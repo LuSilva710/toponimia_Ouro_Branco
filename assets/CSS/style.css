@@ -1,0 +1,184 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    min-width: 290px;
+    color: #4d4e53;
+    background-color: #ffffff;
+    font-family: "Open Sans", Arial, sans-serif;
+    line-height: 1.5;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+#navside {
+    margin-top: 75px;
+    position: fixed;
+    min-width: 200px;
+    top: 0px;
+    left: 0px;
+    width: 100px;
+    height: 100%;
+    border-right: solid;
+    border-color: rgba(0, 22, 22, 0.4);
+}
+
+#navside ul {
+    height: 88%;
+    padding: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#navside li {
+    color: #4d4e53;
+    border-top: 1px solid;
+    list-style: none;
+    position: relative;
+    width: 100%;
+}
+
+#navside a {
+    display: block;
+    padding: 10px;
+    color: #4d4e53;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+header {
+    color: black;
+    margin: 10px;
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: thin;
+    text-align: left;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+#main-doc {
+    margin-left: 200px;
+    margin-top: 20px;
+    padding: 20px;
+}
+
+
+section {
+    margin-bottom: 20px;
+    margin-right: 12px;
+    padding-top: 10px;
+}
+
+section article {
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    /* Bordas finas */
+    text-align: left;
+    color: #333;
+}
+
+
+@media only screen and (max-width: 500px) {
+
+    /* Estilos responsivos para telas menores */
+    .navbar-brand {
+        font-size: 16px;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+    .navbar-nav .nav-item {
+        display: flex;
+        align-items: center;
+        margin: 5px;
+        padding-right: 5px;
+    }
+
+    .btn-outline-success {
+        display: none;
+        /* Oculta o botão de busca */
+    }
+
+    #navside {
+        display: none;
+        /* Oculta o navside */
+    }
+
+    #main-doc {
+        margin: 120px 10px;
+        padding: 5px;
+        /* Ajuste da margem esquerda para compensar a falta do navside */
+    }
+
+
+    section article {
+        padding: 5px;
+    }
+
+    header {
+        font-size: 1rem;
+    }
+
+    #navside .nav-link {
+        padding: 5px;
+    }
+
+    p {
+        font-size: 0.8rem;
+        padding: 10px;
+    }
+
+    #navside a {
+        padding: 8px 20px;
+        /* Reduzindo o padding dos links para ajustar ao novo tamanho do navside */
+    }
+
+    table {
+        max-width: 70%;
+        /* Define a largura máxima da tabela */
+        margin-bottom: 20px;
+        /* Adiciona margem inferior para separar as tabelas */
+    }
+
+    table th,
+    table td {
+        max-width: 50px;
+        flex-wrap: wrap;
+        overflow: hidden;
+        font-size: .5rem;
+    }
+
+    /* Estilos para o mapa responsivo */
+    iframe {
+        max-width: 90%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+}

@@ -1,0 +1,614 @@
+{
+    "bairros": {
+        "bairro_pioneiros": {
+            "nome": "Bairro Pioneiros",
+            "ruas": {
+                "Afonso Sardinha": {
+                    "nome_oficial": "Rua Afonso Sardinha",
+                    "significado": "Afonzo Zardinha de Melo ”houve dois, pai e filho, ambos versados em mineração e empenhados na procura de metais. Afonso Sardinha, o Velho,”versado nas artes montanísticas”, transmitiu ao mameluco Sardinha, os seus conhecimentos de metalurgia, morreu depois do filho, em 1616. Mas não há provas, a não ser no que escreveu Pedro Taques de Almeida Pais Leme, de que esteve presente na descoberta das jazidas de minério de ferro de Araçoiaba e na construção do Engenho de Ferro. Em 1589, os Afonso Sardinha, pai e filho, estiveram no morro de Araçoiaba (hoje morro Ipanema, em Iperó) na esperança de achar principalmente ouro. Acabaram por encontrar jazidas de magnetita. Para processar o minério eles instalaram duas forjas rústicas, do tipo catalãs. Localizados em pleno morro, às margens do Rio das Furnas (depois Ribeirão do Ferro), cada forja tinha a capacidade para, com 320 quilos de minério e 450 de carvão de madeira, após sete horas de trabalho, produzir cerca de 100 quilos de ferro. O minério não chegava à fase líquida. Ao tornar-se maleável, escorria pelo carvão em brasa até o fundo do forno. Sob forma esponjosa, era transferido para as forjas para depuração. O ferro era produzido pelo método de redução. Pode-se imaginar o valor desse empreendimento numa época, menos de cem anos após o descobrimento do Brasil, quando todo artefato de metal, inclusive utensílios domésticos, facas, ferramentas e peças para montaria tinham que ser trazidos de Portugal. Após a iniciativa pioneira dos Sardinha, outras se sucederam no morro Araçoiaba, como os fornos rústicos de Domingos Pereira Ferreira, construídos em 1776 para produzir ferro gusa.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.7791968515694!2d-43.7108043!3d-20.5152759!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4a979e39c2d%3A0x6318a3836872f114!2sR.%20Afonso%20Sardinha%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711410405471!5m2!1spt-BR!2sbr",
+                    "imagem": "./assets/Images/rua_afonso_sardinha.png"
+                },
+                "Albert Scharlet": {
+                    "nome_oficial": "Rua Alberto Scharle",
+                    "significado": "Albert Scharlé(1898-1956) assumiu a gerência da Siderúrgica Belgo-Mineira após a morte do gerente Louis Ensch em 1953. Luxemburguês,formado em metalurgia,nasceu em Steinfort ,venho para o Brasil em 1929 para trabalhar na companhia siderúrgica Belgo-Mineira.Casado com Eugénie e pai de Jean Armand, Émile e Adrienne, construiu em 1954 na cidade de João Monlevade-MG um ginásio junto com Dom Helvécio de Oliveira,sob a orientação da Mitra Diocesana.A denominação do Bairro Luxemburgo em Belo Horizonte também está ligada à ele.Além do bairro ele é patrono de duas ruas em Belo Horizonte,uma em Sabará, uma em Coronel Fabriciano,uma em João Monlevade e em Ouro Branco.Sua esposa também é patrona de uma escola em João Monlevade E.E.Eugênia Scharlé.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7473.7673976239175!2d-43.72237627501239!3d-20.510993349768746!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e35175438d01%3A0x63f6d660b8df130c!2sR.%20Alberto%20Scharle%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411150884!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Amaro da Silveira": {
+                    "nome_oficial": "Rua Amaro da Silveira",
+                    "significado": "Em 1888 constituiu-se a sociedade entre Henrique Heargreaves, Jean Albert Gersparcker, Amaro da Silveira, Carlos da Costa Wigg. e assim nasceu a Usina da Esperança em Itabira do Campo, na época pertencente a Ouro Preto, hoje Itabirito. A sociedade começou com a denominação de Amaro e Gersparcker iniciando sua produção em 1891. No início de 1892 a Usina esperança foi vendida a Sociedade Forjas e Estaleiros, passou a se chamar Usina Queiroz Júnior Ltda e em 1948 passou a denominar-se Usina Queiroz Júnior S.A. Hoje com novos proprietários,têm à frente o empresário Jairo Lessa do grupo VDL.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.858560752626!2d-43.70935309999999!3d-20.512023599999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab7fcd2ccb%3A0x3e9f5db1d06ccfc2!2sR.%20Amaro%20da%20Silveira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411256318!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Amaro Lanari": {
+                    "nome_oficial": "Rua Amaro Lanari",
+                    "significado": "Nascido em 1887 na Argentina, Amaro Lanari, Engenheiro de Minas e Civil pela EMOP em 1909, junto com Christiano França Teixeira Guimarães e Gil Guatimosim, fundou a primeira usina siderúrgica de Minas Gerais, a Companhia Siderúrgica Mineira em 1915, que em 1921 deu origem à Companhia Siderúrgica Belgo Mineira. Há também o Amaro Lanari Filho (foto ilustrativa acima), que também pode ser considerado um pioneiro da Siderurgia. Nascido no dia 25 de outubro de 1913 em Ouro Preto - MG. Engenheiro, administrador público, professor e empresário mineiro, era filho de Amaro Lanari e de Marianna de Andrade Lanari. Graduou-se em 1936 pela Escola de Minas de Ouro Preto. Atuou sucessivamente como engenheiro-chefe da Laminação e Trefilaria da Cia Siderúrgica Belgo Mineira, engenheiro da Estrada de Ferro Brasil-Bolívia, engenheiro chefe da Siderúrgica Aliperti, em São Paulo. Foi presidente da Cia. Aços Especiais Itabira S.A – Acesita (1957) e da Usiminas (1958-1976). Presidiu ainda a Fiat Automóveis S.A. (1983-1985) e a Siderbrás (1985-1987). Foi professor catedrático de Metalurgia Geral e Siderurgia da Escola Politécnica de São Paulo (1943-1958). Presidiu também o Instituto Brasileiro de Siderurgia (1963-1968).",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.820797111555!2d-43.71026239999996!3d-20.5135712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4abef762303%3A0x4cfd159ee42426cc!2sR.%20Amaro%20Lanari%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411810091!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Amintas Jacques Morais": {
+                    "nome_oficial": "Rua Amintas Jacques Morais",
+                    "significado": "Engenheiro de Agrimensura, formado em 1919 pela Escola de Minas de Ouro Preto, foi industrial e empresário, dirigiu o Banco da Lavoura. Juntamente a Percival Farquhar e Athos de Lemos Rache fundaram a Companhia Brasileira de Mineração e Siderurgia, que por sua vez deu origem à Acesita, hoje Aperam.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.857025956319!2d-43.71813379999996!3d-20.512086499999988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e356bb270fed%3A0xeaf2088fe7e239ab!2sR.%20Amintas%20Jaques%20de%20Morais%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411926021!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Arthur Bernardes": {
+                    "nome_oficial": "Rua Arthur Bernardes",
+                    "significado": "Nos quatro anos de governo de Arthur Bernardes, o Brasil viveu em estado de sítio. Foi um grande nacionalista, defensor do petróleo brasileiro e da Amazônia. Outra área que Bernardes deu atenção foi a da siderurgia. Na época em que ocupava a Presidência do Estado de Minas Gerais, existia o chamado Contrato de Itabira, que chamou a atenção da opinião pública que ficaria dividida por quase 20 anos, já que levantava a questão dos futuros caminhos do desenvolvimento brasileiro. O capital proposto de investimento pelo empresário norte-americano Farquhar era de 80 milhões de dólares. A Itabira Iron proveria tudo: uma moderna ferrovia industrial (e teria sobre ela o monopólio), instalações portuárias e uma linha de navegação. Na realidade, a siderurgia ficaria em segundo plano. Os interesses internacionais estavam no minério de ferro e no manganês, e a instalação da siderúrgica era sempre protelada.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9227424385285!2d-43.712202499999975!3d-20.509393099999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aad91fe247%3A0x31de960ae8629586!2sR.%20Artur%20Bernardes%2C%20Ouro%20Branco%20-%20MG%2C%2036492-323!5e0!3m2!1spt-BR!2sbr!4v1711414513065!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Augusto Barbosa e Silva": {
+                    "nome_oficial": "Rua Augusto Barbosa e Silva",
+                    "significado": "Augusto Barbosa da Silva, nascido em: 15/09/1860 e falecido em: 16/06/1939, foi um Diplomado em Engenharia pela Escola de Minas de Ouro Preto, em 1882, Augusto Barbosa da Silva exerceu as funções de professor e diretor da instituição. Anos mais tarde, ganhou do então Imperador D. Pedro II a subvenção de uma bolsa de estudos particular na Europa. Ainda no exterior, foi nomeado Lente de Cálculo Diferencial e Integral, Mecânica Racional e Trigonometria Esférica. Em 1907, teve a oportunidade de construir o primeiro forno elétrico, ainda em funcionamento, na Escola de Minas da Universidade Federal de Ouro Preto (UFOP). Durante a 1a Guerra Mundial (1914-1918), a eletrossiderurgia ainda dava os primeiros passos. Porém, a invenção de Augusto Barbosa conseguiu fabricar ferro manganês para abastecer a Estrada de Ferro Central do Brasil. Barbosa patrioticamente recusou vários convites para instalar o forno elétrico, tanto na Inglaterra quanto nos Estados Unidos. Idealista, mandou vir da Suíça seu sogro, Jean Albert Gerspacher, e seu cunhado, Joseph Gerspacher, que fundaram, na cidade de Itabirito, em Minas Gerais, a usina “Esperança”, primeiro alto-forno para produção de ferro que verdadeiramente funcionou no País, em 1891. Ali estava o berço da siderurgia brasileira, que iniciou a fase contemporânea da indústria da fabricação do ferro no Brasil.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8884676411813!2d-43.72001749999996!3d-20.51079790000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e353e452a853%3A0xc91d801508176c47!2sAv.%20Augusto%20Barbosa%20e%20Silva%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711414766383!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Baldomero Barbará Filho": {
+                    "nome_oficial": "Rua Baldomero Barbará Filho",
+                    "significado": "Baldomero Barbará montou a Metalúrgica Barbará em 1929, na cidade mineira de Caeté, a partir de um novo procedimento para fundir canos em ferro, por centrifugação, inventado por Fernando Arens Jr. e Dimitri Sensaud de Lavaud. Em 1937 foi construída uma nova fábrica em Barra Mansa, que incorpora mais adiante novas técnicas de fundição.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.890026744299!2d-43.708397399999946!3d-20.510734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4acbba0d9fb%3A0xe74e0a7d628300b9!2sR.%20Baldomero%20Barbar%C3%A1%20Filho%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711414881097!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Barão de Eschwege": {
+                    "nome_oficial": "Rua Barão de Eschwege",
+                    "significado": "Wilhelm Ludwig Von Eschwege nasceu e faleceu na Alemanha (Eschwege, Hesse, 1777- Hesse, 1855). Ele foi aluno de Werner, o sistematizador da mineralogia. Geólogo e metalurgista, foi contratado pelo governo português para reorganizar as minas em Portugal, tendo vindo ao Brasil em 1808 com a transferência da Corte, onde ficou até 1821. Voltando a Portugal, foi nomeado pelo imperador Administrador das Matas Nacionais do Reino. Aqui no Brasil, como tenente-coronel engenheiro, foi nomeado intendente das minas de ouro e curador do gabinete de mineralogia que o governo fez instalar no Rio de Janeiro. As suas maiores contribuições foram, entretanto, a construção da fábrica de ferro Patriótica, as inovações técnicas que introduziu nessa fábrica e em outras e, principalmente, a sua vasta obra escrita de pesquisas geológicas e mineralógicas, resultantes de viagens de exploração científica em Minas Gerais e São Paulo. Eschwege foi o primeiro a assinalar a presença de manganês em Minas Gerais. Disso se sobressaem o monumental ”Pluto Brasiliensi”, primeira obra escrita sobre geologia brasileira, e ”Contribuições para a Orografia Brasileira”.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.859900340635!2d-43.70810549999995!3d-20.51196869999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aced890edd%3A0xc92c5296d3a1e026!2sAv.%20Bar%C3%A3o%20de%20Eschwege%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415083801!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Barão de Mauá": {
+                    "nome_oficial": "Rua Barão de Mauá",
+                    "significado": "Barão de Mauá ou Visconde de Mauá (1813-1889) foi um industrial e político brasileiro. Pioneiro da industrialização no Brasil. Foi um símbolo dos capitalistas empreendedores brasileiros do século XIX. Foi responsável por grandes obras como um Estaleiro, a Companhia Fluminense de Transporte e a primeira estrada de ferro ligando o Rio de Janeiro a Petrópolis. Investiu como sócio nas ferrovias do Recife e de Salvador que chegavam até o Rio São Francisco, entre várias outros empreendimentos.O Barão de Mauá (1813-1889) nasceu em Arroio Grande no Rio Grande do Sul em 28 de dezembro de 1813. Filho do fazendeiro João Evangelista de Ávila e Sousa e Maria de Jesus Batista de Carvalho. Em 1854 fundou a Companhia de Iluminação a gás do Rio de Janeiro e no dia 30 de abril inaugura 15 km da primeira estrada de ferro ligando o Porto Mauá, na baía da Guanabara, à encosta da Serra da Estrela.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8356993857715!2d-43.71042510000002!3d-20.512960499999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab94ea1ecd%3A0xb00d63bf45645902!2sR.%20Bar%C3%A3o%20de%20Mau%C3%A1%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415828088!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Clodomiro de Oliveira": {
+                    "nome_oficial": "Rua Clodomiro de Oliveira",
+                    "significado": "Clodomiro de Oliveira estudou na Escola de Minas e formou nos cursos de Engenharia de Minas e Civil no ano de 1897, também foi secretário de Viação do Presidente Arthur Bernardes, quando esse governou o Estado de Minas Gerais, e seu principal conselheiro para assuntos relacionados à siderurgia. Clodomiro de Oliveira  desejava que o governo federal, sozinho ou associado a empresas nacionais, implantasse uma usina com capacidade de 150.000 t na região do Rio Doce-MG. Foi provavelmente a primeira vez, durante a República que surgiu a proposta de construção de uma usina siderúrgica estatal.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8356993857715!2d-43.71042510000002!3d-20.512960499999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aeb2f45fcb%3A0xfc9afdfa35f70627!2sR.%20Clodomiro%20de%20Oliveira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415926675!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Comendador Carlos Wigg": {
+                    "nome_oficial": "Rua Comendador Carlos Wigg",
+                    "significado": "A primeira usina siderúrgica com características modernas, com um forno a superar a marca de 1t/dia de produção, construída no Brasil foi a Usina Esperança, em meados de 1888. Albert Gerspacher, juntamente com Amaro da Silveira e do comendador Carlos da Costa Wigg, construíram em Itabira do Campo este alto-forno com grande capacidade para a época, em relação ao que existia no Brasil. A Usina Esperança era também pioneira na indústria de tijolos refratários para o revestimento de seu alto-forno. O comendador Carlos da Costa Wigg, juntamente com Joseph Gerspacher, filho de Albert Gerspacher, construíram após o primeiro forno acima descrito, um segundo, batizado de Usina Wigg, próximo à estação de Miguel Burnier, na Estrada de Ferro Central do Brasil. Os experimentos iniciais proveitosos, feitos na Usina de Esperança fizeram com que, em 1893, fosse montado este segundo forno, tendo sido inaugurado em 14 de setembro de 1893. A Usina Wigg e Esperança foram, então, os dois únicos empreendimentos siderúrgicos dotados de alto-forno a atingirem o século XX.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8385714471374!2d-43.709516900000004!3d-20.512842799999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab8a913013%3A0xc074de8c32743f3b!2sR.%20Comendador%20Carlos%20Wigg%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711456146970!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Cristiano Teixeira Guimarães": {
+                    "nome_oficial": "Rua Cristiano Teixeira Guimarães",
+                    "significado": "Christiano França Teixeira Guimarães, Engenheiro de Minas e Civil pela EMOP em 1909, junto com Amaro Lanari e Gil Guatimosim, fundou a primeira usina siderúrgica de Minas Gerais, a Companhia Siderúrgica Mineira em 1915, que em 1921 deu origem à Companhia Siderúrgica Belgo Mineira.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.903611971942!2d-43.70741249999999!3d-20.51017719999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb532c64451b%3A0x87752c14ba59b550!2sR.%20Cristiano%20Teixeira%20Guimar%C3%A3es%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711456349538!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Dom Rodrigues José Menezes": {
+                    "nome_oficial": "Rua Dom Rodrigues José Menezes",
+                    "significado": "Rodrigo José Menezes foi governador da capitania de Minas Gerais no ano de 1780, solicitou de Portugal permissão para construir fornos de fundição para a fabricação de equipamentos para atender o trabalho nas minas, o pedido não só foi rejeitado, como deu origem a uma ordem tornando ilegal a existência de fundições e mandando destruir as existentes.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.857801895237!2d-43.71633300000003!3d-20.51205470000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3567f303393%3A0x8e48dec75625c4d2!2sR.%20Dom%20Rodrigo%20Jos%C3%A9%20de%20Menezes%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711456518415!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Domingos Ferreira Pereira": {
+                    "nome_oficial": "Rua Domingos Ferreira Pereira",
+                    "significado": "Em 1765 foi dada a Domingos Ferreira Pereira concessão para minerar ferro, chumbo, e estanho em São Paulo, não durou mais de sete anos a fabrica montada pelo concessionário também vencido pelas dificuldades supervenientes.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8000327797936!2d-43.710745799999984!3d-20.514422099999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4a95d9c7ccb%3A0xcb33a6e33a2a9a72!2sR.%20Domingos%20Ferreira%20Pereira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711457348451!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Francisco José P. Souza": {
+                    "nome_oficial": "Rua Francisco José P. Souza",
+                    "significado": "Francisco José Pinto de Souza, Engenheiro de Minas e Civil pela EMOP em 1934, era autorizado a lavrar jazida de argila refratária e associados, no Município de Santa Luzia, Estado de Minas Gerais, e nos termos do decreto n° 17.432, de 27-12-44, transferiu todos os seus direitos de concessionário da mina, à Cia. Siderúrgica Belgo Mineira, por escritura pública de 25-03-50. Há ainda indícios de ser Pioneiros junto à outras figuras importantes, na mineração do País.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9413387069067!2d-43.70893711139223!3d-20.508630867673507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb52ed45a519%3A0x15419d7eb9b43711!2sR.%20Prof.%20Francisco%20Jos%C3%A9%20Pinto%20de%20Souza%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711458365401!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Frederico Varnhagem": {
+                    "nome_oficial": "Rua Frederico Varnhagem",
+                    "significado": "Frederico Luís Guilherme Varnhagen (1783?-1842) Nascido em Arolsen, no antigo principado de Waldeck, hoje na Alemanha. Serviu na fábrica de ferro de Figueiró dos Vinhos (onde são fabricadas, entre outras obras em ferro, os canhões para as forças armadas portuguesas) na Estremadura, quando então trabalhou com José Bonifácio. Tornam-se amigos. Foi membro da Academia Real das Ciências de Lisboa. Em 1809 é encarregado pelo governo de instalar uma siderúrgica às margens do rio Ipanema, próximo a Sorocaba. Dirige a Real Fábrica de São João de Ipanema entre 1814 e 1821.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9275902086592!2d-43.710866700000004!3d-20.509194400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab4b04630f%3A0x88badaebb7da6cb1!2sAv.%20Frederico%20Varnhagem%2C%20Ouro%20Branco%20-%20MG%2C%2036492-311!5e0!3m2!1spt-BR!2sbr!4v1711459121473!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "General Silvio Paulino Oliveira": {
+                    "nome_oficial": "Rua General Silvio Paulino Oliveira",
+                    "significado": "",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Getúlio Vargas": {
+                    "nome_oficial": "Rua Getúlio Vargas",
+                    "significado": "Getúlio Dornelles Vargas (São Borja, 19 de abril de 1882 — Rio de Janeiro, 24 de agosto de 1954) líder civil da Revolução de 1930, que pôs fim à República Velha, depondo seu 13o e último presidente, Washington Luís, e, impedindo a posse do presidente eleito em 1 de março de 1930, Júlio Prestes. Foi presidente do Brasil em dois períodos. O primeiro período foi de 15 anos ininterruptos, de 1930 até 1945, no segundo período em que foi eleito por voto direto, Getúlio governou o Brasil como presidente da república, por 3 anos e meio: de 31 de janeiro de 1951 até 24 de agosto de 1954, quando se suicidou. O Presidente Getúlio Vargas, logo no início do seu governo, tratou de definir uma política específica para a indústria siderúrgica nacional, visando nacionalizar as reservas minerais do país. Para isso criou, em 1931, a Comissão Nacional de Siderurgia, ligada ao Ministério da Guerra, reunindo técnicos, empresários e militares. Os ”nacionalistas” e os ”entreguistas” polemizavam agitando o Congresso e a imprensa. Outra comissão foi nomeada, em 1933, para discutir e decidir sobre a atuação e o destino da Itabira Iron, até que, em 1939, finda a validade do contrato que o governo havia firmado com aquela empresa, Percival Farquhar, ciente da discussão que se estabelecera, uniu-se a empresários brasileiros e ”nacionalizou” a Itabira Iron. Dividiu-a, então, em duas outras empresas: a Companhia Brasileira de Mineração e a Itabira Mineração. Ao final da década de 30, o Brasil já reunia quase todas as condições necessárias para a implantação de uma indústria siderúrgica, incluindo matérias-primas, disposição e interesse pelo trabalho, planos e projetos. Faltava-lhe, no entanto, os meios para concretizar tudo isso. Em janeiro de 1939, enquanto Oswaldo Aranha buscava a colaboração dos norte-americanos, um outro representante era enviado à Europa para contatar grupos ingleses e alemães, com o propósito de sondar o interesse que eles tinham na implantação de uma indústria siderúrgica no Brasil. De fundamental importância no desenvolvimento da indústria siderúrgica brasileira, a CSN surgiu como consequência do acordo assinado pelo governo brasileiro, que se comprometia a exportar 1, 5 milhão de toneladas de minério de ferro por ano para a Inglaterra e Estados Unidos. Sua Usina de Volta Redonda, no Rio de Janeiro, começou a produzir chapas de aço no país, com a utilização de processos tecnologicamente adequados. A produção buscava acompanhar o crescimento do consumo dos produtos planos no mundo todo - mas especialmente na indústria de São Paulo. Volta Redonda produziu, pela primeira vez no Brasil, em abril de 1946, o coque metalúrgico e, em junho do mesmo ano, foram ativados os seus altos-fornos e a aciaria.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.910994887658!2d-43.71692510000003!3d-20.509874599999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3544ddb50bf%3A0xf576230d42f9a6bf!2sR.%20Get%C3%BAlio%20Vargas%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459598018!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Gil Guatimosim": {
+                    "nome_oficial": "Rua Gil Guatimosim",
+                    "significado": "Engenheiro de Minas e Civil pela EMOP em 1913. Juntamente com Amaro Lanari e Christiano França Teixeira Guimarães, fundou a primeira usina siderúrgica de Minas Gerais, a Companhia Siderúrgica Mineira em 1915, que em 1921 deu origem à Companhia Siderúrgica Belga Mineira.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.869892241315!2d-43.72170540000002!3d-20.5115592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3519f9573ad%3A0x6937c8eb23897ff6!2sR.%20Gil%20Guatmosim%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459654309!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Henrique Laje": {
+                    "nome_oficial": "Rua Henrique Laje",
+                    "significado": "Henrique Lage nasceu em 14 de março de 1881. Era o filho mais velho de Antônio Lage, Comendador e grande empresário que, em 1882, atestando sua grande visão, adquiriu, de um cidadão francês, a Iha do Viana, na Baía de Guanabara, e organizou a firma Lage Irmãos, que seria o ponto de partida para o que mais tarde seria conhecido como o Império Lage. Embora não ostentasse nenhum diploma de curso técnico, Henrique Lage era profundo conhecedor de química, tinha verdadeira intuição em engenharia civil, mecânica e construção naval. Era economista nato e tinha muito amor pelo seu País, por cujo desenvolvimento lutou toda a vida. Sem maiores preocupações com o lucro individual, propôs-se, várias vezes, a realizar, de graça, serviços para cujo contrato se erguiam barreiras burocráticas. Era um criador por excelência. Entre seus sonhos incluíam-se: construir navios de guerra para o Brasil; navios de grande tonelagem, dotados de maior conforto; criar uma frota de navios especializados para o transporte de carvão; implantar usinas de ferro-gusa; ampliar as instalações que montara na Ilha do Viana e desenvolver a mineração não só de carvão, como de ferro e de mármore.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.939769209407!2d-43.71248240000001!3d-20.508695199999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab2907b173%3A0xd6215e2b89033322!2sR.%20Henrique%20Lage%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459783718!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Intendente Câmara": {
+                    "nome_oficial": "Rua Intendente Câmara",
+                    "significado": "Manuel Ferreira da Câmara Bethencourt e Sá, nascido em Minas Novas do Araçuaí em 1764, formado em Direito pela Universidade de Coimbra, passou, junto a Jose Bonifácio de Andrada e Silva, oito anos em viagens de estudos por vários países da Europa em que aprendeu, sobretudo, Mineralogia. O Intendente Câmara foi o primeiro brasileiro nato a assumir o cargo de intendente-geral das Minas e dos Diamantes do Distrito  Diamantino e Comarca do Serro Frio, mas entrou para a história como o construtor do primeiro alto-forno para a produção de ferro na América do Sul. Ele implantou, no meio do nada, a Real Fábrica de Ferro do Morro do Pilar ou de Gaspar Soares, no longínquo ano de 1814. “Câmara realizou o ciclo completo da fundação da  siderurgia em alta escala no Brasil”, afirma o biógrafo Marcos Carneiro de Mendonça, no livro O Intendente Câmara.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8645046907427!2d-43.71211390000005!3d-20.51178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aa4e1027f1%3A0xb72e14761010ab76!2sAv.%20Intendente%20C%C3%A2mara%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459879425!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "João Gerdau": {
+                    "nome_oficial": "Rua João Gerdau",
+                    "significado": "Nasceu em Altona-Elke, província de Holstein, no então reino da Prússia. Teve quatro filhos. Aos 19 anos, emb1869, decidiu migrar para o Brasil. Ao chegar em Porto Alegre, a empresa em que iria trabalhar não existia  mais. Foi então para Santo Ângelo, na margem esquerda do rio Jacuí. João Gerdau adquiriu uma posse       particular, na atual avenida Concórdia, em Agudo, e nela sediou sua residência e uma casa comercial, seu primeiro negócio. Em 1883, abriu uma filial da casa comercial em Cachoeira. Começou a cuidar de loteamentos  imobiliários. Fundou a João Gerdau & Cia. para lotear terras da gleba Várzea Agudo, propícia ao cultivo do  arroz. Seus sócios eram o capitão Polycarpo Pereira de Carvalho e Silva e Antônio Peixoto de Oliveira. João Gerdau comprou uma fábrica de pregos (1901) e uma de móveis (1907), ambas à beira da falência. Passou a fábrica de pregos para o controle do filho Hugo; a de móveis, ao filho Walter. A família Gerdau soube manter e  ampliar seus negócios por quatro gerações. Seus empreendimentos incluem o comércio, a agricultura, o setor imobiliário, a indústria (pregos, móveis, fósforos e fogões) e a siderurgia. A gestão da quarta geração, iniciada na década de 1980, transformou a Gerdau em uma das empresas brasileiras mais internacionalizadas.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.919338969636!2d-43.718573499999955!3d-20.509532599999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3547c64e233%3A0x80c58a6b3c79e22f!2sR.%20Jo%C3%A3o%20Gerdau%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460009175!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "João Luiz Alves": {
+                    "nome_oficial": "Rua João Luiz Alves",
+                    "significado": "Nasceu em 23/05/1870 em Juiz de Fora. Formado em Ciências Jurídicas pela Faculdade de Direito do Largo São Francisco, foi promotor, juiz, professor. Foi, também, chefe do executivo municipal de Campanha/MG; deputado  estadual, deputado federal e senador; atuou como Secretário de Finanças do Governo de Minas e Ministro da Justiça e Negócios Interiores, por último Ministro do Supremo Tribunal Federal. Teve atuação na defesa do  desenvolvimento do país.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8991421586993!2d-43.70759399999998!3d-20.510360399999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4acca3588b5%3A0x4b6a8677cd9a7789!2sR.%20Jo%C3%A3o%20Lu%C3%ADz%20Alves%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460084463!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "João Monlevade": {
+                    "nome_oficial": "Rua João Monlevade",
+                    "significado": "Jean Antoine Felix Dissandes de Monlevade, nasceu em 1789, Engenheiro de Minas francês de origem nobre  nascido em Guéret, região de Creuse, fundador da primeira usina metalúrgica com mão-de-obra escrava, encomendada pelo governo português, para produzir ferramentas para a agricultura e os engenhos, onde hoje se encontra a cidade de João Monlevade, MG. Descendente direto de conceituados troncos da nobreza francesa, os Bogenet e os Monlevade, veio para o Brasil (1817) deixando os conflitos decorrentes do processo revolucionário francês e aportou no Rio de Janeiro aos 14 de maio, com 28 anos de idade, recém-formado Engenheiro de Minas. Apaixonado pela mineralogia e pela geologia, compreendera que o Brasil, mais  especificamente a Província de Minas Gerais, constituir-se-ia em vastíssimo campo de estudos, aceitando, assim, uma comissão do governo francês para estudar os recursos minerais do Brasil. Morou inicialmente em Caeté, MG, onde montou uma pequena indústria de beneficiamento de ferro a percorreu várias comarcas e  distritos mineiros como São João Del Rey, Vila Rica, Sabará, Caeté e São Miguel do Piracicaba.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8879357395244!2d-43.7154166!3d-20.5108197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e355db7889f5%3A0xf9f764bb27dbcf47!2sAv.%20Jo%C3%A3o%20Monlevade%2C%20Ouro%20Branco%20-%20MG%2C%2036492-332!5e0!3m2!1spt-BR!2sbr!4v1711460212608!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "José Gersparcher": {
+                    "nome_oficial": "Rua José Gersparcher",
+                    "significado": "Joseph Gerspacher e seu cunhado Jean Albert Gerspacher que fundaram, na cidade de Itabirito, em Minas Gerais, a usina “Esperança”, primeiro alto-forno para produção de ferro que verdadeiramente funcionou no País, em 1891. Ali estava o berço da siderurgia brasileira, que iniciou a fase contemporânea da indústria da  fabricação do ferro no Brasil.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.86841359845!2d-43.71565859999995!3d-20.5116198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e355dcacc69f%3A0xa4b2e8f3a778c0e1!2sR.%20Jos%C3%A9%20Gerspacher%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460267180!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "José Joaquim Queiros Jr": {
+                    "nome_oficial": "Rua José Joaquim Queiros Jr",
+                    "significado": "O Dr. José Joaquim Queiróz Júnior nasceu no Rio de Janeiro. Ele chegou a Itabira do Campo(atual Itabirito) em 1899.Ele iniciou a construção daquela que seria a mais antiga indústria siderúrgica do continente. Para isto, ele contratou o engenheiro suíço Albert Gersparcher. Inicialmente o Dr. Queiróz Júnior desconhecia à literatura especializada neste ramo, mas com a sua inteligência, coragem, persistência e perseverança ele conseguiu adaptar a usina e às condições nacionais. O Dr. Queiróz dedicou a vida inteira à sua empresa e à siderurgia nacional. Ele trabalhou de sol a sol, exercendo também à função de Contador. Em 1910,ele construiu o primeiro Alto Forno da América Latina. A usina e o alto forno foram construídos na localidade chamada “ Esperança”. A usina Queiróz Júnior funcionou por mais de 100 anos, porém venho a falência em 1991.Esta antiga indústria deu  lugar à VDL Siderurgia, pertencente ao Grupo Jayro Lessa.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8646779325895!2d-43.70549060000004!3d-20.511772899999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ad3f921d7d%3A0xedb038bbc7b56364!2sR.%20Jose%20Joaquim%20Queiroz%20Junior%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460340928!5m2!1spt-BR!2sbr" ,
+                    "imagem": ""
+                },
+                "Louis Ensch": {
+                    "nome_oficial": "Rua Louis Ensch",
+                    "significado": "Nascido no Grão Ducado do Luxemburgo,em 1895, diplomou-se em 1920 pela Escola Politécnica de Aix-La-Chapelle, iniciando logo a seguir, a sua carreira de engenheiro siderurgista na Usina de seu País natal. Em poucos anos, mercê de sua alta capacidade técnica e de seu invulgar dinamismo, alcançava, na Usina de  Burbach, o posto de engenheiro-chefe dos Altos Fornos. Foi então convidado para vir dirigir a Usina de Siderúrgica, da Companhia Siderúrgica Belgo Mineira, havendo chegado a Sabará, para assumir o seu novo posto, no dia 10 de novembro de 1927. Encontrou a Usina, cuja administração lhe fora confiada, em dificílima situação: fabricando apenas 20 toneladas de gusa por dia, sem mercado consumidor e com a produção de muitos meses estocada em seus depósitos. O capital da sociedade, que era de 20.000 contos, e no 2° semestre  de 1927 a Usina estivera paralisada. Plenamente convencido da viabilidade da siderurgia a carvão de madeira e da crescente capacidade de absorção, pelos consumidores internos, dos produtos siderúrgicos, procurou desde logo ampliar a Usina, pondo em funcionamento os fornos de aço e o laminador. Coube-lhe, assim, a honra de  ser o primeiro a fabricar, em Minas Gerais, com matérias primas do nosso Estado, o aço doce, vulgarmente conhecido como ferro, destinado às construções e a indústria de serralheria.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.976480153915!2d-43.71147970000001!3d-20.50719040000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb54f0b8ba0d%3A0xdb1b1c5be5fd1e36!2sR.%20Lou%C3%ADs%20Ensch%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460430603!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Mario Rache": {
+                    "nome_oficial": "Rua Mario Rache",
+                    "significado": "",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pandia Calogeras": {
+                    "nome_oficial": "Rua Pandia Calogeras",
+                    "significado": "João Pandiá Calógeras nasceu no Rio de Janeiro, em 1870. Engenheiro, formou-se pela Escola de Minas, de Ouro Preto, em 1890. Elegeu-se deputado federal pela primeira vez em 1897, pelo Partido Republicano Mineiro (PRM). Em novembro de 1914, assumiu o Ministério da  Agricultura, Indústria e Comércio, permanecendo no cargo até julho de 1915. Deixou o ministério em novembro  de 1922, quando terminou o mandato de Epitácio Pessoa. Afastou-se, então, por algum tempo da vida política para dedicar a negócios particulares e atividades intelectuais. Em 1928, foi eleito presidente da Sociedade Brasileira de Engenharia. Morreu em Petrópolis (RJ), em 1934.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.910816781533!2d-43.707204599999976!3d-20.5098819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb5325c1f7a3%3A0xda460821184d1b21!2sR.%20Pandi%C3%A1%20Cal%C3%B3geras%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460501787!5m2!1spt-BR!2sbr" ,
+                    "imagem": ""
+                },
+                "Percival Farquhar": {
+                    "nome_oficial": "Rua Percival Farquhar",
+                    "significado": "Percival Farquhar tinha interesse na exportação do minério; Nasceu em 19 de outubro de 1864, em Nova York (Pensilvânia), nos Estados Unidos, e morreu no dia 4 de agosto de 1953, em Nova Iorque. Cursou o colegial no  York Collegiate Institute e em 1884, formou-se em engenharia pela faculdade de Yale. No ano de 1890, trabalhou com negócios referentes a transportes e outros serviços públicos na América Central. Suas atividades industriais no Brasil começaram a partir de 1904, quando, em sociedade com o também engenheiro norte-americano F. S. Pearson e o advogado canadense Alexander Mackenzie, fundou no Rio de Janeiro a Light And Powers, responsável pelos serviços públicos de iluminação, e a Tramways, encarregada do transporte público realizado através de bondes. Em 1946, Farquhar criou a companhia de aços especiais (Acesita), porém, a partir de 1952, o controle desta companhia passou a ser exercido pelo Banco do Brasil. Era representante da Itabira Iron Ore Company, que deu origem à Companhia Vale do Rio do Doce.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9801491550033!2d-43.70929920000005!3d-20.507039999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb5380b06389%3A0x91de9264af1b482b!2sRua%20Percival%20Farquhar%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460576366!5m2!1spt-BR!2sbr" ,
+                    "imagem": ""
+                },
+                "Roque Schuch": {
+                    "nome_oficial": "Rua Roque Schuch",
+                    "significado": "Nasceu na Áustria no dia 15.08.1788 e faleceu no Brasil em 04-03-1844 foi professor de matemática e ciências naturais na escola de Troppau (Opava),e mineralogista. Venho para o Brasil em 1817 com a Missão Científica Austríaca que acompanhou a princesa Leopoldina de Habsburgo, filha do Rei Leopoldo I, da Áustria, que casou-se com Dom Pedro I.Também Foi professor de Dom Pedro II.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8021070537707!2d-43.709753600000035!3d-20.51433709999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4abfba37023%3A0x341f3493c1142aca!2sR.%20Roque%20Schuch%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460651385!5m2!1spt-BR!2sbr",
+                    "imagem": ""
+                },
+                "Willy Frohlich": {
+                    "nome_oficial": "Rua Willy Frohlich",
+                    "significado": "Willy Carlos Fröhlich nasceu em Santa Cruz do Sul (RS) no dia 11 de agosto de 1913, filho de Pedro Fröhlich Filho e de Maria Rie del Fröhlich.Fez o curso de contabilidade no Colégio Marista em sua cidade natal e cursou a Faculdade de Ciências Políticas e Econômicas de Porto Alegre, diplomando-se em economia no ano de  1937.Entre 1935 e 1937, ainda estudante universitário exerceu o mandato de vereador em sua cidade natal, tendo sido presidente da Câmara Municipal. Foi ainda prefeito de Santa Cruz do Sul a partir de 1947 e, em outubro de 1950, elegeu-se deputado federal pelo Rio Grande do Sul, assumindo sua cadeira em fevereiro do ano seguinte, após deixar as funções de prefeito. Tornou-se membro em seu estado do Sindicato dos Jornalistas, da Associação Rio-Grandense de Imprensa, da Sociedade de Economia e do Sindicato dos Contabilistas. Foi também diretor do Banco do Estado do Rio Grande do Sul e do Instituto Nacional do Mate. Faleceu no dia 6 de novembro de 1971.",
+                    "localizacao": "Bairro Pioneiros - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.899312949208!2d-43.71941850000001!3d-20.510353400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e353f4cf6109%3A0x686bd8540d96da67!2sR.%20Wili%20Frohlich%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460722486!5m2!1spt-BR!2sbr" ,
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_siderurgia": {
+            "nome": "Bairro Siderurgia",
+            "ruas": {
+                "Acesita": {
+                    "nome_oficial": "Rua Acesita",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Aço Norte": {
+                    "nome_oficial": "Rua Aço Norte",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Aliperte": {
+                    "nome_oficial": "Rua Aliperte",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Anhanguera": {
+                    "nome_oficial": "Rua Anhanguera",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "Lei N° 261",
+                    "codigo": "Art 1°",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Aparecida": {
+                    "nome_oficial": "Rua Aparecida",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Barra Mansa": {
+                    "nome_oficial": "Rua Barra Mansa",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Belgo Mineira": {
+                    "nome_oficial": "Rua Belgo Mineira",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cimetal": {
+                    "nome_oficial": "Rua Cimetal",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Coferraz": {
+                    "nome_oficial": "Rua Coferraz",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Consider": {
+                    "nome_oficial": "Rua Consider",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cosigua": {
+                    "nome_oficial": "Rua Cosigua",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cosim": {
+                    "nome_oficial": "Rua Cosim",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Dedine": {
+                    "nome_oficial": "Rua Dedine",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ferro Brasileiro": {
+                    "nome_oficial": "Rua Ferro Brasileiro",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Fiel": {
+                    "nome_oficial": "Rua Fiel",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Gerdau AçoMinas": {
+                    "nome_oficial": "Rua Gerdau AçoMinas",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Guaira": {
+                    "nome_oficial": "Rua Guaira",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Itaunense": {
+                    "nome_oficial": "Rua Itaunense",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Lafersa": {
+                    "nome_oficial": "Rua Lafersa",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Mannesmam": {
+                    "nome_oficial": "Rua Mannesmam",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pains": {
+                    "nome_oficial": "Rua Pains",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Patriótica": {
+                    "nome_oficial": "Rua Patriótica",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Queiros Junior": {
+                    "nome_oficial": "Rua Queiros Junior",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Rio Grandense": {
+                    "nome_oficial": "Rua Rio Grandense",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Santa Olímpia": {
+                    "nome_oficial": "Rua Santa Olímpia",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Siderbrás": {
+                    "nome_oficial": "Rua Siderbrás",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Villares": {
+                    "nome_oficial": "Rua Villares",
+                    "significado": "",
+                    "localizacao": "Bairro Siderurgia - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        }
+    }
+}
