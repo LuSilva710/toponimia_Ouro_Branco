@@ -13,10 +13,33 @@ body {
     line-height: 1.5;
 }
 
+.navbar {
+    --bs-navbar-padding-x: 0;
+    --bs-navbar-padding-y: 1.2rem;
+}
+
 a {
     text-decoration: none;
 }
 
+.navbar-nav .nav-item:hover .nav-link {
+    color: #198754;
+    width: 100%;
+}
+
+.navbar-collapse {
+    padding: 15px 0;
+}
+
+.form-select::-webkit-scrollbar {
+    width: 8px; 
+    background-color: #f1f1f1; 
+}
+
+.form-select::-webkit-scrollbar-thumb {
+    background-color: #000000; 
+    border-radius: 4px; 
+}
 
 #navside {
     margin-top: 75px;
@@ -35,6 +58,7 @@ a {
     padding: 0;
     overflow-y: auto;
     overflow-x: hidden;
+    margin-top: 10px;
 }
 
 #navside li {
@@ -57,18 +81,16 @@ header {
     color: black;
     margin: 10px;
     text-align: center;
-    font-size: 1.5em;
     font-weight: thin;
     text-align: left;
-    margin-top: 40px;
-    margin-bottom: 20px;
+    margin: 40px 10px 20px;
     font-size: 1.8em;
     font-weight: bold;
 }
 
 #main-doc {
     margin-left: 200px;
-    margin-top: 20px;
+    margin-top: 50px;
     padding: 20px;
 }
 
@@ -102,9 +124,9 @@ table td {
 }
 
 
-@media only screen and (max-width: 500px) {
-
+@media only screen and (max-width: 800px) {
     /* Estilos responsivos para telas menores */
+
     .navbar-brand {
         font-size: 16px;
     }
@@ -120,9 +142,14 @@ table td {
         padding-right: 5px;
     }
 
-    .btn-outline-success {
-        display: none;
-        /* Oculta o botão de busca */
+    .dropdown-menu {
+        --bs-dropdown-padding-x: 0;
+        --bs-dropdown-padding-y: 0;
+        margin: 0 10px;
+    }
+
+    form {
+        width: 95%;
     }
 
     #navside {
@@ -131,7 +158,7 @@ table td {
     }
 
     #main-doc {
-        margin: 120px 10px;
+        margin: 80px 10px;
         padding: 5px;
         /* Ajuste da margem esquerda para compensar a falta do navside */
     }
@@ -160,7 +187,7 @@ table td {
     }
 
     table {
-        max-width: 70%;
+        max-width: 100%;
         /* Define a largura máxima da tabela */
         margin-bottom: 20px;
         /* Adiciona margem inferior para separar as tabelas */
@@ -176,7 +203,7 @@ table td {
 
     /* Estilos para o mapa responsivo */
     iframe {
-        max-width: 90%;
+        max-width: 70%;
         height: auto;
         display: block;
         margin: 0 auto;

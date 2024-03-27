@@ -23,10 +23,10 @@ function criarTabelaRua(rua) {
                 <td colspan="5">${rua.significado}</td>
             </tr>
             <tr>
-                <td colspan="4">
+                <td colspan="3">
                     <iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </td>
-                <td colspan="1">
+                <td colspan="2">
                     <img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">
                 </td>
             </tr>
@@ -52,7 +52,15 @@ function agruparRuasPorLetra(ruas) {
 
 // Função para exibir os detalhes de uma rua
 function exibirDetalhesRua(rua, linkRua) {
+    // Verificar se há uma tabela já aberta
+    const tabelaAberta = document.querySelector('.detalhes-rua');
+    if (tabelaAberta) {
+        tabelaAberta.parentNode.removeChild(tabelaAberta); // Remover tabela aberta
+        return; // Retorna para evitar a abertura de uma nova tabela
+    }
+
     const divDetalhes = document.createElement('div');
+    divDetalhes.classList.add('detalhes-rua'); // Adicionar classe para rastreamento
 
     const tabelaRua = criarTabelaRua(rua);
     divDetalhes.appendChild(tabelaRua);
@@ -60,6 +68,7 @@ function exibirDetalhesRua(rua, linkRua) {
     // Inserir os detalhes da rua logo abaixo do link da rua clicada
     linkRua.parentNode.insertBefore(divDetalhes, linkRua.nextSibling);
 }
+
 
 // Função para exibir as ruas de uma letra do alfabeto
 function exibirRuasPorLetra(ruas) {

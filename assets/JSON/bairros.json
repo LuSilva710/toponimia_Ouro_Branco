@@ -31,7 +31,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.858560752626!2d-43.70935309999999!3d-20.512023599999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab7fcd2ccb%3A0x3e9f5db1d06ccfc2!2sR.%20Amaro%20da%20Silveira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411256318!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/amaro_silveira.png"
                 },
                 "Amaro Lanari": {
                     "nome_oficial": "Rua Amaro Lanari",
@@ -41,7 +41,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.820797111555!2d-43.71026239999996!3d-20.5135712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4abef762303%3A0x4cfd159ee42426cc!2sR.%20Amaro%20Lanari%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411810091!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/amaro_lanari.png"
                 },
                 "Amintas Jacques Morais": {
                     "nome_oficial": "Rua Amintas Jacques Morais",
@@ -51,7 +51,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.857025956319!2d-43.71813379999996!3d-20.512086499999988!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e356bb270fed%3A0xeaf2088fe7e239ab!2sR.%20Amintas%20Jaques%20de%20Morais%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711411926021!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/amintas_jaques.png"
                 },
                 "Arthur Bernardes": {
                     "nome_oficial": "Rua Arthur Bernardes",
@@ -61,7 +61,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9227424385285!2d-43.712202499999975!3d-20.509393099999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aad91fe247%3A0x31de960ae8629586!2sR.%20Artur%20Bernardes%2C%20Ouro%20Branco%20-%20MG%2C%2036492-323!5e0!3m2!1spt-BR!2sbr!4v1711414513065!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/arthur_bernardes.png"
                 },
                 "Augusto Barbosa e Silva": {
                     "nome_oficial": "Rua Augusto Barbosa e Silva",
@@ -71,7 +71,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8884676411813!2d-43.72001749999996!3d-20.51079790000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e353e452a853%3A0xc91d801508176c47!2sAv.%20Augusto%20Barbosa%20e%20Silva%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711414766383!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/augusto_barbosa.png"
                 },
                 "Baldomero Barbará Filho": {
                     "nome_oficial": "Rua Baldomero Barbará Filho",
@@ -81,7 +81,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.890026744299!2d-43.708397399999946!3d-20.510734!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4acbba0d9fb%3A0xe74e0a7d628300b9!2sR.%20Baldomero%20Barbar%C3%A1%20Filho%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711414881097!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/baldomero_filho.png"
                 },
                 "Barão de Eschwege": {
                     "nome_oficial": "Rua Barão de Eschwege",
@@ -91,7 +91,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.859900340635!2d-43.70810549999995!3d-20.51196869999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aced890edd%3A0xc92c5296d3a1e026!2sAv.%20Bar%C3%A3o%20de%20Eschwege%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415083801!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/barao_eschwege.png"
                 },
                 "Barão de Mauá": {
                     "nome_oficial": "Rua Barão de Mauá",
@@ -101,7 +101,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8356993857715!2d-43.71042510000002!3d-20.512960499999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab94ea1ecd%3A0xb00d63bf45645902!2sR.%20Bar%C3%A3o%20de%20Mau%C3%A1%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415828088!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/barao_maua.png"
                 },
                 "Clodomiro de Oliveira": {
                     "nome_oficial": "Rua Clodomiro de Oliveira",
@@ -111,7 +111,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8356993857715!2d-43.71042510000002!3d-20.512960499999984!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aeb2f45fcb%3A0xfc9afdfa35f70627!2sR.%20Clodomiro%20de%20Oliveira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711415926675!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/clodomiro_oliveira.png"
                 },
                 "Comendador Carlos Wigg": {
                     "nome_oficial": "Rua Comendador Carlos Wigg",
@@ -121,7 +121,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8385714471374!2d-43.709516900000004!3d-20.512842799999994!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab8a913013%3A0xc074de8c32743f3b!2sR.%20Comendador%20Carlos%20Wigg%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711456146970!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/carlos_wigg.png"
                 },
                 "Cristiano Teixeira Guimarães": {
                     "nome_oficial": "Rua Cristiano Teixeira Guimarães",
@@ -131,7 +131,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.903611971942!2d-43.70741249999999!3d-20.51017719999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb532c64451b%3A0x87752c14ba59b550!2sR.%20Cristiano%20Teixeira%20Guimar%C3%A3es%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711456349538!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/cristiano_guimaraes.png"
                 },
                 "Dom Rodrigues José Menezes": {
                     "nome_oficial": "Rua Dom Rodrigues José Menezes",
@@ -151,7 +151,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8000327797936!2d-43.710745799999984!3d-20.514422099999987!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4a95d9c7ccb%3A0xcb33a6e33a2a9a72!2sR.%20Domingos%20Ferreira%20Pereira%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711457348451!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/domingos_pereira.png"
                 },
                 "Francisco José P. Souza": {
                     "nome_oficial": "Rua Francisco José P. Souza",
@@ -161,7 +161,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9413387069067!2d-43.70893711139223!3d-20.508630867673507!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb52ed45a519%3A0x15419d7eb9b43711!2sR.%20Prof.%20Francisco%20Jos%C3%A9%20Pinto%20de%20Souza%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711458365401!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/francisco_souza.png"
                 },
                 "Frederico Varnhagem": {
                     "nome_oficial": "Rua Frederico Varnhagem",
@@ -171,7 +171,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9275902086592!2d-43.710866700000004!3d-20.509194400000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ab4b04630f%3A0x88badaebb7da6cb1!2sAv.%20Frederico%20Varnhagem%2C%20Ouro%20Branco%20-%20MG%2C%2036492-311!5e0!3m2!1spt-BR!2sbr!4v1711459121473!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/frederico_varnhagem.png"
                 },
                 "General Silvio Paulino Oliveira": {
                     "nome_oficial": "Rua General Silvio Paulino Oliveira",
@@ -191,7 +191,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.910994887658!2d-43.71692510000003!3d-20.509874599999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3544ddb50bf%3A0xf576230d42f9a6bf!2sR.%20Get%C3%BAlio%20Vargas%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459598018!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/getulio_vargas.png"
                 },
                 "Gil Guatimosim": {
                     "nome_oficial": "Rua Gil Guatimosim",
@@ -201,7 +201,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.869892241315!2d-43.72170540000002!3d-20.5115592!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3519f9573ad%3A0x6937c8eb23897ff6!2sR.%20Gil%20Guatmosim%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459654309!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/gil_guatimosim.png"
                 },
                 "Henrique Laje": {
                     "nome_oficial": "Rua Henrique Laje",
@@ -221,7 +221,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8645046907427!2d-43.71211390000005!3d-20.51178!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4aa4e1027f1%3A0xb72e14761010ab76!2sAv.%20Intendente%20C%C3%A2mara%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711459879425!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/intendente_camara.png"
                 },
                 "João Gerdau": {
                     "nome_oficial": "Rua João Gerdau",
@@ -231,7 +231,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.919338969636!2d-43.718573499999955!3d-20.509532599999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e3547c64e233%3A0x80c58a6b3c79e22f!2sR.%20Jo%C3%A3o%20Gerdau%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460009175!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/joao_gerdau.png"
                 },
                 "João Luiz Alves": {
                     "nome_oficial": "Rua João Luiz Alves",
@@ -241,7 +241,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8991421586993!2d-43.70759399999998!3d-20.510360399999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4acca3588b5%3A0x4b6a8677cd9a7789!2sR.%20Jo%C3%A3o%20Lu%C3%ADz%20Alves%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460084463!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/joao_luiz_alvez.png"
                 },
                 "João Monlevade": {
                     "nome_oficial": "Rua João Monlevade",
@@ -251,7 +251,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8879357395244!2d-43.7154166!3d-20.5108197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e355db7889f5%3A0xf9f764bb27dbcf47!2sAv.%20Jo%C3%A3o%20Monlevade%2C%20Ouro%20Branco%20-%20MG%2C%2036492-332!5e0!3m2!1spt-BR!2sbr!4v1711460212608!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/joao_monlevade.png"
                 },
                 "José Gersparcher": {
                     "nome_oficial": "Rua José Gersparcher",
@@ -261,7 +261,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.86841359845!2d-43.71565859999995!3d-20.5116198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e355dcacc69f%3A0xa4b2e8f3a778c0e1!2sR.%20Jos%C3%A9%20Gerspacher%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460267180!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/jose_gesparcher.png"
                 },
                 "José Joaquim Queiros Jr": {
                     "nome_oficial": "Rua José Joaquim Queiros Jr",
@@ -271,7 +271,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa":"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8646779325895!2d-43.70549060000004!3d-20.511772899999997!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4ad3f921d7d%3A0xedb038bbc7b56364!2sR.%20Jose%20Joaquim%20Queiroz%20Junior%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460340928!5m2!1spt-BR!2sbr" ,
-                    "imagem": ""
+                    "imagem": "./assets/Images/jose_joaquim_junior.png"
                 },
                 "Louis Ensch": {
                     "nome_oficial": "Rua Louis Ensch",
@@ -301,7 +301,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.910816781533!2d-43.707204599999976!3d-20.5098819!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb5325c1f7a3%3A0xda460821184d1b21!2sR.%20Pandi%C3%A1%20Cal%C3%B3geras%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460501787!5m2!1spt-BR!2sbr" ,
-                    "imagem": ""
+                    "imagem": "./assets/Images/pandia_calogeras.png"
                 },
                 "Percival Farquhar": {
                     "nome_oficial": "Rua Percival Farquhar",
@@ -311,7 +311,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.9801491550033!2d-43.70929920000005!3d-20.507039999999996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3fb5380b06389%3A0x91de9264af1b482b!2sRua%20Percival%20Farquhar%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460576366!5m2!1spt-BR!2sbr" ,
-                    "imagem": ""
+                    "imagem": "./assets/Images/percival_farquar.png"
                 },
                 "Roque Schuch": {
                     "nome_oficial": "Rua Roque Schuch",
@@ -321,7 +321,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8021070537707!2d-43.709753600000035!3d-20.51433709999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4abfba37023%3A0x341f3493c1142aca!2sR.%20Roque%20Schuch%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460651385!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/roque_schuch.png"
                 },
                 "Willy Frohlich": {
                     "nome_oficial": "Rua Willy Frohlich",
@@ -331,10 +331,13 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.899312949208!2d-43.71941850000001!3d-20.510353400000007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e353f4cf6109%3A0x686bd8540d96da67!2sR.%20Wili%20Frohlich%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711460722486!5m2!1spt-BR!2sbr" ,
-                    "imagem": ""
+                    "imagem": "./assets/Images/willy_frolich.png"
                 }
             }
         },
+
+
+        
         "bairro_siderurgia": {
             "nome": "Bairro Siderurgia",
             "ruas": {
@@ -346,7 +349,7 @@
                     "codigo": "Art 1°",
                     "regional": "Câmara Municipal de Ouro Branco",
                     "mapa": "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3736.8395523854692!2d-43.70298509999997!3d-20.512802599999993!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xa3e4b2e9d3ade9%3A0xa632713ef20c7710!2sR.%20Acesita%2C%20Ouro%20Branco%20-%20MG%2C%2036420-000!5e0!3m2!1spt-BR!2sbr!4v1711500812760!5m2!1spt-BR!2sbr",
-                    "imagem": ""
+                    "imagem": "./assets/Images/acesita.png"
                 },
                 "Aço Norte": {
                     "nome_oficial": "Rua Aço Norte",
