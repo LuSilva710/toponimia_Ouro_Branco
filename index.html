@@ -42,9 +42,9 @@
             <ul class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
               <select id="dropdown-bairros" class="form-select" aria-label="Selecione o bairro">
                 <option value="">Selecione um bairro</option>
-                <option value="bairro_">1° de Maio</option>
-                <option value="bairro_">Alto Chalé</option>
-                <option value="bairro_">Amália Rodrigues</option>
+                <option value="bairro_1_maio">1° de Maio</option>
+                <option value="bairro_alto_chale">Alto Chalé</option>
+                <option value="bairro_amalia_rodrigues">Amália Rodrigues</option>
                 <option value="bairro_">Bandeirantes</option>
                 <option value="bairro_">Bela Vista</option>
                 <option value="bairro_">Belvedere</option>
@@ -417,6 +417,25 @@
         </p>
       </article>
     </section>
+
+    <div class="fixed-buttons">
+      <button id="chatbotButton"><i class="bi bi-chat-left"></i></button>
+      <button id="returnTopButton"><i class="bi bi-arrow-up"></i></button>
+    </div>
+
+    <div id="chatbotContainer">
+   
+      <div id="chatbot" class="chatbot-hidden">
+        <div id="chatbotHeader">
+          <span>Chatbot</span>
+          <button id="closeChatbotButton">&times;</button>
+        </div>
+        <div id="chatbotMessages"></div>
+        <input type="text" id="userInput" placeholder="Digite sua mensagem...">
+        <button id="sendMessageButton">Enviar</button>
+      </div>
+    </div>
+    
 
   </main>
 

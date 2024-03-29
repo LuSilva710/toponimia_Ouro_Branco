@@ -71,13 +71,19 @@ function exibirDetalhesRua(rua, linkRua) {
 
 
 // Função para exibir as ruas de uma letra do alfabeto
+// Função para exibir as ruas de uma letra do alfabeto
 function exibirRuasPorLetra(ruas) {
     const ruasPorLetra = agruparRuasPorLetra(ruas);
+
+    // Limpar todas as seções de letras antes de exibir as ruas do novo bairro
+    const secoesLetras = document.querySelectorAll('.section-ruas');
+    secoesLetras.forEach(secao => {
+        secao.innerHTML = '';
+    });
 
     for (let letra in ruasPorLetra) {
         const secaoLetra = document.getElementById(letra);
         const divRuas = secaoLetra.querySelector('.section-ruas');
-        divRuas.innerHTML = '';
 
         ruasPorLetra[letra].forEach(rua => {
             const linkRua = document.createElement('a');
@@ -93,6 +99,7 @@ function exibirRuasPorLetra(ruas) {
         });
     }
 }
+
 
 
 // Função principal
@@ -121,3 +128,55 @@ function main() {
 
 // Chamada da função principal
 main();
+
+// Minimizar o menu do toggler
+document.addEventListener("DOMContentLoaded", function() {
+    const dropdownBairros = document.getElementById('dropdown-bairros');
+    const navbarToggler = document.querySelector('.navbar-toggler');
+    const navbarCollapse = document.querySelector('.navbar-collapse');
+
+    // Função para fechar o menu ao selecionar um bairro
+    dropdownBairros.addEventListener('change', function() {
+        if (!navbarCollapse.classList.contains('show')) return; // Se o menu já estiver fechado, retorna
+        navbarToggler.click(); // Fecha o menu
+    });
+
+    // Função para fechar o menu ao rolar a tela
+    window.addEventListener('scroll', function() {
+        if (!navbarCollapse.classList.contains('show')) return; // Se o menu já estiver fechado, retorna
+        navbarToggler.click(); // Fecha o menu
+    });
+});
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const returnTopButton = document.getElementById('returnTopButton');
+
+    // Adiciona um evento de clique ao botão "Voltar ao topo"
+    returnTopButton.addEventListener('click', function() {
+        // Scroll suave para o topo da página
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const chatbotButton = document.getElementById('chatbotButton');
+    const chatbot = document.getElementById('chatbot');
+    const closeChatbotButton = document.getElementById('closeChatbotButton');
+    const chatbotMessages = document.getElementById('chatbotMessages');
+  
+    chatbotButton.addEventListener('click', function() {
+      chatbot.style.display = "block";
+      chatbotMessages.innerHTML = "Olá, <br> Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição irá agregar muito para o Dicionário de Ruas de Ouro Branco!";
+    });
+  
+    closeChatbotButton.addEventListener('click', function() {
+      chatbot.style.display = "none";
+    });
+  });
+  
