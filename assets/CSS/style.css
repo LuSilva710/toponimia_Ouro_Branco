@@ -13,6 +13,7 @@ body {
     line-height: 1.5;
 }
 
+/* Estilo da Navbar */
 .navbar {
     --bs-navbar-padding-x: 0;
     --bs-navbar-padding-y: 1.2rem;
@@ -20,6 +21,11 @@ body {
 
 a {
     text-decoration: none;
+}
+
+.navbar-brand {
+    padding-right: 25px;
+    border-right: 2px solid #fff;
 }
 
 .navbar-nav .nav-item:hover .nav-link {
@@ -30,63 +36,113 @@ a {
     padding: 15px 0;
 }
 
+
 .form-select::-webkit-scrollbar {
-    width: 8px; 
-    background-color: #f1f1f1; 
+    width: 8px;
+    background-color: #f1f1f1;
 }
 
 .form-select::-webkit-scrollbar-thumb {
-    background-color: #000000; 
-    border-radius: 4px; 
+    background-color: #000000;
+    border-radius: 4px;
 }
 
+.dropdown-menu::-webkit-scrollbar {
+    width: 8px;
+    background-color: #f1f1f1;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background-color: #000000;
+    border-radius: 4px;
+}
+
+
+/* Estilo geral do navside */
 #navside {
-    margin-top: 75px;
+    margin-top: 60px;
     position: fixed;
-    min-width: 200px;
-    top: 0px;
-    left: 0px;
-    width: 100px;
+    left: 0;
+    width: 150px;
     height: 100%;
-    border-right: solid;
-    border-color: rgba(0, 22, 22, 0.4);
-}
-
-#navside ul {
-    height: 88%;
-    padding: 0;
+    background-color: #212529;
+    padding: 40px 0;
+    border-top: #ccc;
     overflow-y: auto;
-    overflow-x: hidden;
-    margin-top: 10px;
+    /* Permite rolagem vertical */
 }
 
-#navside li {
-    color: #4d4e53;
-    border-top: 1px solid;
+/* Estilo para a barra de rolagem */
+#navside::-webkit-scrollbar {
+    width: 1px;
+    /* Largura da barra */
+}
+
+#navside::-webkit-scrollbar-track {
+    background: #ffffff;
+    /* Cor do fundo da barra */
+}
+
+/* Estilo da lista */
+#navside ul {
     list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilo dos itens da lista */
+#navside li {
     position: relative;
-    width: 100%;
-}
-
-#navside a {
-    display: block;
-    padding: 10px;
-    color: #4d4e53;
-    text-decoration: none;
+    padding: 10px 20px;
+    margin: 0;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-header {
-    color: black;
-    margin: 10px;
-    text-align: center;
-    font-weight: thin;
-    text-align: left;
-    margin: 40px 10px 20px;
-    font-size: 1.8em;
-    font-weight: bold;
+/* Estilo para links */
+#navside a.nav-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    display: block;
 }
 
+/* Estilo do item ativo */
+#navside li.active {
+    background-color: #fff;
+    box-shadow: 0px -3px rgba(0, 0, 0, 0.2), 0px 3px rgba(0, 0, 0, 0.2);
+}
+
+#navside li.active a {
+    color: #198754;
+}
+
+/* Efeito decorativo para o item ativo */
+#navside li.active::before,
+#navside li.active::after {
+    content: "";
+    position: absolute;
+    background-color: transparent;
+    right: 0;
+    width: 20px;
+}
+
+#navside li.active::before {
+    bottom: 100%;
+    height: 150%;
+    border-bottom-right-radius: 25px;
+    box-shadow: 0 20px 0 0 #fff;
+}
+
+#navside li.active::after {
+    top: 100%;
+    height: 150%;
+    border-top-right-radius: 25px;
+    box-shadow: 0 -20px 0 0 #fff;
+}
+
+
+/* Estilos para o conteúdo principal */
 #main-doc {
     margin-left: 200px;
     margin-top: 50px;
@@ -107,7 +163,7 @@ section article {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
+/* Estilo da tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -122,103 +178,104 @@ table td {
     color: #333;
 }
 
-    .fixed-buttons {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 999; 
-    }
+.fixed-buttons {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+}
 
-    .fixed-buttons button {
-      width: 50px;
-      height: 50px;
-      border: none;
-      border-radius: 50%;
-      margin-bottom: 10px;
-      cursor: pointer;
-      background-color: transparent; 
-      transition: background-color 0.3s; 
-    }
+.fixed-buttons button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
 
-    .fixed-buttons button:hover {
-      background-color: #198754; /* Cor verde ao passar o mouse */
-    }
-
-
-    /* Ajuste de posicionamento para um botão em cima do outro */
-    .fixed-buttons button:nth-child(2) {
-      margin-bottom: 0; 
-      margin-top: -10px; 
-    }
+.fixed-buttons button:hover {
+    background-color: #198754;
+    /* Cor verde ao passar o mouse */
+}
 
 
-    #chatbotContainer {
-        position: relative;
-      }
-      
-      #chatbot {
-        display: none;
-        position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 300px;
-        background-color: #fffcfc;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
-      }
-      
-      #chatbotHeader {
-        background-color: #2c2c2c;
-        color: #fff;
-        padding: 10px;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        display: flex;
-        justify-content: space-between;
-      }
-      
-      #closeChatbotButton {
-        background: none;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-      }
-      
-      #closeChatbotButton:focus {
-        outline: none;
-      }
-      
-    
-      #chatbotMessages {
-        font-size: 12px;
-        position: relative;
-        background-color: #f1f1f1;
-        padding: 10px;
-        border: solid 1px #262424;
-        margin: 10px;
-        border-radius: 5px;
-      }
-      
-      
-      #userInput {
-        width: calc(100% - 80px);
-        margin: 10px;
-        padding: 10px;
-        font-size: 12px;
-        border-radius: 5px;
-      }
-      
-      #sendMessageButton {
-        width: 60px;
-        padding: 5px;
-        margin: 10px;
-        cursor: pointer;
-        font-size: 12px;
-        border-radius: 5px;
-      }
-      
+/* Ajuste de posicionamento para um botão em cima do outro */
+.fixed-buttons button:nth-child(2) {
+    margin-bottom: 0;
+    margin-top: -10px;
+}
+
+
+#chatbotContainer {
+    position: relative;
+}
+
+#chatbot {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 300px;
+    background-color: #fffcfc;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+#chatbotHeader {
+    background-color: #2c2c2c;
+    color: #fff;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+
+#closeChatbotButton {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+#closeChatbotButton:focus {
+    outline: none;
+}
+
+
+#chatbotMessages {
+    font-size: 12px;
+    position: relative;
+    background-color: #f1f1f1;
+    padding: 10px;
+    border: solid 1px #262424;
+    margin: 10px;
+    border-radius: 5px;
+}
+
+
+#userInput {
+    width: calc(100% - 80px);
+    margin: 10px;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+#sendMessageButton {
+    width: 60px;
+    padding: 5px;
+    margin: 10px;
+    cursor: pointer;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
 
 
 @media only screen and (max-width: 800px) {
@@ -251,7 +308,6 @@ table td {
 
     #navside {
         display: none;
-        /* Oculta o navside */
     }
 
     #main-doc {

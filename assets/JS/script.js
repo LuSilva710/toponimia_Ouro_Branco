@@ -68,9 +68,7 @@ function exibirDetalhesRua(rua, linkRua) {
     // Inserir os detalhes da rua logo abaixo do link da rua clicada
     linkRua.parentNode.insertBefore(divDetalhes, linkRua.nextSibling);
 }
-
-
-// Função para exibir as ruas de uma letra do alfabeto
+ 
 // Função para exibir as ruas de uma letra do alfabeto
 function exibirRuasPorLetra(ruas) {
     const ruasPorLetra = agruparRuasPorLetra(ruas);
@@ -107,13 +105,16 @@ function main() {
     fetch('assets/JSON/bairros.json')
         .then(response => response.json())
         .then(data => {
-            const dropdownBairros = document.getElementById('dropdown-bairros');
+            const dropdownLinks = document.querySelectorAll('.dropdown-item');
 
-            // Função para atualizar as ruas ao selecionar um bairro
-            dropdownBairros.addEventListener('change', () => {
-                const bairroSelecionado = dropdownBairros.value;
-                const ruasDoBairro = data.bairros[bairroSelecionado].ruas;
-                exibirRuasPorLetra(ruasDoBairro);
+            // Função para atualizar as ruas ao clicar em um bairro
+            dropdownLinks.forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault(); // Evitar comportamento padrão do link
+                    const bairroSelecionado = link.getAttribute('href').replace('#', '');
+                    const ruasDoBairro = data.bairros[bairroSelecionado].ruas;
+                    exibirRuasPorLetra(ruasDoBairro);
+                });
             });
 
             // Exibir as ruas do primeiro bairro na lista por padrão
@@ -126,25 +127,30 @@ function main() {
         });
 }
 
+
 // Chamada da função principal
 main();
 
 // Minimizar o menu do toggler
 document.addEventListener("DOMContentLoaded", function() {
-    const dropdownBairros = document.getElementById('dropdown-bairros');
+    const dropdownLinks = document.querySelectorAll('.dropdown-item');
     const navbarToggler = document.querySelector('.navbar-toggler');
     const navbarCollapse = document.querySelector('.navbar-collapse');
 
-    // Função para fechar o menu ao selecionar um bairro
-    dropdownBairros.addEventListener('change', function() {
-        if (!navbarCollapse.classList.contains('show')) return; // Se o menu já estiver fechado, retorna
-        navbarToggler.click(); // Fecha o menu
+    // Fechar o menu ao clicar em um link do dropdown
+    dropdownLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (navbarCollapse.classList.contains('show')) {
+                navbarToggler.click(); // Fecha o menu
+            }
+        });
     });
 
-    // Função para fechar o menu ao rolar a tela
+    // Fechar o menu ao rolar a tela
     window.addEventListener('scroll', function() {
-        if (!navbarCollapse.classList.contains('show')) return; // Se o menu já estiver fechado, retorna
-        navbarToggler.click(); // Fecha o menu
+        if (navbarCollapse.classList.contains('show')) {
+            navbarToggler.click(); // Fecha o menu
+        }
     });
 });
 
@@ -177,6 +183,15 @@ document.addEventListener("DOMContentLoaded", function() {
   
     closeChatbotButton.addEventListener('click', function() {
       chatbot.style.display = "none";
+    });
+  });
+  
+  document.querySelectorAll("#navside li").forEach((item) => {
+    item.addEventListener("click", () => {
+      document
+        .querySelectorAll("#navside li")
+        .forEach((el) => el.classList.remove("active"));
+      item.classList.add("active");
     });
   });
   

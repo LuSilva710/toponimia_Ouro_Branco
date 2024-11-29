@@ -335,9 +335,6 @@
                 }
             }
         },
-
-
-
         "bairro_siderurgia": {
             "nome": "Bairro Siderurgia",
             "ruas": {
@@ -613,9 +610,6 @@
                 }
             }
         },
-
-
-
         "bairro_1_maio": {
             "nome": "Bairro 1° de Maio",
             "ruas": {
@@ -941,11 +935,6 @@
                 }
             }
         },
-
-
-
-
-
         "bairro_alto_chale": {
             "nome": "Bairro Alto Chalé",
             "ruas": {
@@ -1011,10 +1000,6 @@
                 }
             }
         },
-
-
-
-        
         "bairro_amalia_rodrigues": {
             "nome": "Bairro Amália Rodrigues",
             "ruas": {
@@ -1199,6 +1184,1733 @@
                     "imagem": ""
                 }
             }
+        },
+        "bairro_bandeirantes": {
+            "nome": "Bairro Bandeirantes",
+            "ruas": {
+                "André Leitão": {
+                    "nome_oficial": "Rua André Leitão",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Dias Arzão": {
+                    "nome_oficial": "Antônio Dias Arzão",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Dias de Oliveira": {
+                    "nome_oficial": "Antônio Dias de Oliveira",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Pires de Campos": {
+                    "nome_oficial": "Antônio Pires de Campos",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Raposo Tavares": {
+                    "nome_oficial": "Antônio Raposo Tavares",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Bartolomeu Bueno": {
+                    "nome_oficial": "Bartolomeu Bueno",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Brás Cubas": {
+                    "nome_oficial": "Brás Cubas",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Diogo Martins Cão": {
+                    "nome_oficial": "Diogo Martins Cão",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Fernao Dias Paes Leme": {
+                    "nome_oficial": "Fernao Dias Paes Leme",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Francisco de Melo Palheta": {
+                    "nome_oficial": "Francisco de Melo Palheta",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Garcia Paes": {
+                    "nome_oficial": "Garcia Paes",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Jerônimo Leitão": {
+                    "nome_oficial": "Jerônimo Leitão",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Luiz Castanho Taques": {
+                    "nome_oficial": "Luiz Castanho Taques",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Luiz Martins": {
+                    "nome_oficial": "Luiz Martins",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Manuel Borba Gato": {
+                    "nome_oficial": "Manuel Borba Gato",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Manuel de Campos Bicudo": {
+                    "nome_oficial": "Manuel de Campos Bicudo",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Martim de Carvalho": {
+                    "nome_oficial": "Martim de Carvalho",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Nicolau Barreto": {
+                    "nome_oficial": "Nicolau Barreto",
+                    "significado": "",
+                    "localizacao": "Bairro BandeirantesK - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pascoal Moreira Cabral": {
+                    "nome_oficial": "Pascoal Moreira Cabral",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pedro Teixeira": {
+                    "nome_oficial": "Pedro Teixeira",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pero Coelho de Souza": {
+                    "nome_oficial": "Pero Coelho de Souza",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Robério Dias": {
+                    "nome_oficial": "Robério Dias",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sebastião Fernandes Tourinho": {
+                    "nome_oficial": "Sebastião Fernandes Tourinho",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Vasco Rodrigues Caldas": {
+                    "nome_oficial": "Vasco Rodrigues Caldas",
+                    "significado": "",
+                    "localizacao": "Bairro Bandeirantes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_bela_vista": {
+            "nome": "Bairro Bela Vista",
+            "ruas": {
+                "Ana Consença Vieira": {
+                    "nome_oficial": "Ana Consença Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ana Fernandes da Costa": {
+                    "nome_oficial": "Ana Fernandes da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Deijanira Bastos Rodrigues": {
+                    "nome_oficial": "Deijanira Bastos Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ercilia Fortunato Nunes": {
+                    "nome_oficial": "Ercilia Fortunato Nunes",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Izabel Simões Vieira": {
+                    "nome_oficial": "Maria Izabel Simões Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Olinda Lopes Fernandes": {
+                    "nome_oficial": "Olinda Lopes Fernandes",
+                    "significado": "",
+                    "localizacao": "Bairro Bela Vista - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_belvedere": {
+            "nome": "Bairro Belvedere",
+            "ruas": {
+                "Pau Brasil": {
+                    "nome_oficial": "Pau Brasil",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Peroba": {
+                    "nome_oficial": "Peroba",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ipê": {
+                    "nome_oficial": "Ipê",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Eucalipto": {
+                    "nome_oficial": "Eucalipto",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sibipiruna": {
+                    "nome_oficial": "Sibipiruna",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cerejeira": {
+                    "nome_oficial": "Cerejeira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Pinheiro": {
+                    "nome_oficial": "Pinheiro",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Candeia": {
+                    "nome_oficial": "Candeia",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cabiuna": {
+                    "nome_oficial": "Cabiuna",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Oliveira": {
+                    "nome_oficial": "Oliveira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Jacarandá": {
+                    "nome_oficial": "Jacarandá",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Jequitibá": {
+                    "nome_oficial": "Jequitibá",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sucupira": {
+                    "nome_oficial": "Sucupira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Braúna": {
+                    "nome_oficial": "Braúna",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Manacá": {
+                    "nome_oficial": "Manacá",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Seringueira": {
+                    "nome_oficial": "Seringueira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Paineira": {
+                    "nome_oficial": "Paineira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Gameleira": {
+                    "nome_oficial": "Gameleira",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Palmeiras": {
+                    "nome_oficial": "Palmeiras",
+                    "significado": "",
+                    "localizacao": "Bairro Belvedere - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_campo_novo": {
+            "nome": "Bairro Campo Novo",
+            "ruas": {
+                "Conceição José dos Santos": {
+                    "nome_oficial": "Conceição José dos Santos",
+                    "significado": "",
+                    "localizacao": "Bairro Campo Novo - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Eurides Cândida da Costa": {
+                    "nome_oficial": "Eurides Cândida da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Campo Novo - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Assunção Vieira": {
+                    "nome_oficial": "José Assunção Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Campo Novo - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria da Conceição Almeida": {
+                    "nome_oficial": "Maria da Conceição Almeida",
+                    "significado": "",
+                    "localizacao": "Bairro Campo Novo - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Silvio Simões Vieira": {
+                    "nome_oficial": "Silvio Simões Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Campo Novo - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_centro": {
+            "nome": "Bairro Centro",
+            "ruas": {
+                "Praça do Céu": {
+                    "nome_oficial": "Praça do Céu",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Alfredo Fernandes Gomes": {
+                    "nome_oficial": "Alfredo Fernandes Gomes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Alicio Vieira do Nascimento": {
+                    "nome_oficial": "Alicio Vieira do Nascimento",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Alto do Cruzeiro": {
+                    "nome_oficial": "Alto do Cruzeiro",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ametista": {
+                    "nome_oficial": "Ametista",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Evencio": {
+                    "nome_oficial": "Antônio Evencio",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Fernandes Torres": {
+                    "nome_oficial": "Antônio Fernandes Torres",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Gomes Junior": {
+                    "nome_oficial": "Antônio Gomes Junior",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio João Vieira": {
+                    "nome_oficial": "Antônio João Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Rezende Guimarães": {
+                    "nome_oficial": "Antônio Rezende Guimarães",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Sérvulo Torres": {
+                    "nome_oficial": "Antônio Sérvulo Torres",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio Tavares da Silva": {
+                    "nome_oficial": "Antônio Tavares da Silva",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Augusta Natalina da Silva": {
+                    "nome_oficial": "Augusta Natalina da Silva",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ayres José Vieira": {
+                    "nome_oficial": "Ayres José Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Benedito Valadares": {
+                    "nome_oficial": "Benedito Valadares",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Dr. Carlos Afonso de Souza Froes": {
+                    "nome_oficial": "Dr. Carlos Afonso de Souza Froes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Celestino Euzébio Fernandes": {
+                    "nome_oficial": "Celestino Euzébio Fernandes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Da Lavoura": {
+                    "nome_oficial": "Da Lavoura",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cosigua": {
+                    "nome_oficial": "Cosigua",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Da Siderbras": {
+                    "nome_oficial": "Da Siderbras",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Das Flores": {
+                    "nome_oficial": "Das Flores",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Das Mercês": {
+                    "nome_oficial": "Das Mercês",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Das Missões": {
+                    "nome_oficial": "Das Missões",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Das Rotas": {
+                    "nome_oficial": "Das Rotas",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Diogo Mendes": {
+                    "nome_oficial": "Diogo Mendes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Dom Silvério": {
+                    "nome_oficial": "Dom Silvério",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Domingos Fernando Rodrigues": {
+                    "nome_oficial": "Domingos Fernando Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Edmundo Pinto": {
+                    "nome_oficial": "Edmundo Pinto",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Francisco Peixoto de Oliveira": {
+                    "nome_oficial": "Francisco Peixoto de Oliveira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Geraldo Coelho de Morais": {
+                    "nome_oficial": "Geraldo Coelho de Morais",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Geraldo José Vieira": {
+                    "nome_oficial": "Geraldo José Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Gumercindo Coelho": {
+                    "nome_oficial": "Gumercindo Coelho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Hermógenes da Costa Carvalho": {
+                    "nome_oficial": "Hermógenes da Costa Carvalho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Henrique Lage": {
+                    "nome_oficial": "Henrique Lage",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Inês Pereira Silva": {
+                    "nome_oficial": "Inês Pereira Silva",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "João Anselmo Barbosa": {
+                    "nome_oficial": "João Anselmo Barbosa",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "João Antônio de Souza": {
+                    "nome_oficial": "João Antônio de Souza",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "João Pedrosa Vieira": {
+                    "nome_oficial": "João Pedrosa Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "João Teófilo": {
+                    "nome_oficial": "João Teófilo",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "João XXIII": {
+                    "nome_oficial": "João XXIII",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José André": {
+                    "nome_oficial": "José André",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Apolinário Nunes": {
+                    "nome_oficial": "José Apolinário Nunes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Arantes Moreira": {
+                    "nome_oficial": "José Arantes Moreira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Conceição da Rocha": {
+                    "nome_oficial": "José Conceição da Rocha",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José de Paula Torres": {
+                    "nome_oficial": "José de Paula Torres",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Fortunato Rodrigues": {
+                    "nome_oficial": "José Fortunato Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Geraldo": {
+                    "nome_oficial": "José Geraldo",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Guilherme": {
+                    "nome_oficial": "José Guilherme",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Hermogenes Vieira": {
+                    "nome_oficial": "José Hermogenes Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Leoncio Salgueiro": {
+                    "nome_oficial": "José Leoncio Salgueiro",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Mapa Filho": {
+                    "nome_oficial": "José Mapa Filho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Pereira Sobrinho": {
+                    "nome_oficial": "José Pereira Sobrinho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "José Ribeiro Lima": {
+                    "nome_oficial": "José Ribeiro Lima",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Juscelino Coelho": {
+                    "nome_oficial": "Juscelino Coelho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Leoncio de Paula Almeida": {
+                    "nome_oficial": "Leoncio de Paula Almeida",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Levindo Costa Carvalho": {
+                    "nome_oficial": "Levindo Costa Carvalho",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Manoel Teodoro": {
+                    "nome_oficial": "Manoel Teodoro",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Manoel Teodoro Lourenço": {
+                    "nome_oficial": "Manoel Teodoro Lourenço",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Domingos Amorim": {
+                    "nome_oficial": "Maria Domingos Amorim",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Evangelista de Almeida": {
+                    "nome_oficial": "Maria Evangelista de Almeida",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Faustina de Jesus": {
+                    "nome_oficial": "Maria Faustina de Jesus",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Firmina da Silva": {
+                    "nome_oficial": "Maria Firmina da Silva",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Silveria": {
+                    "nome_oficial": "Maria Silveria",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Vieira Machado": {
+                    "nome_oficial": "Maria Vieira Machado",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Martins Xavier": {
+                    "nome_oficial": "Martins Xavier",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Miguel da Costa Lima": {
+                    "nome_oficial": "Miguel da Costa Lima",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Miguel Fernandes Torres": {
+                    "nome_oficial": "Miguel Fernandes Torres",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Miguel Vieira Junior": {
+                    "nome_oficial": "Miguel Vieira Junior",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Nossa Senhora Mãe dos Homens": {
+                    "nome_oficial": "Nossa Senhora Mãe dos Homens",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Nuno José Vieira": {
+                    "nome_oficial": "Nuno José Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Olga Roberta Pereira": {
+                    "nome_oficial": "Olga Roberta Pereira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Onésimo Geraldo Vieira": {
+                    "nome_oficial": "Onésimo Geraldo Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Padre Gurgel": {
+                    "nome_oficial": "Padre Gurgel",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Professor José Luiz": {
+                    "nome_oficial": "Professor José Luiz",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Raymundo Campos": {
+                    "nome_oficial": "Raymundo Campos",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Recervindo Alves Viana": {
+                    "nome_oficial": "Recervindo Alves Viana",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Renato Azeredo": {
+                    "nome_oficial": "Renato Azeredo",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Rosália Rodrigues": {
+                    "nome_oficial": "Rosália Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Roselmira Martins Fernandes": {
+                    "nome_oficial": "Roselmira Martins Fernandes",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sagrados Corações": {
+                    "nome_oficial": "Sagrados Corações",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Salanacia": {
+                    "nome_oficial": "Salanacia",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Santa Cruz": {
+                    "nome_oficial": "Santa Cruz",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Santo Antônio": {
+                    "nome_oficial": "Santo Antônio",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sao Jose": {
+                    "nome_oficial": "São José",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Virginita Batista": {
+                    "nome_oficial": "Virginita Batista",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Waldemar Rodrigues": {
+                    "nome_oficial": "Waldemar Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Wilson Antonio Rodrigues": {
+                    "nome_oficial": "Wilson Antonio Rodrigues",
+                    "significado": "",
+                    "localizacao": "Bairro Centro - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_cidade_jardim": {
+            "nome": "Bairro Cidade Jardim",
+            "ruas": {
+                "Claudionor Izidoro da Costa": {
+                    "nome_oficial": "Claudionor Izidoro da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Aparecida Pereira": {
+                    "nome_oficial": "Maria Aparecida Pereira",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Pereira da Costa": {
+                    "nome_oficial": "Maria Pereira da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sílvia Cândida Vieira": {
+                    "nome_oficial": "Sílvia Cândida Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Maria Petrina de Azevedo": {
+                    "nome_oficial": "Maria Petrina de Azevedo",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Áurea Isabel Pinto": {
+                    "nome_oficial": "Áurea Isabel Pinto",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Doutor Jadir": {
+                    "nome_oficial": "Doutor Jadir",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Edmundo Vitoria Filho": {
+                    "nome_oficial": "Edmundo Vitoria Filho",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Francisco Paulino Vieira": {
+                    "nome_oficial": "Francisco Paulino Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Geraldo Leão Rezende": {
+                    "nome_oficial": "Geraldo Leão Rezende",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Geraldo Vital da Costa": {
+                    "nome_oficial": "Geraldo Vital da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Sebastião Faustino Vieira": {
+                    "nome_oficial": "Sebastião Faustino Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Cidade Jardim - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_das_flores": {
+            "nome": "Bairro Das Flores",
+            "ruas": {
+                "Camélias": {
+                    "nome_oficial": "Camélias",
+                    "significado": "",
+                    "localizacao": "Bairro das Flores - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Hortências": {
+                    "nome_oficial": "Hortências",
+                    "significado": "",
+                    "localizacao": "Bairro das Flores - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Orquídeas": {
+                    "nome_oficial": "Orquídeas",
+                    "significado": "",
+                    "localizacao": "Bairro das Flores - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Rosas": {
+                    "nome_oficial": "Rosas",
+                    "significado": "",
+                    "localizacao": "Bairro das Flores - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_dom_orione": {
+            "nome": "Bairro Dom Orione",
+            "ruas": {
+                "Antonio Florencio Pereira": {
+                    "nome_oficial": "Antonio Florencio Pereira",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Dom Orione": {
+                    "nome_oficial": "Dom Orione",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Estrada Pe da Serra": {
+                    "nome_oficial": "Estrada Pe da Serra",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Jose Leao Vieira Neto": {
+                    "nome_oficial": "Jose Leao Vieira Neto",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Juvencino Sacramento Vieira": {
+                    "nome_oficial": "Juvencino Sacramento Vieira",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Ouro Park": {
+                    "nome_oficial": "Ouro Park",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Safira": {
+                    "nome_oficial": "Safira",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
+        },
+        "bairro_inconfidentes": {
+            "nome": "Bairro Inconfidentes",
+            "ruas": {
+                " Amintas Jaques de Morais": {
+                    "nome_oficial": "Amintas Jaques de Morais",
+                    "significado": "",
+                    "localizacao": "Bairro Dom Orione - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Antônio de Oliveira Lopes": {
+                    "nome_oficial": "Antônio de Oliveira Lopes",
+                    "significado": "",
+                    "localizacao": "Bairro Inconfidentes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cláudio Manoel da Costa": {
+                    "nome_oficial": "Cláudio Manoel da Costa",
+                    "significado": "",
+                    "localizacao": "Bairro Inconfidentes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                },
+                "Cônego Luiz Vieira da Silva": {
+                    "nome_oficial": "Cônego Luiz Vieira da Silva",
+                    "significado": "",
+                    "localizacao": "Bairro Inconfidentes - Ouro Branco/MG",
+                    "legislacao": "",
+                    "codigo": "",
+                    "regional": "Câmara Municipal de Ouro Branco",
+                    "mapa": "",
+                    "imagem": ""
+                }
+            }
         }
     }
 }
+
+:lipstick: feat: Estilização da Página Principal
