@@ -363,3 +363,41 @@ table td {
     }
 
 }
+
+
+@media only screen and (max-width: 500px) {
+    /* Estilos responsivos para telas menores */
+
+    html {
+        font-size: 12px;
+    }
+    .navbar-brand {
+        font-size: 8px;
+    }
+
+    .navbar {
+        font-size: 10px;
+        padding: 8px;
+    }
+
+
+    .navbar>.container,
+    .navbar>.container-fluid {
+        display: flex;
+        flex-wrap: inherit;
+        align-items: center;
+        justify-content: start;
+    }
+
+    .navbar-toggler {
+        font-size: 10px;
+    }
+
+    .dropdown-item {
+        font-size: 12px;
+    }
+
+    .form-control {
+        width: 70%;
+    }
+}
