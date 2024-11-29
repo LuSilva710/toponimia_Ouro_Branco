@@ -365,7 +365,7 @@ table td {
 }
 
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 750px) {
     /* Estilos responsivos para telas menores */
 
     html {
