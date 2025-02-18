@@ -20,7 +20,9 @@ function criarTabelaRua(rua) {
                 <td>${rua.regional}</td>
             </tr>
             <tr>
-                <td colspan="5">${rua.significado}</td>
+                <td colspan="3">${rua.significado}</td>
+                <td colspan="2">
+                <img src="${rua.imagemHomenageado}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin-left: auto; margin-right: auto;"></td>
             </tr>
             <tr>
                 <td colspan="3">
@@ -100,7 +102,7 @@ function exibirRuasPorLetra(ruas) {
 
 
 
-// Função principal
+// Listar bairros em ordem alfabética
 function main() {
     fetch('assets/JSON/bairros.json')
         .then(response => response.json())
@@ -170,6 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+// Chatbot
 document.addEventListener("DOMContentLoaded", function() {
     const chatbotButton = document.getElementById('chatbotButton');
     const chatbot = document.getElementById('chatbot');
