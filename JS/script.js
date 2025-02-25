@@ -104,7 +104,7 @@ function exibirRuasPorLetra(ruas) {
 
 // Listar bairros em ordem alfabética
 function main() {
-    fetch('/json/bairros.json')
+    fetch('/JSON/bairros.json')
         .then(response => response.json())
         .then(data => {
             const dropdownLinks = document.querySelectorAll('.dropdown-item');
