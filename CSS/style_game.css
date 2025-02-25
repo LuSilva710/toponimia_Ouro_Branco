@@ -1,0 +1,358 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* Estilo da Navbar */
+.navbar {
+    --bs-navbar-padding-x: 0;
+    --bs-navbar-padding-y: 1.2rem;
+}
+
+a {
+    text-decoration: none;
+}
+
+.navbar-brand {
+    padding-right: 25px;
+    border-right: 2px solid #fff;
+}
+
+.navbar-nav .nav-item:hover .nav-link {
+    color: #198754;
+}
+
+.navbar-collapse {
+    padding: 15px 0;
+}
+
+html,
+body {
+    min-width: 290px;
+    color: #4d4e53;
+    background-color: #ffffff;
+    font-family: "Open Sans", Arial, sans-serif;
+    line-height: 1.5;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+.game-container {
+    margin-top: 2300px;
+    position: absolute;
+    text-align: center;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 95%;
+}
+
+h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #000000;
+    text-align: center;
+}
+
+#game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#hint-button,
+#restart-button,
+#check-button {
+    background: #070707;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+#hint-button:hover {
+    background: #198754;
+}
+
+#restart-button:hover {
+    background: #E5554F;
+}
+
+#check-button:hover {
+    background: #198754;
+}
+
+#timer {
+    font-size: 1.2em;
+    color: #555;
+}
+
+#crossword {
+    display: grid;
+    grid-template-columns: repeat(45, 1fr);
+    grid-gap: 3px;
+    margin: 20px auto;
+    width: 100%;
+    max-width: 90vw;
+    height: auto;
+}
+
+#crossword div {
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em;
+    background-color: #f9f9f9;
+    position: relative;
+    box-sizing: border-box;
+    border: none;
+}
+
+#crossword div input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #000;
+    background: transparent;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #333;
+    outline: none;
+}
+
+#crossword div.filled {
+    background-color: #000000;
+    color: #fff;
+    pointer-events: none;
+}
+
+#crossword input:disabled {
+    color: #333;
+    border: none;
+    /* Inputs desativados sem borda */
+}
+
+
+.crossword-container {
+    display: grid;
+    gap: 2px;
+}
+
+.crossword-container div {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.crossword-container input {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    font-size: 18px;
+    border: 1px solid #000;
+}
+
+.black-cell {
+    background-color: transparent;
+    border: none;
+}
+
+.revealed {
+    background-color: #CCFFCC !important;
+}
+
+#crossword input:disabled {
+    color: #333;
+}
+
+.word-cell {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.word-number {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 12px;
+    font-weight: bold;
+    color: black;
+}
+
+.grid-cell {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-top: 100%;
+}
+
+.word-marker {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    font-size: 10px;
+    z-index: 1;
+    color: #666;
+}
+
+input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.incorrect {
+    background-color: #ffcccc !important;
+}
+
+.empty-cell {
+    background-color: transparent;
+    border: none;
+}
+
+.clues {
+    margin-top: 20px;
+}
+
+.clues h2 {
+    font-size: 1.5em;
+    color: #FF6F61;
+}
+
+#clues-list {
+    text-align: left;
+    padding: 0;
+    list-style: none;
+    font-size: 1.1em;
+}
+
+#clues-list li {
+    margin: 5px 0;
+}
+
+#game-status {
+    margin-top: 20px;
+}
+
+#status-message {
+    font-size: 1.2em;
+    color: #555;
+}
+
+@media (max-width: 740px) {
+
+    .game-container {
+        margin-top: 2150px;
+        position: absolute;
+        text-align: center;
+        background: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+    }
+
+}
+
+@media (max-width: 680px) {
+
+    .navbar-brand {  
+        font-size: 0.8em;
+
+    }
+    .game-container {
+        margin-top: 2500px;
+        position: absolute;
+        text-align: center;
+        background: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 90%;
+    }
+
+    #crossword div {
+        font-size: 1em;
+    }
+
+    h1 {
+        font-size: 1em;
+    }
+
+    .clues h2 {
+        font-size: 1em;
+    }
+}
+
+
+@media (max-width: 500px) {
+
+    #hint-button,
+    #restart-button,
+    #check-button {
+        background: #070707;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.5em;
+    }
+
+    #crossword {
+        width: 100%;
+    }
+
+    #crossword div {
+        width: 200%;
+    }
+    
+    #crossword div input {
+        width: 200%;
+        height: 200%;
+        border: 1px solid #000;
+        background: transparent;
+        text-align: center;
+        font-size: 1.2em;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #333;
+        outline: none;
+    }
+
+    h1 {
+        font-size: 1em;
+    }
+
+    .clues h2 {
+        font-size: 1em;
+    }
+}
