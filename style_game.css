@@ -4,7 +4,20 @@
     padding: 0;
 }
 
-/* Estilo da Navbar */
+html,
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+}
+
 .navbar {
     --bs-navbar-padding-x: 0;
     --bs-navbar-padding-y: 1.2rem;
@@ -27,36 +40,20 @@ a {
     padding: 15px 0;
 }
 
-html,
-body {
-    min-width: 290px;
-    color: #4d4e53;
-    background-color: #ffffff;
-    font-family: "Open Sans", Arial, sans-serif;
-    line-height: 1.5;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #333;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f0f0f0;
+.navbar-toggler {
+    border: none;
 }
 
 .game-container {
-    margin-top: 2300px;
-    position: absolute;
-    text-align: center;
-    background: #fff;
-    padding: 20px;
-    border-radius: 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    margin: 130px 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 95%;
+    background: #fff;
+    border-radius: 15px;
 }
 
 h1 {
@@ -105,26 +102,18 @@ h1 {
 
 #crossword {
     display: grid;
-    grid-template-columns: repeat(45, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(45, 1fr));
     grid-gap: 3px;
     margin: 20px auto;
     width: 100%;
     max-width: 90vw;
-    height: auto;
 }
 
 #crossword div {
-    width: 100%;
-    height: 0;
-    padding-top: 100%;
+    aspect-ratio: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1em;
-    background-color: #f9f9f9;
-    position: relative;
-    box-sizing: border-box;
-    border: none;
 }
 
 #crossword div input {
@@ -242,18 +231,14 @@ input {
 
 .clues h2 {
     font-size: 1.5em;
-    color: #FF6F61;
+    color: #198754;
 }
 
 #clues-list {
     text-align: left;
     padding: 0;
     list-style: none;
-    font-size: 1.1em;
-}
-
-#clues-list li {
-    margin: 5px 0;
+    font-size: 1.0em;
 }
 
 #game-status {
@@ -265,37 +250,34 @@ input {
     color: #555;
 }
 
-@media (max-width: 740px) {
-
-    .game-container {
-        margin-top: 2150px;
-        position: absolute;
-        text-align: center;
-        background: #fff;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 90%;
+@media (max-width: 992px) {
+    .navbar-brand {
+        font-size: 0.9rem;
+        padding-right: 15px;
     }
 
+    #game-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
+@media (max-width: 768px) {
+    .game-container {
+        margin-top: 120px;
+    }
 }
 
 @media (max-width: 680px) {
 
-    .navbar-brand {  
-        font-size: 0.8em;
+    .navbar-brand {
+        font-size: 0.6em;
+    }
 
+    .navbar-nav {
+        font-size: 0.8em;
     }
-    .game-container {
-        margin-top: 2500px;
-        position: absolute;
-        text-align: center;
-        background: #fff;
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        width: 90%;
-    }
+
 
     #crossword div {
         font-size: 1em;
@@ -308,10 +290,18 @@ input {
     .clues h2 {
         font-size: 1em;
     }
+
+    #clues-list {
+        font-size: 0.8em;
+    }
 }
 
 
 @media (max-width: 500px) {
+
+    .navbar-toggler {
+        font-size: 0.8em;
+    }
 
     #hint-button,
     #restart-button,
@@ -332,7 +322,7 @@ input {
     #crossword div {
         width: 200%;
     }
-    
+
     #crossword div input {
         width: 200%;
         height: 200%;
@@ -343,7 +333,6 @@ input {
         font-weight: bold;
         text-transform: uppercase;
         color: #333;
-        outline: none;
     }
 
     h1 {
@@ -353,4 +342,10 @@ input {
     .clues h2 {
         font-size: 1em;
     }
+
+    #clues-list {
+        font-size: 0.5em;
+    }
+
+
 }
