@@ -19,13 +19,11 @@
   <link rel="stylesheet" href="./style.css">
 </head>
 
-
 <body>
-
   <header>
     <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-top">
       <div class="container-fluid">
-        <a class="navbar-brand" href="./index.html"><strong>Toponímia Urbana de Ouro Branco</strong></a>
+        <a class="navbar-brand"><strong>Toponímia Urbana de Ouro Branco</strong></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
           aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -33,12 +31,19 @@
         <div class="collapse navbar-collapse" id="navbarScroll">
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 180px;">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./portaleducativo.html">Projeto Saberes</a>
+              <a class="nav-link active" aria-current="page" href="/index.html">Dicionário de Ruas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./pages/portaleducativo.html">Projeto Saberes
+                da Extensão</a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="./pages/about.html">Sobre nós</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Contato</a>
             </li>
-
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">Bairros</a>
@@ -75,16 +80,14 @@
               </ul>
             </li>
           </ul>
-          <form class="d-flex" role="search">
+          <!-- <form class="d-flex" role="search">
             <label for="search-bar" class="visually-hidden">Pesquisar</label>
             <input id="search-bar" class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
             <button class="btn btn-outline-success" type="submit">
               <span class="bi bi-search" aria-hidden="true"></span>
               <span class="visually-hidden">Pesquisar</span>
             </button>
-          </form>
-
-
+          </form> -->
         </div>
       </div>
     </nav>
@@ -133,6 +136,13 @@
         </p>
       </article>
     </section>
+
+    <section id="introducao-bairro" class="container my-4">
+      <div id="capa-bairro" class="text-center">
+        <!-- Conteúdo dinâmico inserido via JavaScript -->
+      </div>
+    </section>
+
 
     <section id="A" class="main-section">
       <header>A</header>

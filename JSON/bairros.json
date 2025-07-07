@@ -2,6 +2,9 @@
     "bairros": {
         "bairro_pioneiros": {
             "nome": "Bairro Pioneiros",
+            "titulo": "Bairro Pioneiros",
+            "imagem_capa": "./assets/Images/pioneiros.png",
+            "descricao": "Bairro Pioneiros é um bairro residencial conhecido por suas ruas tranquilas e belas paisagens. As escolhas de nomes de ruas deste bairro remetem a figuras históricas ligadas ao bandeirantismo, passíveis de heroicização em determinados contextos históricos.",
             "ruas": {
                 "Afonso Sardinha": {
                     "nome_oficial": "Rua Afonso Sardinha",
@@ -3515,7 +3518,7 @@
                     "regional": "Camara Municipal de Ouro Branco",
                     "mapa": "",
                     "imagem": ""
-                }                
+                }
             }
         }
     }
