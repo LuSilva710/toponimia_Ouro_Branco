@@ -1,3 +1,5 @@
+
+
 // Função para criar elementos da tabela de informações da rua
 function criarTabelaRua(rua) {
     const tabela = document.createElement('table');
@@ -102,33 +104,61 @@ function exibirRuasPorLetra(ruas) {
     }
 }
 
-// Função principal
-function main() {
-    fetch('./json/bairros.json')
-        .then(response => response.json())
-        .then(data => {
-            const dropdownLinks = document.querySelectorAll('.dropdown-item');
+const API_BASE = import.meta?.env?.VITE_API_URL || ''; // se usar bundler; caso contrário deixe '' e sirva no mesmo host
 
-            dropdownLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const bairroSelecionado = link.getAttribute('href').replace('#', '');
-                    const bairroInfo = data.bairros[bairroSelecionado];
+async function carregarBairros() {
+  const r = await fetch(`${API_BASE}/api/bairros`);
+  const data = await r.json();
+  // converte array -> objeto indexado por slug
+  const bairrosIndex = {};
+  for (const b of data.bairros) bairrosIndex[b.slug] = b;
+  return bairrosIndex;
+}
 
-                    exibirIntroducaoBairro(bairroInfo);
-                    exibirRuasPorLetra(bairroInfo.ruas);
-                });
-            });
+async function carregarRuasDoBairro(slug) {
+  const r = await fetch(`${API_BASE}/api/bairros/${slug}/ruas`);
+  const data = await r.json();
+  // converte array -> objeto { "Nome da Rua": {detalhes...} } para suas funções existentes
+  const ruasIndex = {};
+  for (const rua of data.ruas) {
+    ruasIndex[rua.nome_oficial] = rua;
+  }
+  return ruasIndex;
+}
 
-            // Exibir o primeiro bairro da lista por padrão
-            const primeiroBairro = Object.keys(data.bairros)[0];
-            const bairroInfo = data.bairros[primeiroBairro];
-            exibirIntroducaoBairro(bairroInfo);
-            exibirRuasPorLetra(bairroInfo.ruas);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar JSON de ruas:', error);
-        });
+async function main() {
+  try {
+    const bairrosIndex = await carregarBairros();
+    const dropdownLinks = document.querySelectorAll('.dropdown-item');
+
+    async function renderBairro(slug) {
+      const bairroInfo = bairrosIndex[slug];
+      if (!bairroInfo) return;
+
+      // busca ruas via API
+      const ruasIndex = await carregarRuasDoBairro(slug);
+
+      // adapta para seu formato antigo:
+      const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
+
+      exibirIntroducaoBairro(bairroComRuas);
+      exibirRuasPorLetra(bairroComRuas.ruas);
+    }
+
+    dropdownLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const slug = link.getAttribute('href').replace('#', '');
+        renderBairro(slug);
+      });
+    });
+
+    // Carrega o primeiro bairro por padrão
+    const primeiroSlug = Object.keys(bairrosIndex)[0];
+    renderBairro(primeiroSlug);
+  } catch (err) {
+    console.error('Erro ao carregar da API:', err);
+  }
 }
 
 main();
