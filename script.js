@@ -1,4 +1,19 @@
 
+// Torne seu arquivo um módulo e crie o client aqui.
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const SUPABASE_URL  = 'https://zxojqtxkaxgcnnsgoxub.supabase.co'
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4b2pxdHhrYXhnY25uc2dveHViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzU0NDUsImV4cCI6MjA3MjY1MTQ0NX0.XrqCWtzatb6pVRfkM09RYBgfraJRP-pAi1hT4fIiq6k'
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
+// (opcional) expõe globalmente:
+window.supabase = supabase
+const { data: ping, error: pingErr } = await supabase
+  .from('bairros')
+  .select('id')
+  .limit(1)
+
+console.log('ping bairros:', ping, pingErr)
 
 // Função para criar elementos da tabela de informações da rua
 function criarTabelaRua(rua) {
@@ -104,26 +119,64 @@ function exibirRuasPorLetra(ruas) {
     }
 }
 
-const API_BASE = import.meta?.env?.VITE_API_URL || ''; // se usar bundler; caso contrário deixe '' e sirva no mesmo host
+const API_BASE = "https://zxojqtxkaxgcnnsgoxub.supabase.co"; // se usar bundler; caso contrário deixe '' e sirva no mesmo host
+
+// cache simples em memória pra evitar consultas repetidas
+let _bairrosIndexCache = null
 
 async function carregarBairros() {
-  const r = await fetch(`${API_BASE}/api/bairros`);
-  const data = await r.json();
-  // converte array -> objeto indexado por slug
-  const bairrosIndex = {};
-  for (const b of data.bairros) bairrosIndex[b.slug] = b;
-  return bairrosIndex;
+  // Busca lista de bairros
+  const { data, error } = await supabase
+    .from('bairros')
+    .select('id, slug, nome, titulo, imagem_capa, descricao')
+    .order('nome', { ascending: true })
+
+  if (error) throw error
+
+  // Converte array -> objeto indexado por slug (como seu código espera)
+  const bairrosIndex = {}
+  for (const b of data) bairrosIndex[b.slug] = b
+
+  _bairrosIndexCache = bairrosIndex
+  return bairrosIndex
 }
 
 async function carregarRuasDoBairro(slug) {
-  const r = await fetch(`${API_BASE}/api/bairros/${slug}/ruas`);
-  const data = await r.json();
-  // converte array -> objeto { "Nome da Rua": {detalhes...} } para suas funções existentes
-  const ruasIndex = {};
-  for (const rua of data.ruas) {
-    ruasIndex[rua.nome_oficial] = rua;
+  // Pegamos o bairro_id do cache (carregado por carregarBairros)
+  if (!_bairrosIndexCache) await carregarBairros()
+  const bairro = _bairrosIndexCache[slug]
+  if (!bairro) return {}
+
+  const { data, error } = await supabase
+    .from('ruas')
+    .select(`
+      id,
+      bairro_id,
+      slug,
+      nome_oficial,
+      imagemhomenageado,
+      significado,
+      localizacao,
+      legislacao,
+      codigo,
+      regional,
+      mapa,
+      imagem
+    `)
+    .eq('bairro_id', bairro.id)
+    .order('nome_oficial', { ascending: true })
+
+  if (error) throw error
+
+  // Adapta para o formato que suas funções usam:
+  // { "Nome da Rua": {detalhes...} } e mapeia imagemhomenageado -> imagemHomenageado
+  const ruasIndex = {}
+  for (const rua of data) {
+    const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
+    delete adaptada.imagemhomenageado
+    ruasIndex[rua.nome_oficial] = adaptada
   }
-  return ruasIndex;
+  return ruasIndex
 }
 
 async function main() {
