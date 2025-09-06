@@ -1,3 +1,22 @@
+
+
+
+// Torne seu arquivo um módulo e crie o client aqui.
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const SUPABASE_URL = 'https://zxojqtxkaxgcnnsgoxub.supabase.co'
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4b2pxdHhrYXhnY25uc2dveHViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzU0NDUsImV4cCI6MjA3MjY1MTQ0NX0.XrqCWtzatb6pVRfkM09RYBgfraJRP-pAi1hT4fIiq6k'
+
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
+// (opcional) expõe globalmente:
+window.supabase = supabase
+const { data: ping, error: pingErr } = await supabase
+    .from('bairros')
+    .select('id')
+    .limit(1)
+
+console.log('ping bairros:', ping, pingErr)
+
 // Função para criar elementos da tabela de informações da rua
 function criarTabelaRua(rua) {
     const tabela = document.createElement('table');
@@ -53,7 +72,9 @@ function exibirIntroducaoBairro(bairro) {
 function agruparRuasPorLetra(ruas) {
     const ruasPorLetra = {};
     for (const nomeRua in ruas) {
-        const primeiraLetra = nomeRua.charAt(0).toUpperCase();
+        const nomeSemPrefixo = nomeRua.replace(/^Rua\s+/i, "")
+        const primeiraLetra = nomeSemPrefixo.charAt(0).toUpperCase();
+
         if (!ruasPorLetra[primeiraLetra]) {
             ruasPorLetra[primeiraLetra] = [];
         }
@@ -92,7 +113,7 @@ function exibirRuasPorLetra(ruas) {
             const linkRua = document.createElement('a');
             linkRua.href = '#';
             linkRua.textContent = rua.nome;
-            linkRua.addEventListener('click', function(event) {
+            linkRua.addEventListener('click', function (event) {
                 event.preventDefault();
                 exibirDetalhesRua(rua.detalhes, linkRua);
             });
@@ -102,33 +123,100 @@ function exibirRuasPorLetra(ruas) {
     }
 }
 
-// Função principal
-function main() {
-    fetch('./json/bairros.json')
-        .then(response => response.json())
-        .then(data => {
-            const dropdownLinks = document.querySelectorAll('.dropdown-item');
+const API_BASE = "https://zxojqtxkaxgcnnsgoxub.supabase.co"; // se usar bundler; caso contrário deixe '' e sirva no mesmo host
 
-            dropdownLinks.forEach(link => {
-                link.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    const bairroSelecionado = link.getAttribute('href').replace('#', '');
-                    const bairroInfo = data.bairros[bairroSelecionado];
+// cache simples em memória pra evitar consultas repetidas
+let _bairrosIndexCache = null
 
-                    exibirIntroducaoBairro(bairroInfo);
-                    exibirRuasPorLetra(bairroInfo.ruas);
-                });
+async function carregarBairros() {
+    // Busca lista de bairros
+    const { data, error } = await supabase
+        .from('bairros')
+        .select('id, slug, nome, titulo, imagem_capa, descricao')
+        .order('nome', { ascending: true })
+
+    if (error) throw error
+
+    // Converte array -> objeto indexado por slug (como seu código espera)
+    const bairrosIndex = {}
+    for (const b of data) bairrosIndex[b.slug] = b
+
+    _bairrosIndexCache = bairrosIndex
+    return bairrosIndex
+}
+
+async function carregarRuasDoBairro(slug) {
+    // Pegamos o bairro_id do cache (carregado por carregarBairros)
+    if (!_bairrosIndexCache) await carregarBairros()
+    const bairro = _bairrosIndexCache[slug]
+    if (!bairro) return {}
+
+    const { data, error } = await supabase
+        .from('ruas')
+        .select(`
+      id,
+      bairro_id,
+      slug,
+      nome_oficial,
+      imagemhomenageado,
+      significado,
+      localizacao,
+      legislacao,
+      codigo,
+      regional,
+      mapa,
+      imagem
+    `)
+        .eq('bairro_id', bairro.id)
+        .order('nome_oficial', { ascending: true })
+
+    if (error) throw error
+
+    // Adapta para o formato que suas funções usam:
+    // { "Nome da Rua": {detalhes...} } e mapeia imagemhomenageado -> imagemHomenageado
+    const ruasIndex = {}
+    for (const rua of data) {
+        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
+        delete adaptada.imagemhomenageado
+        ruasIndex[rua.nome_oficial] = adaptada
+    }
+    return ruasIndex
+}
+
+async function main() {
+    try {
+        const bairrosIndex = await carregarBairros();
+        const dropdownLinks = document.querySelectorAll('.dropdown-item');
+
+        async function renderBairro(slug) {
+            console.log("Render bairro:",slug)
+            const bairroInfo = bairrosIndex[slug];
+            if (!bairroInfo) return;
+
+            // busca ruas via API
+            const ruasIndex = await carregarRuasDoBairro(slug);
+
+            // adapta para seu formato antigo:
+            const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
+
+            exibirIntroducaoBairro(bairroComRuas);
+            exibirRuasPorLetra(bairroComRuas.ruas);
+        }
+
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const slug = link.getAttribute('href').replace('#', '');
+                renderBairro(slug);
             });
-
-            // Exibir o primeiro bairro da lista por padrão
-            const primeiroBairro = Object.keys(data.bairros)[0];
-            const bairroInfo = data.bairros[primeiroBairro];
-            exibirIntroducaoBairro(bairroInfo);
-            exibirRuasPorLetra(bairroInfo.ruas);
-        })
-        .catch(error => {
-            console.error('Erro ao carregar JSON de ruas:', error);
         });
+
+        // Carrega o primeiro bairro por padrão
+        const primeiroSlug = Object.keys(bairrosIndex)[0];
+        renderBairro(primeiroSlug);
+    } catch (err) {
+        console.error('Erro ao carregar da API:', err);
+    }
 }
 
 main();
