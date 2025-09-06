@@ -7,12 +7,49 @@ const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
 // (opcional) expõe globalmente:
 window.supabase = supabase
-const { data: ping, error: pingErr } = await supabase
-    .from('bairros')
-    .select('id')
-    .limit(1)
 
-console.log('ping bairros:', ping, pingErr)
+/**
+ * NOVA FUNÇÃO: Gera dinamicamente as seções do alfabeto (A-Z) no HTML.
+ */
+function gerarSecoesAlfabeto() {
+    const mainDoc = document.getElementById('main-doc');
+    if (!mainDoc) return;
+
+    // Gera o alfabeto de 'A' a 'Z'
+    for (let i = 65; i <= 90; i++) {
+        const letra = String.fromCharCode(i);
+
+        // Cria os elementos HTML para cada letra
+        const section = document.createElement('section');
+        section.id = letra;
+        section.className = 'main-section';
+
+        const header = document.createElement('header');
+        header.textContent = letra;
+
+        const article = document.createElement('article');
+        const p = document.createElement('p');
+        const a = document.createElement('a');
+        a.className = 'section-ruas';
+
+        const divInfo = document.createElement('div');
+        divInfo.className = 'section-rua-info';
+        
+        const hr = document.createElement('hr');
+
+        // Monta a estrutura
+        p.appendChild(a);
+        p.appendChild(divInfo);
+        p.appendChild(hr);
+        article.appendChild(p);
+        section.appendChild(header);
+        section.appendChild(article);
+        
+        // Adiciona a seção completa ao <main>
+        mainDoc.appendChild(section);
+    }
+}
+
 
 // Função para criar elementos da tabela de informações da rua
 function criarTabelaRua(rua) {
@@ -29,24 +66,24 @@ function criarTabelaRua(rua) {
         </thead>
         <tbody>
             <tr>
-                <td>${rua.nome_oficial}</td>
-                <td>${rua.localizacao}</td>
-                <td>${rua.legislacao}</td>
-                <td>${rua.codigo}</td>
-                <td>${rua.regional}</td>
+                <td>${rua.nome_oficial || ''}</td>
+                <td>${rua.localizacao || ''}</td>
+                <td>${rua.legislacao || ''}</td>
+                <td>${rua.codigo || ''}</td>
+                <td>${rua.regional || ''}</td>
             </tr>
             <tr>
-                <td colspan="3">${rua.significado}</td>
+                <td colspan="3">${rua.significado || 'Significado não disponível.'}</td>
                 <td colspan="2">
-                    <img src="${rua.imagemHomenageado}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin: auto;">
+                    ${rua.imagemHomenageado ? `<img src="${rua.imagemHomenageado}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin: auto;">` : ''}
                 </td>
             </tr>
             <tr>
                 <td colspan="3">
-                    <iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    ${rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.'}
                 </td>
                 <td colspan="2">
-                    <img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">
+                    ${rua.imagem ? `<img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
                 </td>
             </tr>
         </tbody>
@@ -69,7 +106,7 @@ function exibirIntroducaoBairro(bairro) {
 function agruparRuasPorLetra(ruas) {
     const ruasPorLetra = {};
     for (const nomeRua in ruas) {
-        const nomeSemPrefixo = nomeRua.replace(/^Rua\s+/i, "")
+        const nomeSemPrefixo = nomeRua.replace(/^(Rua|Antônio|Ana)\s+/i, "").trim();
         const primeiraLetra = nomeSemPrefixo.charAt(0).toUpperCase();
 
         if (!ruasPorLetra[primeiraLetra]) {
@@ -82,10 +119,15 @@ function agruparRuasPorLetra(ruas) {
 
 // Função para exibir os detalhes de uma rua
 function exibirDetalhesRua(rua, linkRua) {
+    // Fecha qualquer outra tabela que esteja aberta
     const tabelaAberta = document.querySelector('.detalhes-rua');
     if (tabelaAberta) {
-        tabelaAberta.parentNode.removeChild(tabelaAberta);
-        return;
+        // Se a tabela clicada já está aberta, apenas a fecha.
+        if (tabelaAberta.previousSibling === linkRua) {
+            tabelaAberta.remove();
+            return;
+        }
+        tabelaAberta.remove();
     }
 
     const divDetalhes = document.createElement('div');
@@ -99,34 +141,33 @@ function exibirDetalhesRua(rua, linkRua) {
 function exibirRuasPorLetra(ruas) {
     const ruasPorLetra = agruparRuasPorLetra(ruas);
     const secoesLetras = document.querySelectorAll('.section-ruas');
-    secoesLetras.forEach(secao => secao.innerHTML = '');
+    secoesLetras.forEach(secao => secao.innerHTML = ''); // Limpa todas as seções
 
     for (let letra in ruasPorLetra) {
         const secaoLetra = document.getElementById(letra);
         if (!secaoLetra) continue;
         const divRuas = secaoLetra.querySelector('.section-ruas');
+        if (!divRuas) continue;
 
         ruasPorLetra[letra].forEach(rua => {
             const linkRua = document.createElement('a');
             linkRua.href = '#';
             linkRua.textContent = rua.nome;
+            linkRua.style.display = 'block'; // Garante que cada rua fique numa linha
             linkRua.addEventListener('click', function (event) {
                 event.preventDefault();
                 exibirDetalhesRua(rua.detalhes, linkRua);
             });
             divRuas.appendChild(linkRua);
-            divRuas.appendChild(document.createElement('br'));
         });
     }
 }
 
-const API_BASE = "https://zxojqtxkaxgcnnsgoxub.supabase.co"; // se usar bundler; caso contrário deixe '' e sirva no mesmo host
+// --- LÓGICA DE CARREGAMENTO DA API ---
 
-// cache simples em memória pra evitar consultas repetidas
 let _bairrosIndexCache = null
 
 async function carregarBairros() {
-    // Busca lista de bairros
     const { data, error } = await supabase
         .from('bairros')
         .select('id, slug, nome, titulo, imagem_capa, descricao')
@@ -134,7 +175,6 @@ async function carregarBairros() {
 
     if (error) throw error
 
-    // Converte array -> objeto indexado por slug (como seu código espera)
     const bairrosIndex = {}
     for (const b of data) bairrosIndex[b.slug] = b
 
@@ -143,54 +183,41 @@ async function carregarBairros() {
 }
 
 async function carregarRuasDoBairro(slug) {
-    // Pegamos o bairro_id do cache (carregado por carregarBairros)
-    if (!_bairrosIndexCache) await carregarBairros();
-    const bairro = _bairrosIndexCache[slug];
-    if (!bairro) return {};
+    if (!_bairrosIndexCache) await carregarBairros()
+    const bairro = _bairrosIndexCache[slug]
+    if (!bairro) return {}
 
     const { data, error } = await supabase
         .from('ruas')
-        .select(`
-            id,
-            bairro_id,
-            slug,
-            nome_oficial,
-            imagemhomenageado,
-            significado,
-            localizacao,
-            legislacao,
-            codigo,
-            regional,
-            mapa,
-            imagem
-        `)
+        .select(`*`) // Seleciona todas as colunas
         .eq('bairro_id', bairro.id)
-        .order('nome_oficial', { ascending: true });
+        .order('nome_oficial', { ascending: true })
 
-    if (error) throw error;
-    const ruasIndex = {};
+    if (error) throw error
+
+    const ruasIndex = {}
     for (const rua of data) {
-        // A linha 'delete' foi removida aqui.
-        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado };
-        ruasIndex[rua.nome_oficial] = adaptada;
+        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
+        delete adaptada.imagemhomenageado
+        ruasIndex[rua.nome_oficial] = adaptada
     }
-    return ruasIndex;
+    return ruasIndex
 }
 
 async function main() {
     try {
+        // Primeiro, gera a estrutura HTML das seções do alfabeto
+        gerarSecoesAlfabeto();
+
         const bairrosIndex = await carregarBairros();
         const dropdownLinks = document.querySelectorAll('.dropdown-item');
 
         async function renderBairro(slug) {
-            console.log("Render bairro:",slug)
+            console.log("Renderizando bairro:", slug)
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
 
-            // busca ruas via API
             const ruasIndex = await carregarRuasDoBairro(slug);
-
-            // adapta para seu formato antigo:
             const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
 
             exibirIntroducaoBairro(bairroComRuas);
@@ -206,17 +233,29 @@ async function main() {
         });
 
         // Carrega o primeiro bairro por padrão
-        const primeiroSlug = Object.keys(bairrosIndex)[0];
-        renderBairro(primeiroSlug);
+        if (Object.keys(bairrosIndex).length > 0) {
+            const primeiroSlug = Object.keys(bairrosIndex)[0];
+            renderBairro(primeiroSlug);
+        }
+
     } catch (err) {
         console.error('Erro ao carregar da API:', err);
+        // Opcional: Mostrar uma mensagem de erro para o usuário na tela
+        const mainDoc = document.getElementById('main-doc');
+        if (mainDoc) {
+            mainDoc.innerHTML = `<p style="text-align: center; color: red;">Não foi possível carregar os dados. Verifique sua conexão e tente novamente.</p>`;
+        }
     }
 }
 
+// --- INICIALIZAÇÃO E EVENTOS ADICIONAIS ---
+
+// Executa a função principal para iniciar a aplicação
 main();
 
-// Minimizar o menu do toggler ao clicar ou rolar
+// Código para minimizar o menu e outros eventos
 document.addEventListener("DOMContentLoaded", function () {
+    // Minimizar menu dropdown
     const dropdownLinks = document.querySelectorAll('.dropdown-item');
     const navbarToggler = document.querySelector('.navbar-toggler');
     const navbarCollapse = document.querySelector('.navbar-collapse');
@@ -234,18 +273,14 @@ document.addEventListener("DOMContentLoaded", function () {
             navbarToggler.click();
         }
     });
-});
 
-// Botão de voltar ao topo
-document.addEventListener("DOMContentLoaded", function () {
+    // Botão de voltar ao topo
     const returnTopButton = document.getElementById('returnTopButton');
     returnTopButton.addEventListener('click', function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
-});
 
-// Chatbot
-document.addEventListener("DOMContentLoaded", function () {
+    // Chatbot
     const chatbotButton = document.getElementById('chatbotButton');
     const chatbot = document.getElementById('chatbot');
     const closeChatbotButton = document.getElementById('closeChatbotButton');
@@ -259,12 +294,12 @@ document.addEventListener("DOMContentLoaded", function () {
     closeChatbotButton.addEventListener('click', function () {
         chatbot.style.display = "none";
     });
-});
 
-// Ativação das letras do nav lateral
-document.querySelectorAll("#navside li").forEach((item) => {
-    item.addEventListener("click", () => {
-        document.querySelectorAll("#navside li").forEach((el) => el.classList.remove("active"));
-        item.classList.add("active");
+    // Ativação das letras do nav lateral
+    document.querySelectorAll("#navside li").forEach((item) => {
+        item.addEventListener("click", () => {
+            document.querySelectorAll("#navside li").forEach((el) => el.classList.remove("active"));
+            item.classList.add("active");
+        });
     });
 });
