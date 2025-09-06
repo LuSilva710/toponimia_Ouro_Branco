@@ -1,11 +1,8 @@
-
-
-
 // Torne seu arquivo um módulo e crie o client aqui.
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const SUPABASE_URL = 'https://zxojqtxkaxgcnnsgoxub.supabase.co'
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4b2pxdHhrYXhnY25uc2dveHViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzU0NDUsImV4cCI6MjA3MjY1MTQ0NX0.XrqCWtzatb6pVRfkM09RYBgfraJRP-pAi1hT4fIiq6k'
+const SUPABASE_URL = 'https://vtsuctcmycaiooeubjnk.supabase.co'
+const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0c3VjdGNteWNhaW9vZXViam5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMTI5MjYsImV4cCI6MjA3MjY4ODkyNn0.YvkjnpNLF-BZALghTD3fTJ7bQbzqc1_ZNlLCb0rUq3Y'
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
 // (opcional) expõe globalmente:
@@ -147,40 +144,37 @@ async function carregarBairros() {
 
 async function carregarRuasDoBairro(slug) {
     // Pegamos o bairro_id do cache (carregado por carregarBairros)
-    if (!_bairrosIndexCache) await carregarBairros()
-    const bairro = _bairrosIndexCache[slug]
-    if (!bairro) return {}
+    if (!_bairrosIndexCache) await carregarBairros();
+    const bairro = _bairrosIndexCache[slug];
+    if (!bairro) return {};
 
     const { data, error } = await supabase
         .from('ruas')
         .select(`
-      id,
-      bairro_id,
-      slug,
-      nome_oficial,
-      imagemhomenageado,
-      significado,
-      localizacao,
-      legislacao,
-      codigo,
-      regional,
-      mapa,
-      imagem
-    `)
+            id,
+            bairro_id,
+            slug,
+            nome_oficial,
+            imagemhomenageado,
+            significado,
+            localizacao,
+            legislacao,
+            codigo,
+            regional,
+            mapa,
+            imagem
+        `)
         .eq('bairro_id', bairro.id)
-        .order('nome_oficial', { ascending: true })
+        .order('nome_oficial', { ascending: true });
 
-    if (error) throw error
-
-    // Adapta para o formato que suas funções usam:
-    // { "Nome da Rua": {detalhes...} } e mapeia imagemhomenageado -> imagemHomenageado
-    const ruasIndex = {}
+    if (error) throw error;
+    const ruasIndex = {};
     for (const rua of data) {
-        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
-        delete adaptada.imagemhomenageado
-        ruasIndex[rua.nome_oficial] = adaptada
+        // A linha 'delete' foi removida aqui.
+        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado };
+        ruasIndex[rua.nome_oficial] = adaptada;
     }
-    return ruasIndex
+    return ruasIndex;
 }
 
 async function main() {
