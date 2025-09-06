@@ -1,0 +1,95 @@
+<!-- admin.html -->
+<script type="module">
+  import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+  const supabase = createClient("https://zxojqtxkaxgcnnsgoxub.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp4b2pxdHhrYXhnY25uc2dveHViIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcwNzU0NDUsImV4cCI6MjA3MjY1MTQ0NX0.XrqCWtzatb6pVRfkM09RYBgfraJRP-pAi1hT4fIiq6k")
+
+  // LOGIN
+  const formLogin = document.getElementById('form-login')
+  formLogin.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const email = document.getElementById('email').value
+    const password = document.getElementById('password').value
+
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) return alert('Erro login: ' + error.message)
+
+    document.getElementById('area-admin').style.display = 'block'
+    formLogin.style.display = 'none'
+  })
+
+  // INSERIR BAIRRO
+  document.getElementById('form-bairro').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const payload = {
+      slug: document.getElementById('b_slug').value,
+      nome: document.getElementById('b_nome').value,
+      titulo: document.getElementById('b_titulo').value,
+      imagem_capa: document.getElementById('b_capa').value,
+      descricao: document.getElementById('b_desc').value,
+    }
+    const { error } = await supabase.from('bairros').insert(payload)
+    if (error) return alert('Erro ao inserir bairro: ' + error.message)
+    alert('Bairro inserido!')
+  })
+
+  // INSERIR RUA
+  document.getElementById('form-rua').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const bairroSlug = document.getElementById('r_bairro_slug').value
+    // buscar id do bairro pelo slug
+    const { data: b } = await supabase.from('bairros').select('id').eq('slug', bairroSlug).single()
+    if (!b) return alert('Bairro não encontrado.')
+
+    const payload = {
+      bairro_id: b.id,
+      slug: document.getElementById('r_slug').value,
+      nome_oficial: document.getElementById('r_nome').value,
+      imagemhomenageado: document.getElementById('r_img_hom').value,
+      significado: document.getElementById('r_sig').value,
+      localizacao: document.getElementById('r_loc').value,
+      legislacao: document.getElementById('r_leg').value,
+      codigo: document.getElementById('r_cod').value,
+      regional: document.getElementById('r_reg').value,
+      mapa: document.getElementById('r_mapa').value,
+      imagem: document.getElementById('r_img').value,
+    }
+    const { error } = await supabase.from('ruas').insert(payload)
+    if (error) return alert('Erro ao inserir rua: ' + error.message)
+    alert('Rua inserida!')
+  })
+</script>
+
+<form id="form-login">
+  <h3>Login admin</h3>
+  <input id="email" type="email" placeholder="email" required>
+  <input id="password" type="password" placeholder="senha" required>
+  <button>Entrar</button>
+</form>
+
+<div id="area-admin" style="display:none">
+  <h3>Novo Bairro</h3>
+  <form id="form-bairro">
+    <input id="b_slug"   placeholder="slug" required>
+    <input id="b_nome"   placeholder="nome" required>
+    <input id="b_titulo" placeholder="titulo">
+    <input id="b_capa"   placeholder="url imagem_capa">
+    <textarea id="b_desc" placeholder="descricao"></textarea>
+    <button>Salvar Bairro</button>
+  </form>
+
+  <h3>Nova Rua</h3>
+  <form id="form-rua">
+    <input id="r_bairro_slug" placeholder="slug do bairro" required>
+    <input id="r_slug"        placeholder="slug da rua" required>
+    <input id="r_nome"        placeholder="nome_oficial" required>
+    <input id="r_img_hom"     placeholder="url imagemHomenageado">
+    <input id="r_sig"         placeholder="significado">
+    <input id="r_loc"         placeholder="localizacao">
+    <input id="r_leg"         placeholder="legislacao">
+    <input id="r_cod"         placeholder="codigo">
+    <input id="r_reg"         placeholder="regional">
+    <input id="r_mapa"        placeholder="url do mapa">
+    <input id="r_img"         placeholder="url imagem">
+    <button>Salvar Rua</button>
+  </form>
+</div>
