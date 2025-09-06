@@ -427,3 +427,154 @@
             width: 70%;
         }
     }
+
+/* Adicione estas regras ao final do arquivo CSS */
+
+/* Melhorias para mobile (abaixo de 576px) */
+@media (max-width: 575.98px) {
+    /* Navbar mais compacta */
+    .navbar {
+        padding: 0.5rem 0;
+    }
+    
+    .navbar-brand {
+        font-size: 0.8rem;
+        padding-right: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 60%;
+    }
+    
+    /* Menu lateral mobile */
+    #navside {
+        width: 0;
+        overflow: hidden;
+        transition: width 0.3s ease;
+        top: 56px;
+    }
+    
+    #navside.mobile-visible {
+        width: 150px;
+    }
+    
+    /* Botão para toggle do menu lateral */
+    .mobile-menu-toggle {
+        display: block;
+        position: fixed;
+        left: 10px;
+        top: 60px;
+        z-index: 1100;
+        background: #212529;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+    
+    /* Conteúdo principal ajustado */
+    #main-doc {
+        margin-left: 0;
+        padding: 15px;
+        margin-top: 56px;
+    }
+    
+    /* Tabelas com rolagem horizontal */
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    table {
+        min-width: 600px;
+    }
+    
+    /* Melhorias nos botões flutuantes */
+    .fixed-buttons {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .fixed-buttons button {
+        width: 40px;
+        height: 40px;
+        font-size: 0.9rem;
+    }
+    
+    /* Chatbot mobile */
+    #chatbot {
+        width: 90%;
+        right: 5%;
+        bottom: 80px;
+    }
+    
+    /* Melhorias nas seções */
+    section {
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+    
+    section article {
+        padding: 10px;
+    }
+    
+    /* Ajuste de iframes */
+    iframe {
+        max-width: 100%;
+        height: 250px;
+    }
+}
+
+/* Melhorias de usabilidade gerais */
+/* Efeito hover nos links das ruas */
+.section-ruas a {
+    display: inline-block;
+    padding: 5px 0;
+    color: #198754;
+    transition: all 0.2s ease;
+}
+
+.section-ruas a:hover {
+    color: #0d6e3f;
+    transform: translateX(3px);
+}
+
+/* Feedback visual para tabelas */
+table tr:hover td {
+    background-color: rgba(25, 135, 84, 0.05);
+}
+
+/* Melhorias na acessibilidade */
+:focus-visible {
+    outline: 2px solid #198754;
+    outline-offset: 2px;
+}
+
+/* Loading state */
+.loading-spinner {
+    display: none;
+    text-align: center;
+    padding: 20px;
+}
+
+.loading-spinner.active {
+    display: block;
+}
+
+.loading-spinner::after {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(25, 135, 84, 0.3);
+    border-radius: 50%;
+    border-top-color: #198754;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
