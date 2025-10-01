@@ -27,6 +27,7 @@
 
     /* Estilo da Navbar */
     .navbar {
+        --bs-navbar-padding-y: 1.2rem;
         padding: 1rem 0;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
@@ -37,7 +38,7 @@
 
     .navbar-brand {
         padding-right: 25px;
-        border-right: 2px solid var(--light-gray);
+        border-right: 2px solid var(--white);
 
     }
 
@@ -59,7 +60,7 @@
     }
 
     .dropdown-item {
-        color: rgba(255, 255, 255, 0.85);
+        color: var(--white);
     }
 
     .dropdown-item:hover {
@@ -427,8 +428,6 @@
             width: 70%;
         }
     }
-
-/* Adicione estas regras ao final do arquivo CSS */
 
 /* Melhorias para mobile (abaixo de 576px) */
 @media (max-width: 575.98px) {
