@@ -289,19 +289,106 @@
         border-radius: 5px;
     }
 
-    @media (max-width: 992px) {
-        #navside {
-            width: 70px;
-        }
-
-        #navside a.nav-link {
-            font-size: 14px;
-        }
-
-        #main-doc {
-            margin-left: 70px;
-        }
+@media (max-width: 992px) {
+    /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
+    #navside {
+        width: 100%;
+        height: 60px; /* Altura fixa para a barra */
+        top: 56px; /* Logo abaixo da Navbar principal */
+        left: 0;
+        z-index: 990;
+        background-color: #212529;
+        overflow-x: auto; /* Permite rolagem horizontal */
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0;
+        border-top: 1px solid #444;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
     }
+
+    /* Ajuste da lista para ficar horizontal */
+    #navside ul {
+        display: flex;
+        flex-direction: row;
+        padding: 0 10px;
+        margin: 0;
+        width: auto;
+    }
+
+    #navside li {
+        padding: 0;
+        display: inline-block;
+    }
+
+    #navside a.nav-link {
+        padding: 15px 20px; /* Área de toque maior */
+        font-size: 1.1rem;
+        color: #fff;
+    }
+
+    /* Indicador de letra ativa na horizontal */
+    #navside li.active {
+        background-color: #198754; /* Verde destaque */
+        border-radius: 4px;
+        box-shadow: none;
+    }
+    
+    /* Remove os triângulos decorativos da versão desktop */
+    #navside li.active::before,
+    #navside li.active::after {
+        display: none;
+    }
+
+    #navside li.active a {
+        color: #fff;
+    }
+
+    /* 2. Ajustar Conteúdo Principal para não ficar escondido */
+    #main-doc {
+        margin-left: 0; /* Remove margem da esquerda */
+        margin-top: 120px; /* Compensa Navbar + Barra A-Z */
+        padding: 20px 15px;
+    }
+
+    /* 3. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* Quebra de texto nas células para evitar tabelas muito largas se possível */
+    table th, table td {
+        white-space: normal;
+        min-width: 60px;
+    }
+
+    /* 4. Ajustes de Imagens e Mapas */
+    iframe, img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Se o mapa for iframe, damos uma altura mínima */
+    iframe {
+        min-height: 300px;
+    }
+
+    /* 5. Chatbot e Botões Flutuantes */
+    .fixed-buttons {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    #chatbot {
+        width: 95%; /* Ocupa quase toda a largura no celular */
+        right: 2.5%;
+        bottom: 70px;
+    }
+}
 
 
     @media (max-width: 800px) {

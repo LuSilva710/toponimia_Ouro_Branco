@@ -422,6 +422,35 @@
         }
 
         @media (max-width: 768px) {
+
+            .timeline::after {
+                left: 20px;
+            }
+
+            /* Alinhar todos os itens para a direita da linha */
+            .timeline-item {
+                width: 100%;
+                padding-left: 50px;
+                padding-right: 10px;
+            }
+
+            /* Ajustar bolinhas da timeline */
+            .timeline-item::after {
+                left: 8px;
+                /* Ajuste fino para alinhar com a linha movida */
+            }
+
+            /* Remove alternância esquerda/direita */
+            .left::after,
+            .right::after {
+                left: 8px;
+            }
+
+            .left,
+            .right {
+                left: 0;
+            }
+
             .hero-section {
                 padding: 70px 0;
             }

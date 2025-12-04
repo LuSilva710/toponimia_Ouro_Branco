@@ -445,12 +445,25 @@
 
      .crossword-section,
      .clues-section {
+         overflow: auto;
          width: 100%;
+         padding: 5px;
+         -webkit-overflow-scrolling: touch;
      }
 
      .game-title {
          font-size: 1.8rem;
      }
+
+    /* Garantir que as células tenham um tamanho mínimo de toque */
+    .grid-cell {
+        min-width: 6px; 
+        min-height: 6px;
+    }
+    
+    .grid-cell input {
+        font-size: 14px; /* Fonte legível */
+    }
  }
 
  @media (max-width: 768px) {
