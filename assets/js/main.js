@@ -305,8 +305,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Botão de voltar ao topo
     const returnTopButton = document.getElementById('returnTopButton');
-    returnTopButton.addEventListener('click', function () {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+    returnTopButton.addEventListener('click', () => {
+        window.scrollY > 0 ? window.scrollTo({ top: 0, behavior: 'smooth' }) : window.scrollTo(0, document.body.scrollHeight);
+    });
+    window.addEventListener('scroll', () => {
+        const arrow = document.getElementById('arrow');
+        if (!arrow) return;
+
+        const up = window.scrollY > 150;
+        arrow.classList.toggle("bi-arrow-up", up);
+        arrow.classList.toggle("bi-arrow-down", !up);
     });
 
     // Chatbot

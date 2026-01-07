@@ -39,7 +39,7 @@
  /* Estilo da Navbar */
  .navbar {
      --bs-navbar-padding-x: 0;
-     --bs-navbar-padding-y: 1.2rem;
+     --bs-navbar-padding-y: 0.2rem;
  }
 
  a {
