@@ -13,6 +13,11 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+
+    }
+
+    html {
+        scroll-padding-top: 110px;
     }
 
     html,
@@ -20,7 +25,7 @@
         min-width: 290px;
         background-color: var(--white);
         color: var(--medium-gray);
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
         min-height: 100vh;
     }
@@ -28,7 +33,8 @@
     /* Estilo da Navbar */
     .navbar {
         --bs-navbar-padding-y: 1.2rem;
-        padding: 1rem 0;
+        padding: 0.5rem 0;
+        z-index: 1050 !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
@@ -73,13 +79,17 @@
     #navside {
         position: fixed;
         left: 0;
-        top: 84px;
-        width: 150px;
-        height: calc(100% - 76px);
+        top: 0;
+        width: 110px;
+        height: 100vh;
         background-color: #212529;
-        padding: 20px 0;
+
+        padding-top: 80px;
+
+        padding-bottom: 20px;
         overflow-y: auto;
-        z-index: 1000;
+        z-index: 1040;
+        border-right: 1px solid var(--dark-gray);
     }
 
     /* Estilo para a barra de rolagem */
@@ -128,6 +138,36 @@
         font-weight: 600;
     }
 
+    .nav-item-disabled {
+        opacity: 0.2;
+        pointer-events: none;
+        cursor: default;
+    }
+
+    #bairroAtualBtn i {
+        transition: transform 0.3s ease;
+        font-size: 0.9rem;
+        color: #198754;
+        /* Cor verde para destacar a seta */
+    }
+
+    /* Gira a seta quando o menu abre */
+    #bairroAtualBtn[aria-expanded="true"] i {
+        transform: rotate(180deg);
+    }
+
+    #nomeBairroExibido {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #fff;
+    }
+
+    .nav-item-disabled a {
+        color: inherit;
+        text-decoration: none;
+    }
+
     /* Efeito decorativo para o item ativo */
     #navside li.active::before,
     #navside li.active::after {
@@ -156,15 +196,16 @@
     /* Estilos para o conteúdo principal */
     #main-doc {
         margin-left: 150px;
-        margin-top: 76px;
+        margin-top: 100px;
         padding: 30px;
-        background-color: var(--lighter-gray);
+        min-height: 100vh;
+        background-color: var(--lighter);
     }
 
     section {
         padding: 30px;
         margin-bottom: 30px;
-        background-color: var(--white);
+        background-color: #fcfcfc;
         border-radius: 4px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -289,106 +330,113 @@
         border-radius: 5px;
     }
 
-@media (max-width: 992px) {
-    /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
-    #navside {
-        width: 100%;
-        height: 60px; /* Altura fixa para a barra */
-        top: 56px; /* Logo abaixo da Navbar principal */
-        left: 0;
-        z-index: 990;
-        background-color: #212529;
-        overflow-x: auto; /* Permite rolagem horizontal */
-        overflow-y: hidden;
-        white-space: nowrap;
-        padding: 0;
-        border-top: 1px solid #444;
-        display: flex;
-        align-items: center;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
+    @media (max-width: 992px) {
 
-    /* Ajuste da lista para ficar horizontal */
-    #navside ul {
-        display: flex;
-        flex-direction: row;
-        padding: 0 10px;
-        margin: 0;
-        width: auto;
-    }
+        #navside {
+            width: 100%;
+            height: 60px;
+            top: 56px;
+            left: 0;
+            z-index: 990;
+            background-color: #212529;
+            overflow-x: auto;
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 0;
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    #navside li {
-        padding: 0;
-        display: inline-block;
-    }
+        /* Ajuste da lista para ficar horizontal */
+        #navside ul {
+            display: flex;
+            flex-direction: row;
+            padding: 0 10px;
+            margin: 0;
+            width: auto;
+        }
 
-    #navside a.nav-link {
-        padding: 15px 20px; /* Área de toque maior */
-        font-size: 1.1rem;
-        color: #fff;
-    }
+        #navside li {
+            padding: 0;
+            display: inline-block;
+        }
 
-    /* Indicador de letra ativa na horizontal */
-    #navside li.active {
-        background-color: #198754; /* Verde destaque */
-        border-radius: 4px;
-        box-shadow: none;
-    }
-    
-    /* Remove os triângulos decorativos da versão desktop */
-    #navside li.active::before,
-    #navside li.active::after {
-        display: none;
-    }
+        #navside a.nav-link {
+            padding: 15px 20px;
+            /* Área de toque maior */
+            font-size: 1.1rem;
+            color: #fff;
+        }
 
-    #navside li.active a {
-        color: #fff;
-    }
+        /* Indicador de letra ativa na horizontal */
+        #navside li.active {
+            background-color: #198754;
+            /* Verde destaque */
+            border-radius: 4px;
+            box-shadow: none;
+        }
 
-    /* 2. Ajustar Conteúdo Principal para não ficar escondido */
-    #main-doc {
-        margin-left: 0; /* Remove margem da esquerda */
-        margin-top: 120px; /* Compensa Navbar + Barra A-Z */
-        padding: 20px 15px;
-    }
+        /* Remove os triângulos decorativos da versão desktop */
+        #navside li.active::before,
+        #navside li.active::after {
+            display: none;
+        }
 
-    /* 3. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
-    table {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    
-    /* Quebra de texto nas células para evitar tabelas muito largas se possível */
-    table th, table td {
-        white-space: normal;
-        min-width: 60px;
-    }
+        #navside li.active a {
+            color: #fff;
+        }
 
-    /* 4. Ajustes de Imagens e Mapas */
-    iframe, img {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-    
-    /* Se o mapa for iframe, damos uma altura mínima */
-    iframe {
-        min-height: 300px;
-    }
+        /* 2. Ajustar Conteúdo Principal para não ficar escondido */
+        #main-doc {
+            margin-left: 0;
+            /* Remove margem da esquerda */
+            margin-top: 120px;
+            /* Compensa Navbar + Barra A-Z */
+            padding: 20px 15px;
+        }
 
-    /* 5. Chatbot e Botões Flutuantes */
-    .fixed-buttons {
-        bottom: 10px;
-        right: 10px;
+        /* 3. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
+        table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* Quebra de texto nas células para evitar tabelas muito largas se possível */
+        table th,
+        table td {
+            white-space: normal;
+            min-width: 60px;
+        }
+
+        /* 4. Ajustes de Imagens e Mapas */
+        iframe,
+        img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Se o mapa for iframe, damos uma altura mínima */
+        iframe {
+            min-height: 300px;
+        }
+
+        /* 5. Chatbot e Botões Flutuantes */
+        .fixed-buttons {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        #chatbot {
+            width: 95%;
+            /* Ocupa quase toda a largura no celular */
+            right: 2.5%;
+            bottom: 70px;
+        }
     }
-    
-    #chatbot {
-        width: 95%; /* Ocupa quase toda a largura no celular */
-        right: 2.5%;
-        bottom: 70px;
-    }
-}
 
 
     @media (max-width: 800px) {
@@ -490,9 +538,9 @@
             font-size: 12px;
         }
 
-     .navbar-brand {
-         font-size: 0.6rem;
-     }
+        .navbar-brand {
+            font-size: 0.6rem;
+        }
 
 
         .navbar {
@@ -516,151 +564,154 @@
         }
     }
 
-/* Melhorias para mobile (abaixo de 576px) */
-@media (max-width: 575.98px) {
-    /* Navbar mais compacta */
-    .navbar {
-        padding: 0.5rem 0;
+    /* Melhorias para mobile (abaixo de 576px) */
+    @media (max-width: 575.98px) {
+
+        /* Navbar mais compacta */
+        .navbar {
+            padding: 0.5rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 0.8rem;
+            padding-right: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+        }
+
+        /* Menu lateral mobile */
+        #navside {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            top: 56px;
+        }
+
+        #navside.mobile-visible {
+            width: 150px;
+        }
+
+        /* Botão para toggle do menu lateral */
+        .mobile-menu-toggle {
+            display: block;
+            position: fixed;
+            left: 10px;
+            top: 60px;
+            z-index: 1100;
+            background: #212529;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* Conteúdo principal ajustado */
+        #main-doc {
+            margin-left: 0;
+            padding: 15px;
+            margin-top: 56px;
+        }
+
+        /* Tabelas com rolagem horizontal */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            min-width: 600px;
+        }
+
+        /* Melhorias nos botões flutuantes */
+        .fixed-buttons {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .fixed-buttons button {
+            width: 40px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* Chatbot mobile */
+        #chatbot {
+            width: 90%;
+            right: 5%;
+            bottom: 80px;
+        }
+
+        /* Melhorias nas seções */
+        section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        section article {
+            padding: 10px;
+        }
+
+        /* Ajuste de iframes */
+        iframe {
+            max-width: 100%;
+            height: 250px;
+        }
     }
-    
-    .navbar-brand {
-        font-size: 0.8rem;
-        padding-right: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 60%;
+
+    /* Melhorias de usabilidade gerais */
+    /* Efeito hover nos links das ruas */
+    .section-ruas a {
+        display: inline-block;
+        padding: 5px 0;
+        color: #198754;
+        transition: all 0.2s ease;
     }
-    
-    /* Menu lateral mobile */
-    #navside {
-        width: 0;
-        overflow: hidden;
-        transition: width 0.3s ease;
-        top: 56px;
+
+    .section-ruas a:hover {
+        color: #0d6e3f;
+        transform: translateX(3px);
     }
-    
-    #navside.mobile-visible {
-        width: 150px;
+
+    /* Feedback visual para tabelas */
+    table tr:hover td {
+        background-color: rgba(25, 135, 84, 0.05);
     }
-    
-    /* Botão para toggle do menu lateral */
-    .mobile-menu-toggle {
+
+    /* Melhorias na acessibilidade */
+    :focus-visible {
+        outline: 2px solid #198754;
+        outline-offset: 2px;
+    }
+
+    /* Loading state */
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .loading-spinner.active {
         display: block;
-        position: fixed;
-        left: 10px;
-        top: 60px;
-        z-index: 1100;
-        background: #212529;
-        color: white;
-        border: none;
+    }
+
+    .loading-spinner::after {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(25, 135, 84, 0.3);
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-        cursor: pointer;
+        border-top-color: #198754;
+        animation: spin 1s ease-in-out infinite;
     }
-    
-    /* Conteúdo principal ajustado */
-    #main-doc {
-        margin-left: 0;
-        padding: 15px;
-        margin-top: 56px;
-    }
-    
-    /* Tabelas com rolagem horizontal */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    table {
-        min-width: 600px;
-    }
-    
-    /* Melhorias nos botões flutuantes */
-    .fixed-buttons {
-        bottom: 10px;
-        right: 10px;
-    }
-    
-    .fixed-buttons button {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
-    }
-    
-    /* Chatbot mobile */
-    #chatbot {
-        width: 90%;
-        right: 5%;
-        bottom: 80px;
-    }
-    
-    /* Melhorias nas seções */
-    section {
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    section article {
-        padding: 10px;
-    }
-    
-    /* Ajuste de iframes */
-    iframe {
-        max-width: 100%;
-        height: 250px;
-    }
-}
 
-/* Melhorias de usabilidade gerais */
-/* Efeito hover nos links das ruas */
-.section-ruas a {
-    display: inline-block;
-    padding: 5px 0;
-    color: #198754;
-    transition: all 0.2s ease;
-}
-
-.section-ruas a:hover {
-    color: #0d6e3f;
-    transform: translateX(3px);
-}
-
-/* Feedback visual para tabelas */
-table tr:hover td {
-    background-color: rgba(25, 135, 84, 0.05);
-}
-
-/* Melhorias na acessibilidade */
-:focus-visible {
-    outline: 2px solid #198754;
-    outline-offset: 2px;
-}
-
-/* Loading state */
-.loading-spinner {
-    display: none;
-    text-align: center;
-    padding: 20px;
-}
-
-.loading-spinner.active {
-    display: block;
-}
-
-.loading-spinner::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(25, 135, 84, 0.3);
-    border-radius: 50%;
-    border-top-color: #198754;
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }

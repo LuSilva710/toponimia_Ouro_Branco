@@ -1,3 +1,4 @@
 node_modules/
 migracao.js
 update_ruas.js
+node_modules/*

@@ -34,7 +34,7 @@ function gerarSecoesAlfabeto() {
 
         const divInfo = document.createElement('div');
         divInfo.className = 'section-rua-info';
-        
+
         const hr = document.createElement('hr');
 
         // Monta a estrutura
@@ -44,7 +44,7 @@ function gerarSecoesAlfabeto() {
         article.appendChild(p);
         section.appendChild(header);
         section.appendChild(article);
-        
+
         // Adiciona a seção completa ao <main>
         mainDoc.appendChild(section);
     }
@@ -140,27 +140,50 @@ function exibirDetalhesRua(rua, linkRua) {
 // Função para exibir as ruas de uma letra do alfabeto
 function exibirRuasPorLetra(ruas) {
     const ruasPorLetra = agruparRuasPorLetra(ruas);
-    const secoesLetras = document.querySelectorAll('.section-ruas');
-    secoesLetras.forEach(secao => secao.innerHTML = ''); // Limpa todas as seções
+    const navItems = document.querySelectorAll("#navside li");
 
-    for (let letra in ruasPorLetra) {
-        const secaoLetra = document.getElementById(letra);
-        if (!secaoLetra) continue;
-        const divRuas = secaoLetra.querySelector('.section-ruas');
-        if (!divRuas) continue;
+    document.querySelectorAll('.main-section').forEach(section => {
+        if (section.id !== "Introdução") {
+            section.style.display = 'none';
+            const divRuas = section.querySelector('.section-ruas');
+            if (divRuas) divRuas.innerHTML = '';
+        }
+    });
 
-        ruasPorLetra[letra].forEach(rua => {
-            const linkRua = document.createElement('a');
-            linkRua.href = '#';
-            linkRua.textContent = rua.nome;
-            linkRua.style.display = 'block'; // Garante que cada rua fique numa linha
-            linkRua.addEventListener('click', function (event) {
-                event.preventDefault();
-                exibirDetalhesRua(rua.detalhes, linkRua);
-            });
-            divRuas.appendChild(linkRua);
-        });
-    }
+    navItems.forEach(item => {
+        const link = item.querySelector("a");
+        if (!link) return;
+
+        const letraLink = link.getAttribute("href").replace("#", "");
+
+        if (link.textContent.includes("↓")) return;
+
+        if (ruasPorLetra[letraLink]) {
+            item.classList.remove("nav-item-disabled");
+
+            const secaoConteudo = document.getElementById(letraLink);
+            if (secaoConteudo) {
+                secaoConteudo.style.display = 'block'; // Torna a seção visível
+
+                const divRuas = secaoConteudo.querySelector('.section-ruas');
+
+                ruasPorLetra[letraLink].forEach(rua => {
+                    const linkRua = document.createElement('a');
+                    linkRua.href = '#';
+                    linkRua.textContent = rua.nome;
+                    linkRua.style.display = 'block';
+                    linkRua.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        exibirDetalhesRua(rua.detalhes, linkRua);
+                    });
+                    divRuas.appendChild(linkRua);
+                });
+            }
+        } else {
+            item.classList.add("nav-item-disabled");
+
+        }
+    });
 }
 
 // --- LÓGICA DE CARREGAMENTO DA API ---
@@ -213,9 +236,15 @@ async function main() {
         const dropdownLinks = document.querySelectorAll('.dropdown-item');
 
         async function renderBairro(slug) {
-            console.log("Renderizando bairro:", slug)
+            console.log("Renderizando bairro:", slug);
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
+
+            // --- NOVA LINHA: Atualiza o nome no Header ---
+            const labelBairro = document.getElementById('nomeBairroExibido');
+            if (labelBairro) {
+                labelBairro.textContent = bairroInfo.nome; // Usa o nome amigável do bairro
+            }
 
             const ruasIndex = await carregarRuasDoBairro(slug);
             const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
