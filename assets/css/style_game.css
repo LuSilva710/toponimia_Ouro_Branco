@@ -6,6 +6,15 @@
      --correct: #e8ffe8;
      --incorrect: #ffe8e8;
      --border-color: #000;
+     --cell-size: 16px;
+     /* desktop */
+ }
+
+ /* no mobile já começa “com zoom” */
+ @media (max-width: 768px) {
+     :root {
+         --cell-size: 24px;
+     }
  }
 
  * {
@@ -263,52 +272,224 @@
      border-bottom: 2px solid var(--dark);
  }
 
- #crossword-container {
-     display: grid;
-     grid-gap: 0;
-     background: transparent;
-     padding: 0;
-     border: 1px solid var(--border-color);
-     width: 100%;
-     height: 100%;
-     max-width: 100%;
-     max-height: 70vh;
-     aspect-ratio: 1 / 1;
-     margin: 0 auto;
- }
-
  #crossword {
      display: grid;
-     grid-template-columns: repeat(45, 1fr);
-     grid-template-rows: repeat(45, 1fr);
-     width: 100%;
-     height: 100%;
+     grid-template-columns: repeat(45, var(--cell-size));
+     grid-template-rows: repeat(45, var(--cell-size));
+     width: max-content;
+     height: max-content;
  }
 
+ .crossword-section {
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+     width: 100%;
+ }
+
+ /* “pill” flutuante sobre o tabuleiro (mobile-first) */
+ .zoom-ui {
+     width: 100%;
+     max-width: 560px;
+     margin: 0 auto;
+
+     display: grid;
+     grid-template-columns: 44px 28px 1fr 56px 44px 44px;
+     align-items: center;
+     gap: 10px;
+
+     padding: 12px 14px;
+     border-radius: 999px;
+
+     background: rgba(255, 255, 255, .90);
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+
+     border: 1px solid rgba(0, 0, 0, .08);
+     box-shadow: 0 12px 28px rgba(0, 0, 0, .14);
+ }
+
+ /* Esconde no desktop se você quiser (opcional) */
+ @media (max-width: 420px) {
+     .zoom-ui {
+         grid-template-columns: 40px 24px 1fr 52px 40px 40px;
+         gap: 8px;
+         padding: 10px 12px;
+     }
+ }
+
+
+ .zoom-icon {
+     width: 44px;
+     height: 44px;
+     border-radius: 999px;
+     border: 0;
+     background: var(--dark);
+     color: #fff;
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+     transition: transform .12s ease;
+ }
+
+ .zoom-icon:active {
+     transform: translateY(1px);
+ }
+
+ /* botão “ghost” (mais discreto) */
+ .zoom-ghost {
+     background: rgba(0, 0, 0, .06);
+     color: var(--dark);
+     box-shadow: none;
+     border: 1px solid rgba(0, 0, 0, .10);
+ }
+
+ .zoom-label {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 28px;
+     color: rgba(0, 0, 0, .65);
+ }
+
+ /* Range bem bonito + acessível */
+ .zoom-range {
+     width: 100%;
+     accent-color: var(--dark);
+     height: 28px;
+ }
+
+ .zoom-range::-webkit-slider-runnable-track {
+     height: 7px;
+     border-radius: 999px;
+     background: rgba(0, 0, 0, .15);
+ }
+
+ .zoom-range::-webkit-slider-thumb {
+     -webkit-appearance: none;
+     width: 20px;
+     height: 20px;
+     border-radius: 999px;
+     background: var(--dark);
+     margin-top: -6.5px;
+     box-shadow: 0 6px 14px rgba(0, 0, 0, .22);
+ }
+
+ /* Thumb/track (WebKit) */
+ .zoom-range::-webkit-slider-runnable-track {
+     height: 6px;
+     border-radius: 999px;
+     background: rgba(0, 0, 0, .15);
+ }
+
+ .zoom-range::-webkit-slider-thumb {
+     -webkit-appearance: none;
+     appearance: none;
+     width: 18px;
+     height: 18px;
+     border-radius: 999px;
+     background: var(--dark);
+     margin-top: -6px;
+     box-shadow: 0 6px 14px rgba(0, 0, 0, .22);
+ }
+
+ /* Thumb/track (Firefox) */
+ .zoom-range::-moz-range-track {
+     height: 6px;
+     border-radius: 999px;
+     background: rgba(0, 0, 0, .15);
+ }
+
+ .zoom-range::-moz-range-thumb {
+     width: 18px;
+     height: 18px;
+     border-radius: 999px;
+     background: var(--dark);
+     border: 0;
+     box-shadow: 0 6px 14px rgba(0, 0, 0, .22);
+ }
+
+ .zoom-range::-moz-range-thumb{
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: var(--dark);
+  border: 0;
+  box-shadow: 0 6px 14px rgba(0,0,0,.22);
+}
+
+.zoom-value{
+  min-width: 56px;
+  text-align: right;
+  font-weight: 700;
+  color: rgba(0,0,0,.70);
+  font-variant-numeric: tabular-nums;
+}
+
+/* foco acessível */
+.zoom-icon:focus-visible,
+.zoom-range:focus-visible{
+  outline: 3px solid rgba(25,135,84,.45);
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
+ /* Respeita usuários com “reduzir movimento” */
+ @media (prefers-reduced-motion: reduce) {
+     .zoom-icon {
+         transition: none;
+     }
+ }
+
+ #crossword-container {
+     border: 1px solid var(--border-color);
+     width: 100%;
+     max-width: 100%;
+     height: min(70vh, 520px);
+     aspect-ratio: 1 / 1;
+     margin: 0 auto;
+
+     overflow: auto;
+     -webkit-overflow-scrolling: touch;
+     background: transparent;
+
+ }
+
+
  .grid-cell {
+     width: var(--cell-size);
+     height: var(--cell-size);
      position: relative;
      display: flex;
      justify-content: center;
      align-items: center;
-     background: white;
+     background: #fff;
      border: 1px solid var(--border-color);
-     box-sizing: border-box;
-     aspect-ratio: 1 / 1;
  }
 
  .grid-cell input {
      width: 100%;
      height: 100%;
      text-align: center;
-     font-size: 1rem;
-     font-weight: bold;
+     font-weight: 800;
      text-transform: uppercase;
-     color: var(--dark);
+     border: 0;
      outline: none;
-     border: none;
      background: transparent;
-     transition: all 0.2s;
      padding: 0;
+     line-height: 1;
+     font-size: calc(var(--cell-size) * 0.55);
+ }
+
+ .word-number {
+     position: absolute;
+     top: 1px;
+     left: 2px;
+     font-weight: 800;
+     z-index: 2;
+     font-size: calc(var(--cell-size) * 0.25);
  }
 
  .grid-cell input:focus {

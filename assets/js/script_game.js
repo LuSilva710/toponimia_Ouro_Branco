@@ -219,23 +219,23 @@ function fillGrid() {
 /**
  * Calcula o tamanho das células baseado no espaço disponível
  */
-function calculateCellSize() {
-    const availableWidth = crosswordWrapper.clientWidth - 2; // Subtrai a borda
-    const availableHeight = crosswordWrapper.clientHeight - 2;
+// function calculateCellSize() {
+//     const availableWidth = crosswordWrapper.clientWidth - 2; // Subtrai a borda
+//     const availableHeight = crosswordWrapper.clientHeight - 2;
 
-    // Calcula o tamanho baseado na menor dimensão (largura ou altura)
-    const sizeBasedOnWidth = availableWidth / gridSize;
-    const sizeBasedOnHeight = availableHeight / gridSize;
+//     // Calcula o tamanho baseado na menor dimensão (largura ou altura)
+//     const sizeBasedOnWidth = availableWidth / gridSize;
+//     const sizeBasedOnHeight = availableHeight / gridSize;
 
-    // Usa o menor valor para garantir que o grid caiba inteiro
-    cellSize = Math.min(sizeBasedOnWidth, sizeBasedOnHeight);
+//     // Usa o menor valor para garantir que o grid caiba inteiro
+//     cellSize = Math.min(sizeBasedOnWidth, sizeBasedOnHeight);
 
-    // Define o tamanho das células
-    document.querySelectorAll('.grid-cell').forEach(cell => {
-        cell.style.width = `${cellSize}px`;
-        cell.style.height = `${cellSize}px`;
-    });
-}
+//     // Define o tamanho das células
+//     document.querySelectorAll('.grid-cell').forEach(cell => {
+//         cell.style.width = `${cellSize}px`;
+//         cell.style.height = `${cellSize}px`;
+//     });
+// }
 
 /**
  * Renderização do grid
@@ -243,8 +243,8 @@ function calculateCellSize() {
  */
 function renderGrid() {
     crosswordContainer.innerHTML = '';
-    crosswordContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
-    crosswordContainer.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
+    // crosswordContainer.style.gridTemplateColumns = `repeat(${gridSize}, 1fr)`;
+    // crosswordContainer.style.gridTemplateRows = `repeat(${gridSize}, 1fr)`;
 
     let wordIndex = 1;
     const positionMarkers = {};
@@ -263,6 +263,11 @@ function renderGrid() {
 
             if (cellIsPartOfWord[row][col]) {
                 const input = document.createElement('input');
+                input.setAttribute('autocomplete', 'off');
+                input.setAttribute('autocorrect', 'off');
+                input.setAttribute('autocapitalize', 'characters');
+                input.setAttribute('spellcheck', 'false');
+                input.inputMode = 'latin';
                 input.maxLength = 1;
                 input.dataset.row = row;
                 input.dataset.col = col;
@@ -295,9 +300,9 @@ function renderGrid() {
     }
 
     // Calcular tamanho das células após renderização
-    setTimeout(() => {
-        calculateCellSize();
-    }, 10);
+    // setTimeout(() => {
+    //     calculateCellSize();
+    // }, 10);
 
     renderClues();
     addEventListeners();
@@ -358,11 +363,16 @@ function updateProgressBar() {
  * Manipulador de clique
  */
 function handleClick(event) {
-    // Destaca a célula clicada
     document.querySelectorAll('#crossword input').forEach(input => {
         input.classList.remove('active');
     });
-    event.target.classList.add('active');
+
+    const el = event.target;
+    el.classList.add('active');
+
+    if (window.matchMedia('(max-width: 768px)').matches) {
+        centerOnInput(el);
+    }
 }
 
 /**
@@ -557,10 +567,10 @@ document.addEventListener('DOMContentLoaded', () => {
     checkButton.addEventListener('click', checkAnswers);
     hintButton.addEventListener('click', giveHint);
 
-    // Redimensionar quando a janela mudar de tamanho
-    window.addEventListener('resize', () => {
-        calculateCellSize();
-    });
+    // // Redimensionar quando a janela mudar de tamanho
+    // window.addEventListener('resize', () => {
+    //     calculateCellSize();
+    // });
 
     const fab = document.getElementById('fabNav');
     const fabIcon = document.getElementById('fabIcon');
@@ -611,6 +621,140 @@ document.addEventListener('DOMContentLoaded', () => {
         // estado inicial
         setFabMode('down');
     }
+    function centerOnInput(input) {
+        if (!viewport || !input) return;
+
+        const cell = input.closest('.grid-cell');
+        if (!cell) return;
+
+        // posição da célula dentro do viewport (considerando scroll atual)
+        const cellRect = cell.getBoundingClientRect();
+        const viewRect = viewport.getBoundingClientRect();
+
+        const currentLeft = viewport.scrollLeft;
+        const currentTop = viewport.scrollTop;
+
+        const targetLeft = currentLeft + (cellRect.left - viewRect.left) - (viewport.clientWidth / 2) + (cellRect.width / 2);
+        const targetTop = currentTop + (cellRect.top - viewRect.top) - (viewport.clientHeight / 2) + (cellRect.height / 2);
+
+        viewport.scrollTo({
+            left: Math.max(0, targetLeft),
+            top: Math.max(0, targetTop),
+            behavior: 'smooth'
+        });
+    }
+
+    const viewport = document.getElementById('crossword-container');
+
+    const zoomRange = document.getElementById('zoomRange');
+    const zoomValue = document.getElementById('zoomValue');
+    const zoomPlus = document.getElementById('zoomPlus');
+    const zoomMinus = document.getElementById('zoomMinus');
+    const zoomCenterBtn = document.getElementById('zoomCenter');
+
+    let cellSize = 24;                 // mobile começa “com zoom”
+    const MIN = 14, MAX = 40;
+
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+    function getViewportCenter() {
+        return {
+            x: viewport.scrollLeft + viewport.clientWidth / 2,
+            y: viewport.scrollTop + viewport.clientHeight / 2
+        };
+    }
+
+    function setCellSize(next, keepCenter = true) {
+        if (!viewport) return;
+        const prev = cellSize;
+        const center = keepCenter ? getViewportCenter() : null;
+
+        cellSize = clamp(next, MIN, MAX);
+        document.documentElement.style.setProperty('--cell-size', `${cellSize}px`);
+
+        // atualiza UI
+        if (zoomRange) zoomRange.value = String(cellSize);
+        if (zoomValue) {
+            const pct = Math.round((cellSize / 16) * 100);
+            zoomValue.textContent = `${pct}%`;
+        }
+
+        // mantém o “mesmo lugar” no tabuleiro
+        if (keepCenter && center) {
+            const scale = cellSize / prev;
+            viewport.scrollLeft = center.x * scale - viewport.clientWidth / 2;
+            viewport.scrollTop = center.y * scale - viewport.clientHeight / 2;
+        }
+    }
+
+    // começa com zoom adequado (mobile maior, desktop menor)
+    function setInitialZoom() {
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+        setCellSize(isMobile ? 24 : 16, false);
+
+        // opcional: centraliza no início da primeira palavra
+        setTimeout(() => {
+            const [r, c] = words[0].start;
+            const first = document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+            if (first) centerOnInput(first);
+        }, 60);
+    }
+
+    // slider
+    zoomRange?.addEventListener('input', () => {
+        setCellSize(parseInt(zoomRange.value, 10), true);
+    });
+
+    // botões (agora ficam “bonitos” no pill)
+    zoomPlus?.addEventListener('click', () => setCellSize(cellSize + 2, true));
+    zoomMinus?.addEventListener('click', () => setCellSize(cellSize - 2, true));
+
+    // centralizar na célula ativa
+    zoomCenterBtn?.addEventListener('click', () => {
+        const active = document.querySelector('#crossword input.active')
+            || document.querySelector('#crossword input:focus');
+
+        if (active) centerOnInput(active);
+        else {
+            // fallback: centraliza na primeira célula válida
+            const first = document.querySelector('#crossword input');
+            if (first) centerOnInput(first);
+        }
+    });
+
+    // pinch-to-zoom (2 dedos) no mobile
+    let lastDist = null;
+    function dist(t1, t2) {
+        const dx = t1.clientX - t2.clientX;
+        const dy = t1.clientY - t2.clientY;
+        return Math.hypot(dx, dy);
+    }
+
+    viewport?.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            lastDist = dist(e.touches[0], e.touches[1]);
+        }
+    }, { passive: true });
+
+    viewport?.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2 && lastDist) {
+            // evita zoom da página
+            e.preventDefault();
+            const d = dist(e.touches[0], e.touches[1]);
+            const ratio = d / lastDist;
+            lastDist = d;
+
+            // ajuste suave
+            setCellSize(Math.round(cellSize * ratio), true);
+        }
+    }, { passive: false });
+
+    viewport?.addEventListener('touchend', () => { lastDist = null; }, { passive: true });
+
+    // init
+    setInitialZoom();
+    window.addEventListener('resize', setInitialZoom);
+
 
 
 });
