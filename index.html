@@ -31,8 +31,7 @@
     <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark sticky-top">
       <div class="container-fluid">
         <!-- <a class="navbar-brand"><strong>Toponímia Urbana <br> de Ouro Branco</strong></a> -->
-        <img src="/assets/images/header/toponimia.png" alt="Topoínima Urbana" srcset=""
-          style="height: 55px; width: auto; object-fit: contain;">
+        <img src="/assets/images/header/toponimia.png" style="cursor: pointer;" alt="Topoínima Urbana" srcset="" style="" id="imgHeader">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
           aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -51,42 +50,48 @@
               <a class="nav-link active" aria-current="page" href="./about.html">Sobre nós</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link d-flex align-items-center gap-2" href="#" id="bairroAtualBtn" role="button"
-                data-bs-toggle="dropdown" aria-expanded="false"
-                style="color: rgba(255,255,255,.55); padding: .5rem 1rem;">
-                <span id="nomeBairroExibido">Selecionar Bairro</span>
-                <i class="bi bi-chevron-down" style="font-weight: 900; -webkit-text-stroke: 1px;"></i>
-              </a>
-              <ul class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
-                <li><a class="dropdown-item" href="#bairro_1_de_maio">1° de Maio</a></li>
-                <li><a class="dropdown-item" href="#bairro_alto_chale">Alto Chalé</a></li>
-                <li><a class="dropdown-item" href="#bairro_amalia_rodrigues">Amália Rodrigues</a></li>
-                <li><a class="dropdown-item" href="#bairro_bandeirantes">Bandeirantes</a></li>
-                <li><a class="dropdown-item" href="#bairro_bela_vista">Bela Vista</a></li>
-                <li><a class="dropdown-item" href="#bairro_belvedere">Belvedere</a></li>
-                <li><a class="dropdown-item" href="#bairro_campo_novo">Campo Novo</a></li>
-                <li><a class="dropdown-item" href="#bairro_centro">Centro</a></li>
-                <li><a class="dropdown-item" href="#bairro_cidade_jardim">Cidade Jardim</a></li>
-                <li><a class="dropdown-item" href="#bairro_das_flores">Das Flores</a></li>
-                <li><a class="dropdown-item" href="#bairro_dom_orione">Dom Orione</a></li>
-                <li><a class="dropdown-item" href="#bairro_inconfidentes">Inconfidentes</a></li>
-                <li><a class="dropdown-item" href="#bairro_jardim_belo_vale">Jardim Belo Vale</a></li>
-                <li><a class="dropdown-item" href="#bairro_jardim_belo_horizonte">Jardim Belo Horizonte</a></li>
-                <li><a class="dropdown-item" href="#bairro_jardim_monte_belo">Jardim Monte Belo</a></li>
-                <li><a class="dropdown-item" href="#bairro_luzia_augusta">Luzia Augusta</a></li>
-                <li><a class="dropdown-item" href="#bairro_metalurgicos">Metalúrgicos</a></li>
-                <li><a class="dropdown-item" href="#bairro_minas_talco">Minas Talco</a></li>
-                <li><a class="dropdown-item" href="#bairro_nova_serrana">Nova Serrana</a></li>
-                <li><a class="dropdown-item" href="#bairro_novo_horizonte">Novo Horizonte</a></li>
-                <li><a class="dropdown-item" href="#bairro_pioneiros">Pioneiros</a></li>
-                <li><a class="dropdown-item" href="#bairro_sao_francisco">São Francisco</a></li>
-                <li><a class="dropdown-item" href="#bairro_serra">Serra</a></li>
-                <li><a class="dropdown-item" href="#bairro_serra_verde">Serra Verde</a></li>
-                <li><a class="dropdown-item" href="#bairro_siderurgia">Siderurgia</a></li>
-                <li><a class="dropdown-item" href="#bairro_soledade">Soledade</a></li>
-                <li><a class="dropdown-item" href="#bairro_tiradentes">Tiradentes</a></li>
-                <li><a class="dropdown-item" href="#bairro_vale_do_engenho">Vale do Engenho</a></li>
-              </ul>
+              <div class="dropdown w-100">
+                <button class="btn w-100 d-flex align-items-center px-3 py-2" id="bairroAtualBtn"
+                  data-bs-toggle="dropdown" aria-expanded="false" type="button"
+                  style="border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.15); color: rgba(255,255,255,.9); border-radius: 12px;">
+                  <i class="bi bi-geo-alt me-2"></i>
+                  <span id="nomeBairroExibido" class="flex-grow-1 text-start text-truncate">Selecionar Bairro</span>
+                  <i class="bi bi-chevron-down ms-2"></i>
+                </button>
+
+                <ul class="dropdown-menu" style="height: auto; max-height: 200px; overflow-x: hidden;">
+                  <li><a class="dropdown-item" href="#bairro_1_de_maio">1° de Maio</a></li>
+                  <li><a class="dropdown-item" href="#bairro_alto_chale">Alto Chalé</a></li>
+                  <li><a class="dropdown-item" href="#bairro_amalia_rodrigues">Amália Rodrigues</a></li>
+                  <li><a class="dropdown-item" href="#bairro_bandeirantes">Bandeirantes</a></li>
+                  <li><a class="dropdown-item" href="#bairro_bela_vista">Bela Vista</a></li>
+                  <li><a class="dropdown-item" href="#bairro_belvedere">Belvedere</a></li>
+                  <li><a class="dropdown-item" href="#bairro_campo_novo">Campo Novo</a></li>
+                  <li><a class="dropdown-item" href="#bairro_centro">Centro</a></li>
+                  <li><a class="dropdown-item" href="#bairro_cidade_jardim">Cidade Jardim</a></li>
+                  <li><a class="dropdown-item" href="#bairro_das_flores">Das Flores</a></li>
+                  <li><a class="dropdown-item" href="#bairro_dom_orione">Dom Orione</a></li>
+                  <li><a class="dropdown-item" href="#bairro_inconfidentes">Inconfidentes</a></li>
+                  <li><a class="dropdown-item" href="#bairro_jardim_belo_vale">Jardim Belo Vale</a></li>
+                  <li><a class="dropdown-item" href="#bairro_jardim_belo_horizonte">Jardim Belo Horizonte</a></li>
+                  <li><a class="dropdown-item" href="#bairro_jardim_monte_belo">Jardim Monte Belo</a></li>
+                  <li><a class="dropdown-item" href="#bairro_luzia_augusta">Luzia Augusta</a></li>
+                  <li><a class="dropdown-item" href="#bairro_metalurgicos">Metalúrgicos</a></li>
+                  <li><a class="dropdown-item" href="#bairro_minas_talco">Minas Talco</a></li>
+                  <li><a class="dropdown-item" href="#bairro_nova_serrana">Nova Serrana</a></li>
+                  <li><a class="dropdown-item" href="#bairro_novo_horizonte">Novo Horizonte</a></li>
+                  <li><a class="dropdown-item" href="#bairro_pioneiros">Pioneiros</a></li>
+                  <li><a class="dropdown-item" href="#bairro_sao_francisco">São Francisco</a></li>
+                  <li><a class="dropdown-item" href="#bairro_serra">Serra</a></li>
+                  <li><a class="dropdown-item" href="#bairro_serra_verde">Serra Verde</a></li>
+                  <li><a class="dropdown-item" href="#bairro_siderurgia">Siderurgia</a></li>
+                  <li><a class="dropdown-item" href="#bairro_soledade">Soledade</a></li>
+                  <li><a class="dropdown-item" href="#bairro_tiradentes">Tiradentes</a></li>
+                  <li><a class="dropdown-item" href="#bairro_vale_do_engenho">Vale do Engenho</a></li>
+                </ul>
+              </div>
+
+
             </li>
           </ul>
         </div>
@@ -94,7 +99,7 @@
     </nav>
   </header>
 
-  <nav id="navside" >
+  <nav id="navside">
     <ul class="list-unstyled">
       <li class="nav-item"><a class="nav-link" href="#A">Ruas por letra ↓</a></li>
       <li class="nav-item"><a class="nav-link" href="#A">A</a></li>
@@ -128,17 +133,28 @@
 
   <main id="main-doc" class="bg-dark">
     <section id="Introdução" class="main-section">
-      <header>Introdução</header>
-      <article>
-        <p>
-          O Dicionário de Ruas é uma plataforma que reúne informações sobre os nomes das ruas da cidade de Ouro Branco.
-          Aqui você vai encontrar explicações, significados e justificativas dos nomes das ruas da cidade. Quando se
-          tratar de pessoa homenageada, você pode encontrar uma pequena biografia dessa pessoa.
-          Além disso, também disponibilizamos informações como: onde a rua está localizada e qual foi a legislação que
-          oficializou seu nome, quando houver.
-        </p>
-        
-      </article>
+      <!-- Barra clicável -->
+      <button
+        class="w-100 d-flex align-items-center justify-content-between px-3 py-3 bg-dark text-white border-0 border-bottom"
+        type="button" data-bs-toggle="collapse" data-bs-target="#introTexto" aria-expanded="false"
+        aria-controls="introTexto" style="border-color: rgba(255,255,255,.15) !important;">
+        <span class="fw-semibold">Introdução</span>
+        <i class="bi bi-chevron-down chevron-transition"></i>
+      </button>
+
+      <!-- Conteúdo colapsável -->
+      <div id="introTexto" class="collapse">
+        <article class="px-3 pt-3 pb-2">
+          <p class="mb-0">
+            O Dicionário de Ruas é uma plataforma que reúne informações sobre os nomes das ruas da cidade de Ouro
+            Branco.
+            Aqui você vai encontrar explicações, significados e justificativas dos nomes das ruas da cidade. Quando se
+            tratar de pessoa homenageada, você pode encontrar uma pequena biografia dessa pessoa.
+            Além disso, também disponibilizamos informações como: onde a rua está localizada e qual foi a legislação que
+            oficializou seu nome, quando houver.
+          </p>
+        </article>
+      </div>
     </section>
 
     <section id="introducao-bairro" class="container my-4">

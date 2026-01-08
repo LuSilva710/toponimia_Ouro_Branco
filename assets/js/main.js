@@ -99,8 +99,12 @@ function exibirIntroducaoBairro(bairro) {
         <img src="${bairro.imagem_capa}" alt="Imagem do bairro ${bairro.titulo}" class="img-fluid rounded mb-3" style="max-height: 300px; object-fit: cover;">
         <p class="lead">${bairro.descricao}</p>
         <hr>
+        
     `;
+    nomeBairro = bairro.titulo;
 }
+
+var nomeBairro = '';
 
 // Função para agrupar ruas por letra do alfabeto
 function agruparRuasPorLetra(ruas) {

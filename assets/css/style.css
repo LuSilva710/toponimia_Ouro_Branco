@@ -42,6 +42,20 @@
         text-decoration: none;
     }
 
+    #imgHeader {
+        height: 55px !important;
+        width: auto !important;
+        object-fit: contain !important;
+    }
+
+    @media(max-width:600px) {
+        #imgHeader {
+            height: 85px !important;
+            width: auto !important;
+            object-fit: contain;
+        }
+    }
+
     .navbar-brand {
         padding-right: 25px;
         border-right: 2px solid var(--white);
@@ -331,6 +345,15 @@
         border-radius: 5px;
     }
 
+    .chevron-transition {
+        transition: transform .2s ease;
+    }
+
+    /* quando o collapse estiver aberto, gira a seta */
+    button[aria-expanded="true"] .chevron-transition {
+        transform: rotate(180deg);
+    }
+
     @media (max-width: 992px) {
 
         #navside {
@@ -489,7 +512,7 @@
         }
 
         #main-doc {
-            margin-top: 60px;
+            margin-top: 0px;
             margin-left: 45px;
             padding: 5px;
         }
@@ -503,8 +526,17 @@
         }
 
         p {
-            font-size: 0.8rem;
+            font-size: 1.1rem;
             padding: 10px;
+        }
+
+        hr {
+            margin: 0;
+        }
+
+        article p {
+            font-size: 1.1rem;
+            padding: 0px;
         }
 
         table {
@@ -615,7 +647,7 @@
         #main-doc {
             margin-left: 0;
             padding: 15px;
-            margin-top: 56px;
+            margin-top: 0px;
         }
 
         /* Tabelas com rolagem horizontal */

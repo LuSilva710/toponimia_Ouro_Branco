@@ -19,7 +19,11 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Noto+Serif:wght@400;700&display=swap"
         rel="stylesheet">
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
     <!-- Style css -->
     <link rel="stylesheet" href="./assets/css/style_game.css">
 </head>
@@ -27,34 +31,34 @@
 
 <body>
     <header class="bg-dark">
-    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark sticky-top">
-      <div class="container-fluid">
-        <!-- <a class="navbar-brand"><strong>Toponímia Urbana <br> de Ouro Branco</strong></a> -->
-        <img src="/assets/images/header/toponimia.png" alt="Topoínima Urbana" srcset=""
-          style="height: 55px; width: auto; object-fit: contain;">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
-          aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarScroll">
-          <ul class="navbar-nav d-flex justify-content-around w-100 my-2 my-lg-0 navbar-nav-scroll"
-            style="--bs-scroll-height: 180px;">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./index.html">Dicionário de Ruas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./portaleducativo.html">Projeto Saberes
-                da Extensão</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./about.html">Sobre nós</a>
-            </li>
-            
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
+        <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark sticky-top">
+            <div class="container-fluid">
+                <!-- <a class="navbar-brand"><strong>Toponímia Urbana <br> de Ouro Branco</strong></a> -->
+                <a href="./index.html"><img src="/assets/images/header/toponimia.png" alt="Topoínima Urbana" srcset=""
+                        style="height: 55px; width: auto; object-fit: contain;"></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
+                    aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarScroll">
+                    <ul class="navbar-nav d-flex justify-content-around w-100 my-2 my-lg-0 navbar-nav-scroll"
+                        style="--bs-scroll-height: 180px;">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./index.html">Dicionário de Ruas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./portaleducativo.html">Projeto Saberes
+                                da Extensão</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="./about.html">Sobre nós</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
 
     <body>
         <div class="game-container">
@@ -82,11 +86,12 @@
             </div>
 
             <div class="game-content">
-                <div class="crossword-section">
+                <div class="crossword-section" id="game-section">
                     <div id="crossword"></div>
                 </div>
 
-                <div class="clues-section">
+                <div class="clues-section" id="clues-section">
+
                     <h2><i class="bi bi-journal-text me-2"></i>Pistas</h2>
                     <ul id="clues-list"></ul>
                 </div>
@@ -96,47 +101,55 @@
                 <p id="status-message">Preencha o jogo de palavras cruzadas com os nomes das escolas!</p>
             </div>
         </div>
+        <button id="fabClues" class="fab-clues" type="button" aria-label="Ir para pistas">
+            <i class="bi bi-journal-text"></i>
+            <span>Pistas</span>
+        </button>
+        <button id="fabNav" class="fab-clues" type="button" aria-label="Ir para pistas">
+            <i id="fabIcon" class="bi bi-journal-text"></i>
+            <span id="fabText">Pistas</span>
+        </button>
 
-<footer class="footer">
-        <div class="container">
-            <div class="row g-5">
-                <div class="col-lg-4">
-                    <h4>Toponímia Urbana de Ouro Branco</h4>
-                    <p>Projeto de pesquisa dedicado ao estudo dos nomes de lugares e sua relação com a história e
-                        cultura local.</p>
-                    <div class="social-icons">
-                        <a href="#"><i class="bi bi-facebook"></i></a>
-                        <a href="#"><i class="bi bi-instagram"></i></a>
-                        <a href="#"><i class="bi bi-twitter"></i></a>
-                        <a href="#"><i class="bi bi-youtube"></i></a>
+        <footer class="footer">
+            <div class="container">
+                <div class="row g-5">
+                    <div class="col-lg-4">
+                        <h4>Toponímia Urbana de Ouro Branco</h4>
+                        <p>Projeto de pesquisa dedicado ao estudo dos nomes de lugares e sua relação com a história e
+                            cultura local.</p>
+                        <div class="social-icons">
+                            <a href="#"><i class="bi bi-facebook"></i></a>
+                            <a href="#"><i class="bi bi-instagram"></i></a>
+                            <a href="#"><i class="bi bi-twitter"></i></a>
+                            <a href="#"><i class="bi bi-youtube"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <h4>Contato</h4>
+                        <div class="contact-info">
+                            <p><i class="bi bi-geo-alt"></i> Instituto Federal de Ouro Branco, MG</p>
+                            <p><i class="bi bi-envelope"></i> toponimiaob@gmail.com</p>
+                            <p><i class="bi bi-telephone"></i> (31) 99999-9999</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <h4>Links Rápidos</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="/index.html" class="text-white">Dicionário de Ruas</a></li>
+                            <li><a href="./portaleducativo.html" class="text-white">Projeto Saberes</a></li>
+                            <li><a href="./about.html" class="text-white">Sobre Nós</a></li>
+                            <li><a href="#" class="text-white">Contato</a></li>
+                        </ul>
                     </div>
                 </div>
 
-                <div class="col-lg-4">
-                    <h4>Contato</h4>
-                    <div class="contact-info">
-                        <p><i class="bi bi-geo-alt"></i> Instituto Federal de Ouro Branco, MG</p>
-                        <p><i class="bi bi-envelope"></i> toponimiaob@gmail.com</p>
-                        <p><i class="bi bi-telephone"></i> (31) 99999-9999</p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <h4>Links Rápidos</h4>
-                    <ul class="list-unstyled">
-                        <li><a href="/index.html" class="text-white">Dicionário de Ruas</a></li>
-                        <li><a href="./portaleducativo.html" class="text-white">Projeto Saberes</a></li>
-                        <li><a href="./about.html" class="text-white">Sobre Nós</a></li>
-                        <li><a href="#" class="text-white">Contato</a></li>
-                    </ul>
+                <div class="copyright">
+                    <p>&copy; 2023 Toponímia Urbana de Ouro Branco. Todos os direitos reservados.</p>
                 </div>
             </div>
-
-            <div class="copyright">
-                <p>&copy; 2023 Toponímia Urbana de Ouro Branco. Todos os direitos reservados.</p>
-            </div>
-        </div>
-    </footer>
+        </footer>
 
         </div>
         <script src="./assets/js/script_game.js"></script>
