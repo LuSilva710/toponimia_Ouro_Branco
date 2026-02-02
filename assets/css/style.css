@@ -68,6 +68,303 @@
         color: var(--white);
     }
 
+    /* ============================================
+       HERO SECTION
+       ============================================ */
+    .hero-section {
+        position: relative;
+        min-height: 50vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, rgba(26, 26, 26, 0.92) 0%, rgba(45, 45, 45, 0.88) 50%, rgba(10, 10, 10, 0.95) 100%),
+            url('../images/ouro_branco_historico.png');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        color: var(--white);
+        padding: 60px 20px;
+        margin-top: 76px;
+        overflow: hidden;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background:
+            radial-gradient(circle at 20% 50%, rgba(80, 80, 80, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(120, 120, 120, 0.15) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .hero-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        line-height: 1.2;
+        text-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1rem, 2vw, 1.5rem);
+        font-weight: 400;
+        margin-bottom: 40px;
+        opacity: 0.95;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .hero-search {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .search-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 20px;
+        font-size: 1.2rem;
+        color: var(--medium-gray);
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .search-input {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border: none;
+        padding: 18px 20px 18px 55px;
+        font-size: 1rem;
+        border-radius: 50px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+        color: var(--dark-gray);
+    }
+
+    .search-input:focus {
+        outline: none;
+        background-color: var(--white);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+        transform: translateY(-2px);
+    }
+
+    .search-input::placeholder {
+        color: var(--medium-gray);
+    }
+
+    /* ============================================
+       SEÇÃO DE INTRODUÇÃO MODERNA
+       ============================================ */
+    .intro-section {
+        padding: 30px 20px;
+        background-color: var(--lighter-gray);
+        margin-bottom: 30px;
+    }
+
+    .intro-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .intro-title {
+        font-size: clamp(1.5rem, 3vw, 2rem);
+        font-weight: 700;
+        color: var(--black);
+        margin-bottom: 12px;
+        line-height: 1.2;
+    }
+
+    .intro-lead {
+        font-size: clamp(0.9rem, 2vw, 1rem);
+        color: var(--medium-gray);
+        max-width: 650px;
+        margin: 0 auto;
+        line-height: 1.5;
+    }
+
+    .intro-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+        margin-top: 25px;
+    }
+
+    .intro-card {
+        background-color: var(--white);
+        border: 2px solid var(--border-color);
+        border-radius: 8px;
+        padding: 20px 16px;
+        text-align: center;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .intro-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background: linear-gradient(90deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .intro-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+        border-color: var(--dark-gray);
+    }
+
+    .intro-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .intro-card-icon {
+        width: 48px;
+        height: 48px;
+        margin: 0 auto 14px;
+        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .intro-card:hover .intro-card-icon {
+        transform: scale(1.06) rotate(5deg);
+    }
+
+    .intro-card-icon i {
+        font-size: 1.3rem;
+        color: var(--white);
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .intro-card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--black);
+        margin-bottom: 8px;
+    }
+
+    .intro-card-text {
+        font-size: 0.82rem;
+        color: var(--medium-gray);
+        line-height: 1.4;
+        margin: 0;
+    }
+
+    /* ============================================
+       SEÇÃO DE BAIRRO
+       ============================================ */
+    .bairro-section {
+        margin: 40px 0;
+        background-color: var(--white);
+    }
+
+    .bairro-header {
+        position: relative;
+        min-height: 300px;
+        display: flex;
+        align-items: flex-end;
+        overflow: hidden;
+    }
+
+    .bairro-cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+    }
+
+    .bairro-cover::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+    }
+
+    .bairro-cover img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .bairro-info {
+        position: relative;
+        z-index: 2;
+        padding: 30px;
+        width: 100%;
+        color: var(--white);
+    }
+
+    .bairro-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background-color: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .bairro-badge i {
+        font-size: 0.9rem;
+    }
+
+    .bairro-title {
+        font-size: clamp(2rem, 4vw, 3rem);
+        font-weight: 800;
+        margin-bottom: 12px;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        line-height: 1.1;
+    }
+
+    .bairro-description {
+        font-size: clamp(1rem, 2vw, 1.2rem);
+        line-height: 1.6;
+        max-width: 800px;
+        margin: 0;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        opacity: 0.95;
+    }
 
     /* Estilo geral do navside */
     #navside {
@@ -192,36 +489,307 @@
         color: #333;
     }
 
+    /* ============================================
+       CARDS DE RUAS - ESTILIZAÇÃO EM LISTA
+       ============================================ */
+
+    .section-ruas {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 20px 0;
+    }
+
+    .rua-card {
+        background-color: var(--white);
+        border-radius: 6px;
+        padding: 16px 20px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border-left: 3px solid var(--medium-gray);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .rua-card:hover {
+        transform: translateX(4px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        border-left-color: var(--dark-gray);
+    }
+
+    .rua-card-content {
+        flex: 1;
+    }
+
+    .rua-card-title {
+        font-size: 1.05rem;
+        font-weight: 600;
+        color: var(--dark-gray);
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .rua-card-title i {
+        color: var(--medium-gray);
+        font-size: 0.95rem;
+    }
+
+    .rua-card-info {
+        font-size: 0.85rem;
+        color: var(--medium-gray);
+        line-height: 1.4;
+        margin-top: 4px;
+    }
+
+    .rua-card-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background-color: var(--light-gray);
+        color: var(--dark-gray);
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* Detalhes expandidos da rua */
+    .detalhes-rua {
+        margin: 20px 0;
+        padding: 0;
+        background: transparent;
+        border-radius: 0;
+        animation: expandCard 0.3s ease-out;
+        transform-origin: top;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+    }
+
+    /* Indicador de scroll em mobile */
+    @media (max-width: 768px) {
+        .detalhes-rua::after {
+            content: '→';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(34, 34, 34, 0.8);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            pointer-events: none;
+            opacity: 0.7;
+            animation: pulseScroll 2s infinite;
+        }
+
+        @keyframes pulseScroll {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: translateY(-50%) translateX(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translateY(-50%) translateX(4px);
+            }
+        }
+    }
+
+    @keyframes expandCard {
+        from {
+            opacity: 0;
+            transform: scaleY(0.95) translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: scaleY(1) translateY(0);
+        }
+    }
+
+    .detalhes-rua table {
+        background-color: var(--white);
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        min-width: 600px;
+        border-collapse: collapse;
+    }
+
+    .detalhes-rua::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .detalhes-rua::-webkit-scrollbar-track {
+        background: var(--lighter-gray);
+        border-radius: 4px;
+    }
+
+    .detalhes-rua::-webkit-scrollbar-thumb {
+        background: var(--medium-gray);
+        border-radius: 4px;
+    }
+
+    .detalhes-rua::-webkit-scrollbar-thumb:hover {
+        background: var(--dark-gray);
+    }
+
+    .detalhes-rua table th {
+        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        color: var(--white);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 16px 20px;
+        text-align: left;
+        border-bottom: 3px solid var(--dark-gray);
+    }
+
+    .detalhes-rua table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        line-height: 1.7;
+        font-size: 0.9rem;
+        vertical-align: top;
+    }
+
+    .detalhes-rua table td:first-child {
+        font-weight: 600;
+        color: var(--dark-gray);
+        width: 30%;
+        background-color: rgba(250, 250, 250, 0.5);
+    }
+
+    .detalhes-rua table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .detalhes-rua table tr:hover td {
+        background-color: var(--lighter-gray);
+    }
+
+    .detalhes-rua table tr:hover td:first-child {
+        background-color: rgba(240, 240, 240, 0.8);
+    }
+
+    /* Estilo para valores especiais na tabela */
+    .detalhes-rua table td strong {
+        color: var(--black);
+        font-weight: 700;
+    }
+
+    .detalhes-rua table td em {
+        color: var(--medium-gray);
+        font-style: italic;
+    }
+
+    .detalhes-rua img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 8px 0;
+    }
+
+    .detalhes-rua iframe {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: 300px;
+        border: none;
+    }
+
+    /* ============================================
+       BOTÕES FLUTUANTES MODERNOS
+       ============================================ */
     .fixed-buttons {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 999;
+        bottom: 30px;
+        right: 30px;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
     }
 
     .fixed-buttons button {
-        width: 50px;
-        height: 50px;
-        border: none;
+        width: 56px;
+        height: 56px;
         border-radius: 50%;
-        margin-bottom: 10px;
+        border: none;
+        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        color: var(--white);
+        font-size: 1.1rem;
         cursor: pointer;
-        background-color: transparent;
-        transition: background-color 0.3s;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .fixed-buttons button i {
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+    }
+
+    .fixed-buttons button::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        transform: translate(-50%, -50%);
+        transition: width 0.3s, height 0.3s;
     }
 
     .fixed-buttons button:hover {
-        background-color: #198754;
+        transform: translateY(-4px) scale(1.05);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
     }
 
-
-    /* Ajuste de posicionamento para um botão em cima do outro */
-    .fixed-buttons button:nth-child(2) {
-        margin-bottom: 0;
-        margin-top: -10px;
+    .fixed-buttons button:hover::before {
+        width: 100%;
+        height: 100%;
     }
 
+    .fixed-buttons button:active {
+        transform: translateY(-2px) scale(1.02);
+    }
 
+    #chatbotButton {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    }
+
+    #returnTopButton {
+        background: linear-gradient(135deg, #444 0%, #222 100%);
+    }
+
+    /* ============================================
+       CHATBOT MODERNO
+       ============================================ */
     #chatbotContainer {
         position: relative;
     }
@@ -229,166 +797,476 @@
     #chatbot {
         display: none;
         position: fixed;
-        bottom: 90px;
-        right: 20px;
-        width: 300px;
-        background-color: #fffcfc;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease-in-out;
+        bottom: 100px;
+        right: 30px;
+        width: 320px;
+        max-height: 480px;
+        background-color: var(--white);
+        border-radius: 16px;
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 999;
+        overflow: hidden;
+        animation: slideUp 0.3s ease-out;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    #chatbot.chatbot-visible {
+        display: flex;
+        flex-direction: column;
     }
 
     #chatbotHeader {
-        background-color: #2c2c2c;
-        color: #fff;
-        padding: 10px;
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        color: var(--white);
+        padding: 18px 20px;
         display: flex;
+        align-items: center;
         justify-content: space-between;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #chatbotHeader span {
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    #chatbotHeader span::before {
+        content: '💬';
+        font-size: 1.3rem;
     }
 
     #closeChatbotButton {
-        background: none;
+        background: rgba(255, 255, 255, 0.1);
         border: none;
-        color: #fff;
+        color: var(--white);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
         cursor: pointer;
+        font-size: 1.5rem;
+        line-height: 1;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #closeChatbotButton:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: rotate(90deg);
     }
 
     #closeChatbotButton:focus {
         outline: none;
     }
 
-
     #chatbotMessages {
-        font-size: 12px;
-        position: relative;
-        background-color: #f1f1f1;
-        padding: 10px;
-        border: solid 1px #262424;
-        margin: 10px;
-        border-radius: 5px;
+        flex: 1;
+        background-color: var(--lighter-gray);
+        padding: 16px;
+        overflow-y: auto;
+        max-height: 320px;
+        font-size: 0.85rem;
+        line-height: 1.5;
     }
 
+    #chatbotMessages::-webkit-scrollbar {
+        width: 6px;
+    }
 
-    #userInput {
+    #chatbotMessages::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    #chatbotMessages::-webkit-scrollbar-thumb {
+        background: var(--medium-gray);
+        border-radius: 10px;
+    }
+
+    #chatbot input[type="text"] {
         width: calc(100% - 80px);
-        margin: 10px;
-        padding: 10px;
-        font-size: 12px;
-        border-radius: 5px;
+        margin: 12px 12px 12px 16px;
+        padding: 12px 16px;
+        font-size: 0.9rem;
+        border: 2px solid var(--border-color);
+        border-radius: 24px;
+        outline: none;
+        transition: all 0.2s;
+    }
+
+    #chatbot input[type="text"]:focus {
+        border-color: var(--dark-gray);
+        box-shadow: 0 0 0 3px rgba(34, 34, 34, 0.1);
     }
 
     #sendMessageButton {
-        width: 60px;
-        padding: 5px;
-        margin: 10px;
+        width: 44px;
+        height: 44px;
+        padding: 0;
+        margin: 12px 12px 12px 8px;
         cursor: pointer;
-        font-size: 12px;
-        border-radius: 5px;
+        font-size: 0;
+        border: none;
+        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        color: var(--white);
+        border-radius: 50%;
+        transition: all 0.2s;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-@media (max-width: 992px) {
-    /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
-    #navside {
-        width: 100%;
-        height: 60px; /* Altura fixa para a barra */
-        top: 56px; /* Logo abaixo da Navbar principal */
-        left: 0;
-        z-index: 990;
-        background-color: #212529;
-        overflow-x: auto; /* Permite rolagem horizontal */
-        overflow-y: hidden;
-        white-space: nowrap;
-        padding: 0;
-        border-top: 1px solid #444;
+    #sendMessageButton::before {
+        content: '→';
+        font-size: 1.3rem;
+        font-weight: bold;
+        line-height: 1;
         display: flex;
         align-items: center;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        justify-content: center;
     }
 
-    /* Ajuste da lista para ficar horizontal */
-    #navside ul {
-        display: flex;
-        flex-direction: row;
-        padding: 0 10px;
-        margin: 0;
-        width: auto;
+    #sendMessageButton:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
-    #navside li {
+    /* ============================================
+       FOOTER
+       ============================================ */
+    .site-footer {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: var(--white);
+        padding: 50px 30px 20px;
+        margin-top: 60px;
+    }
+
+    .footer-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+        margin-bottom: 30px;
+    }
+
+    .footer-section {
         padding: 0;
+    }
+
+    .footer-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+        color: var(--white);
+    }
+
+    .footer-description {
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 0;
+    }
+
+    .footer-heading {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--white);
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer-links li {
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.8);
+        text-decoration: none;
+        transition: all 0.2s;
         display: inline-block;
     }
 
-    #navside a.nav-link {
-        padding: 15px 20px; /* Área de toque maior */
-        font-size: 1.1rem;
-        color: #fff;
+    .footer-links a:hover {
+        color: var(--white);
+        transform: translateX(4px);
     }
 
-    /* Indicador de letra ativa na horizontal */
-    #navside li.active {
-        background-color: #198754; /* Verde destaque */
-        border-radius: 4px;
-        box-shadow: none;
-    }
-    
-    /* Remove os triângulos decorativos da versão desktop */
-    #navside li.active::before,
-    #navside li.active::after {
-        display: none;
+    .footer-links i {
+        margin-right: 8px;
+        color: rgba(255, 255, 255, 0.6);
     }
 
-    #navside li.active a {
-        color: #fff;
+    .footer-bottom {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 20px;
+        margin-top: 30px;
+        text-align: center;
     }
 
-    /* 2. Ajustar Conteúdo Principal para não ficar escondido */
-    #main-doc {
-        margin-left: 0; /* Remove margem da esquerda */
-        margin-top: 120px; /* Compensa Navbar + Barra A-Z */
-        padding: 20px 15px;
+    .footer-bottom p {
+        margin: 0;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
     }
 
-    /* 3. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
-    table {
-        display: block;
-        width: 100%;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    
-    /* Quebra de texto nas células para evitar tabelas muito largas se possível */
-    table th, table td {
-        white-space: normal;
-        min-width: 60px;
-    }
+    @media (max-width: 992px) {
 
-    /* 4. Ajustes de Imagens e Mapas */
-    iframe, img {
-        max-width: 100% !important;
-        height: auto !important;
-    }
-    
-    /* Se o mapa for iframe, damos uma altura mínima */
-    iframe {
-        min-height: 300px;
-    }
+        /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
+        #navside {
+            width: 100%;
+            height: 60px;
+            /* Altura fixa para a barra */
+            top: 56px;
+            /* Logo abaixo da Navbar principal */
+            left: 0;
+            z-index: 990;
+            background-color: #212529;
+            overflow-x: auto;
+            /* Permite rolagem horizontal */
+            overflow-y: hidden;
+            white-space: nowrap;
+            padding: 0;
+            border-top: 1px solid #444;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    /* 5. Chatbot e Botões Flutuantes */
-    .fixed-buttons {
-        bottom: 10px;
-        right: 10px;
+        /* Ajuste da lista para ficar horizontal */
+        #navside ul {
+            display: flex;
+            flex-direction: row;
+            padding: 0 10px;
+            margin: 0;
+            width: auto;
+        }
+
+        #navside li {
+            padding: 0;
+            display: inline-block;
+        }
+
+        #navside a.nav-link {
+            padding: 15px 20px;
+            /* Área de toque maior */
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        /* Indicador de letra ativa na horizontal */
+        #navside li.active {
+            background-color: #198754;
+            /* Verde destaque */
+            border-radius: 4px;
+            box-shadow: none;
+        }
+
+        /* Remove os triângulos decorativos da versão desktop */
+        #navside li.active::before,
+        #navside li.active::after {
+            display: none;
+        }
+
+        #navside li.active a {
+            color: #fff;
+        }
+
+        /* 2. Ajustar Conteúdo Principal para não ficar escondido */
+        #main-doc {
+            margin-left: 0;
+            /* Remove margem da esquerda */
+            margin-top: 120px;
+            /* Compensa Navbar + Barra A-Z */
+            padding: 20px 15px;
+        }
+
+        /* 3. Cards de ruas em mobile */
+        .section-ruas {
+            gap: 10px;
+            padding: 10px 0;
+        }
+
+        .rua-card {
+            padding: 12px 16px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .rua-card:hover {
+            transform: translateX(2px);
+        }
+
+        .rua-card-badge {
+            margin-top: 8px;
+            align-self: flex-end;
+        }
+
+        /* 4. Hero section responsivo */
+        .hero-section {
+            min-height: 40vh;
+            padding: 40px 15px;
+            margin-top: 120px;
+        }
+
+        .hero-title {
+            font-size: 1.8rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            padding: 14px 16px 14px 45px;
+            font-size: 0.9rem;
+        }
+
+        .search-icon {
+            left: 15px;
+            font-size: 1rem;
+        }
+
+        /* 5. Intro section responsiva */
+        .intro-section {
+            padding: 25px 15px;
+        }
+
+        .intro-header {
+            margin-bottom: 20px;
+        }
+
+        .intro-cards {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .intro-card {
+            padding: 18px 14px;
+        }
+
+        .intro-card-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .intro-card-icon i {
+            font-size: 1.3rem;
+        }
+
+        /* 6. Bairro section responsiva */
+        .bairro-header {
+            min-height: 250px;
+        }
+
+        .bairro-info {
+            padding: 20px;
+        }
+
+        .bairro-title {
+            font-size: 1.75rem;
+        }
+
+        .bairro-description {
+            font-size: 0.95rem;
+        }
+
+        /* 4. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
+        table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* Quebra de texto nas células para evitar tabelas muito largas se possível */
+        table th,
+        table td {
+            white-space: normal;
+            min-width: 60px;
+        }
+
+        /* 5. Ajustes de Imagens e Mapas */
+        iframe,
+        img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Se o mapa for iframe, damos uma altura mínima */
+        iframe {
+            min-height: 300px;
+        }
+
+        /* 5. Botões flutuantes e chatbot responsivos */
+        .fixed-buttons {
+            bottom: 20px;
+            right: 20px;
+            gap: 10px;
+        }
+
+        .fixed-buttons button {
+            width: 50px;
+            height: 50px;
+            font-size: 1rem;
+        }
+
+        #chatbot {
+            width: calc(100% - 40px);
+            right: 20px;
+            left: 20px;
+            bottom: 85px;
+            max-height: 65vh;
+        }
+
+        #chatbotMessages {
+            max-height: calc(65vh - 180px);
+            padding: 12px;
+        }
+
+        /* 6. Footer responsivo */
+        .site-footer {
+            padding: 40px 20px 20px;
+            margin-top: 40px;
+        }
+
+        .footer-content {
+            grid-template-columns: 1fr;
+            gap: 30px;
+        }
+
+        .footer-section {
+            text-align: center;
+        }
+
+        .footer-links a:hover {
+            transform: translateX(0);
+        }
+
     }
-    
-    #chatbot {
-        width: 95%; /* Ocupa quase toda a largura no celular */
-        right: 2.5%;
-        bottom: 70px;
-    }
-}
 
 
     @media (max-width: 800px) {
@@ -490,9 +1368,9 @@
             font-size: 12px;
         }
 
-     .navbar-brand {
-         font-size: 0.6rem;
-     }
+        .navbar-brand {
+            font-size: 0.6rem;
+        }
 
 
         .navbar {
@@ -516,151 +1394,154 @@
         }
     }
 
-/* Melhorias para mobile (abaixo de 576px) */
-@media (max-width: 575.98px) {
-    /* Navbar mais compacta */
-    .navbar {
-        padding: 0.5rem 0;
+    /* Melhorias para mobile (abaixo de 576px) */
+    @media (max-width: 575.98px) {
+
+        /* Navbar mais compacta */
+        .navbar {
+            padding: 0.5rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 0.8rem;
+            padding-right: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+        }
+
+        /* Menu lateral mobile */
+        #navside {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            top: 56px;
+        }
+
+        #navside.mobile-visible {
+            width: 150px;
+        }
+
+        /* Botão para toggle do menu lateral */
+        .mobile-menu-toggle {
+            display: block;
+            position: fixed;
+            left: 10px;
+            top: 60px;
+            z-index: 1100;
+            background: #212529;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* Conteúdo principal ajustado */
+        #main-doc {
+            margin-left: 0;
+            padding: 15px;
+            margin-top: 56px;
+        }
+
+        /* Tabelas com rolagem horizontal */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            min-width: 600px;
+        }
+
+        /* Melhorias nos botões flutuantes */
+        .fixed-buttons {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .fixed-buttons button {
+            width: 40px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* Chatbot mobile */
+        #chatbot {
+            width: 90%;
+            right: 5%;
+            bottom: 80px;
+        }
+
+        /* Melhorias nas seções */
+        section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        section article {
+            padding: 10px;
+        }
+
+        /* Ajuste de iframes */
+        iframe {
+            max-width: 100%;
+            height: 250px;
+        }
     }
-    
-    .navbar-brand {
-        font-size: 0.8rem;
-        padding-right: 10px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 60%;
+
+    /* Melhorias de usabilidade gerais */
+    /* Efeito hover nos links das ruas */
+    .section-ruas a {
+        display: inline-block;
+        padding: 5px 0;
+        color: #198754;
+        transition: all 0.2s ease;
     }
-    
-    /* Menu lateral mobile */
-    #navside {
-        width: 0;
-        overflow: hidden;
-        transition: width 0.3s ease;
-        top: 56px;
+
+    .section-ruas a:hover {
+        color: #0d6e3f;
+        transform: translateX(3px);
     }
-    
-    #navside.mobile-visible {
-        width: 150px;
+
+    /* Feedback visual para tabelas */
+    table tr:hover td {
+        background-color: rgba(25, 135, 84, 0.05);
     }
-    
-    /* Botão para toggle do menu lateral */
-    .mobile-menu-toggle {
+
+    /* Melhorias na acessibilidade */
+    :focus-visible {
+        outline: 2px solid #198754;
+        outline-offset: 2px;
+    }
+
+    /* Loading state */
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .loading-spinner.active {
         display: block;
-        position: fixed;
-        left: 10px;
-        top: 60px;
-        z-index: 1100;
-        background: #212529;
-        color: white;
-        border: none;
+    }
+
+    .loading-spinner::after {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(25, 135, 84, 0.3);
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
-        cursor: pointer;
+        border-top-color: #198754;
+        animation: spin 1s ease-in-out infinite;
     }
-    
-    /* Conteúdo principal ajustado */
-    #main-doc {
-        margin-left: 0;
-        padding: 15px;
-        margin-top: 56px;
-    }
-    
-    /* Tabelas com rolagem horizontal */
-    .table-responsive {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    table {
-        min-width: 600px;
-    }
-    
-    /* Melhorias nos botões flutuantes */
-    .fixed-buttons {
-        bottom: 10px;
-        right: 10px;
-    }
-    
-    .fixed-buttons button {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
-    }
-    
-    /* Chatbot mobile */
-    #chatbot {
-        width: 90%;
-        right: 5%;
-        bottom: 80px;
-    }
-    
-    /* Melhorias nas seções */
-    section {
-        padding: 15px;
-        margin-bottom: 15px;
-    }
-    
-    section article {
-        padding: 10px;
-    }
-    
-    /* Ajuste de iframes */
-    iframe {
-        max-width: 100%;
-        height: 250px;
-    }
-}
 
-/* Melhorias de usabilidade gerais */
-/* Efeito hover nos links das ruas */
-.section-ruas a {
-    display: inline-block;
-    padding: 5px 0;
-    color: #198754;
-    transition: all 0.2s ease;
-}
-
-.section-ruas a:hover {
-    color: #0d6e3f;
-    transform: translateX(3px);
-}
-
-/* Feedback visual para tabelas */
-table tr:hover td {
-    background-color: rgba(25, 135, 84, 0.05);
-}
-
-/* Melhorias na acessibilidade */
-:focus-visible {
-    outline: 2px solid #198754;
-    outline-offset: 2px;
-}
-
-/* Loading state */
-.loading-spinner {
-    display: none;
-    text-align: center;
-    padding: 20px;
-}
-
-.loading-spinner.active {
-    display: block;
-}
-
-.loading-spinner::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    border: 3px solid rgba(25, 135, 84, 0.3);
-    border-radius: 50%;
-    border-top-color: #198754;
-    animation: spin 1s ease-in-out infinite;
-}
-
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
