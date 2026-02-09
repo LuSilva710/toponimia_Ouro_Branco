@@ -147,6 +147,46 @@ function exibirDetalhesRua(rua, card) {
     card.parentNode.insertBefore(divDetalhes, card.nextSibling);
 }
 
+// ========================================
+// FUNÇÕES DE ESTADOS DE CARREGAMENTO
+// ========================================
+
+// Função para mostrar skeleton screens
+function mostrarSkeletons(quantidade = 5) {
+    const secoesLetras = document.querySelectorAll('.section-ruas');
+    secoesLetras.forEach(secao => {
+        secao.innerHTML = '';
+        for (let i = 0; i < quantidade; i++) {
+            const skeleton = document.createElement('div');
+            skeleton.className = 'skeleton-card';
+            skeleton.innerHTML = `
+                <div class="skeleton-content">
+                    <div class="skeleton-line skeleton-title"></div>
+                    <div class="skeleton-line skeleton-text"></div>
+                </div>
+                <div class="skeleton-line skeleton-badge"></div>
+            `;
+            secao.appendChild(skeleton);
+        }
+    });
+}
+
+// Função para mostrar spinner de carregamento
+function mostrarSpinner(container) {
+    const spinner = document.createElement('div');
+    spinner.className = 'loading-spinner';
+    spinner.innerHTML = `
+        <div class="spinner"></div>
+        <div class="loading-text">Carregando ruas...</div>
+    `;
+    container.appendChild(spinner);
+}
+
+// Função para remover skeletons e spinners
+function limparLoading() {
+    document.querySelectorAll('.skeleton-card, .loading-spinner').forEach(el => el.remove());
+}
+
 // Função para exibir as ruas de uma letra do alfabeto com CARDS
 function exibirRuasPorLetra(ruas) {
     const ruasPorLetra = agruparRuasPorLetra(ruas);
@@ -201,10 +241,31 @@ function exibirRuasPorLetra(ruas) {
             card.addEventListener('click', function () {
                 exibirDetalhesRua(rua.detalhes, card);
             });
-
             divRuas.appendChild(card);
         });
     }
+
+    // Marca letras vazias como disabled
+    marcarLetrasVazias(ruasPorLetra);
+}
+
+// Função para marcar letras sem ruas como disabled
+function marcarLetrasVazias(ruasPorLetra) {
+    const todasLetras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+
+    todasLetras.forEach(letra => {
+        const navItem = document.querySelector(`#navside a[href="#${letra}"]`)?.parentElement;
+
+        if (navItem) {
+            if (ruasPorLetra[letra] && ruasPorLetra[letra].length > 0) {
+                // Remove disabled se tiver ruas
+                navItem.classList.remove('disabled');
+            } else {
+                // Adiciona disabled se não tiver ruas
+                navItem.classList.add('disabled');
+            }
+        }
+    });
 }
 
 // --- LÓGICA DE CARREGAMENTO DA API ---
@@ -251,7 +312,7 @@ async function carregarRuasDoBairro(slug) {
     return ruasIndex
 }
 
-// --- FUNCIONALIDADE DE BUSCA ---
+// --- FUNCIONALIDADE DE BUSCA COM AUTOCOMPLETE ---
 let _todasRuas = [];
 
 // Função debounce para otimizar a busca
@@ -267,16 +328,19 @@ function debounce(func, wait) {
     };
 }
 
-// Função para filtrar e exibir ruas baseado na busca
-function filtrarRuas(query) {
+// Função para mostrar sugestões de autocomplete
+function mostrarSugestoes(query) {
+    const autocompleteDiv = document.getElementById('searchAutocomplete');
     const queryLower = query.trim().toLowerCase();
 
-    // Se a busca estiver vazia, não fazer nada
+    // Se a busca estiver vazia ou muito curta, esconde autocomplete
     if (!queryLower || queryLower.length < 2) {
+        autocompleteDiv.classList.remove('active');
+        autocompleteDiv.innerHTML = '';
         return;
     }
 
-    const resultados = {};
+    const resultados = [];
 
     // Buscar em todas as ruas carregadas
     _todasRuas.forEach(({ nome, detalhes }) => {
@@ -287,20 +351,82 @@ function filtrarRuas(query) {
             detalhes.localizacao.toLowerCase().includes(queryLower);
 
         if (nomeMatch || significadoMatch || localizacaoMatch) {
-            resultados[nome] = detalhes;
+            resultados.push({ nome, detalhes });
         }
     });
 
-    // Exibir resultados
-    exibirRuasPorLetra(resultados);
+    // Limita a 10 resultados
+    const resultadosLimitados = resultados.slice(0, 10);
 
-    // Scroll para primeira seção com resultados
-    const primeiraLetra = Object.keys(agruparRuasPorLetra(resultados))[0];
-    if (primeiraLetra) {
-        const secao = document.getElementById(primeiraLetra);
-        if (secao) {
-            secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    // Monta o HTML do autocomplete
+    if (resultadosLimitados.length === 0) {
+        autocompleteDiv.innerHTML = `
+            <div class="autocomplete-no-results">
+                <i class="bi bi-search"></i>
+                Nenhuma rua encontrada
+            </div>
+        `;
+    } else {
+        const header = `<div class="autocomplete-header">${resultadosLimitados.length} resultado${resultadosLimitados.length > 1 ? 's' : ''} encontrado${resultadosLimitados.length > 1 ? 's' : ''}</div>`;
+
+        const items = resultadosLimitados.map(rua => {
+            const primeiraLetra = rua.nome.replace(/^(Rua|Antônio|Ana)\s+/i, "").trim().charAt(0).toUpperCase();
+            return `
+                <div class="autocomplete-item" data-rua="${rua.nome}" data-letra="${primeiraLetra}">
+                    <div class="autocomplete-item-title">
+                        <i class="bi bi-signpost-2"></i>
+                        ${rua.nome}
+                        <span class="autocomplete-item-badge">${primeiraLetra}</span>
+                    </div>
+                    <div class="autocomplete-item-info">${rua.detalhes.localizacao || 'Localização não disponível'}</div>
+                </div>
+            `;
+        }).join('');
+
+        autocompleteDiv.innerHTML = header + items;
+
+        // Adiciona eventos de click nos itens
+        autocompleteDiv.querySelectorAll('.autocomplete-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const nomeRua = item.getAttribute('data-rua');
+                const letra = item.getAttribute('data-letra');
+                navegarParaRua(letra, nomeRua);
+
+                // Esconde autocomplete e limpa input
+                autocompleteDiv.classList.remove('active');
+                document.getElementById('searchInput').value = '';
+            });
+        });
+    }
+
+    // Mostra o autocomplete
+    autocompleteDiv.classList.add('active');
+}
+
+// Função para navegar até uma rua específica
+function navegarParaRua(letra, nomeRua) {
+    // Primeiro, faz scroll até a seção da letra
+    const secao = document.getElementById(letra);
+    if (secao) {
+        secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        // Aguarda um pouco para o scroll terminar, então destaca a rua
+        setTimeout(() => {
+            const cards = secao.querySelectorAll('.rua-card');
+            cards.forEach(card => {
+                const titulo = card.querySelector('.rua-card-title');
+                if (titulo && titulo.textContent.includes(nomeRua)) {
+                    // Destaca temporariamente
+                    card.style.backgroundColor = 'rgba(255, 235, 59, 0.2)';
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Remove destaque após 2 segundos
+                    setTimeout(() => {
+                        card.style.backgroundColor = '';
+                    }, 2000);
+                }
+            });
+        }, 500);
     }
 }
 
@@ -308,6 +434,9 @@ async function main() {
     try {
         // Primeiro, gera a estrutura HTML das seções do alfabeto
         gerarSecoesAlfabeto();
+
+        // Mostra skeleton screens enquanto carrega
+        mostrarSkeletons(3);
 
         const bairrosIndex = await carregarBairros();
         const dropdownLinks = document.querySelectorAll('.dropdown-item');
@@ -317,8 +446,14 @@ async function main() {
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
 
+            // Mostra skeleton ao trocar de bairro
+            mostrarSkeletons(3);
+
             const ruasIndex = await carregarRuasDoBairro(slug);
             const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
+
+            // Limpa skeletons antes de exibir
+            limparLoading();
 
             exibirIntroducaoBairro(bairroComRuas);
             exibirRuasPorLetra(bairroComRuas.ruas);
@@ -338,12 +473,30 @@ async function main() {
             renderBairro(primeiroSlug);
         }
 
-        // Configurar busca com debounce
+        // Configurar a busca com debounce e autocomplete
         const searchInput = document.getElementById('searchInput');
+        const autocompleteDiv = document.getElementById('searchAutocomplete');
+
         if (searchInput) {
-            searchInput.addEventListener('input', debounce((e) => {
-                filtrarRuas(e.target.value);
-            }, 300));
+            const debouncedSearch = debounce(mostrarSugestoes, 300);
+            searchInput.addEventListener('input', (e) => {
+                debouncedSearch(e.target.value);
+            });
+
+            // Esconde autocomplete ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (!searchInput.contains(e.target) && !autocompleteDiv.contains(e.target)) {
+                    autocompleteDiv.classList.remove('active');
+                }
+            });
+
+            // Esconde ao pressionar ESC
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    autocompleteDiv.classList.remove('active');
+                    searchInput.value = '';
+                }
+            });
         }
 
     } catch (err) {
