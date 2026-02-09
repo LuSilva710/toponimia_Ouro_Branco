@@ -45,44 +45,81 @@ function gerarSecoesAlfabeto() {
 }
 
 
-// Função para criar elementos da tabela de informações da rua
+// Função para criar elementos da tabela de informações da rua com design PREMIUM
 function criarTabelaRua(rua) {
-    const tabela = document.createElement('table');
-    tabela.innerHTML = `
-        <thead>
-            <tr>
-                <th>Nome Oficial</th>
-                <th>Localização</th>
-                <th>Legislação</th>
-                <th>Código</th>
-                <th>Regional</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>${rua.nome_oficial || ''}</td>
-                <td>${rua.localizacao || ''}</td>
-                <td>${rua.legislacao || ''}</td>
-                <td>${rua.codigo || ''}</td>
-                <td>${rua.regional || ''}</td>
-            </tr>
-            <tr>
-                <td colspan="3">${rua.significado || 'Significado não disponível.'}</td>
-                <td colspan="2">
-                    ${rua.imagemHomenageado ? `<img src="${rua.imagemHomenageado}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin: auto;">` : ''}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    ${rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.'}
-                </td>
-                <td colspan="2">
-                    ${rua.imagem ? `<img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
-                </td>
-            </tr>
-        </tbody>
+    const container = document.createElement('div');
+    container.className = 'rua-details-premium';
+
+    // Grid de informações principais
+    const infoGrid = `
+        <div class="rua-info-grid">
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-tag"></i> Código</span>
+                <span class="info-value">${rua.codigo || '---'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-map"></i> Regional</span>
+                <span class="info-value">${rua.regional || '---'}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label"><i class="bi bi-hash"></i> Legislação</span>
+                <span class="info-value">${rua.legislacao || '---'}</span>
+            </div>
+        </div>
     `;
-    return tabela;
+
+    // Seção de Significado/Histórico
+    const significadoHtml = `
+        <div class="rua-section-premium">
+            <h4 class="section-title-premium"><i class="bi bi-book"></i> Significado e Histórico</h4>
+            <div class="significado-content-premium">
+                ${rua.significado || 'Significado não disponível.'}
+            </div>
+        </div>
+    `;
+
+    // Seção de Mídia (Mapa e Imagem)
+    const midiaHtml = `
+        <div class="rua-media-grid-premium">
+            <div class="mapa-container-premium">
+                <h4 class="section-title-premium"><i class="bi bi-geo-alt"></i> Localização</h4>
+                ${rua.mapa ? `
+                    <div class="iframe-wrapper">
+                        <iframe src="${rua.mapa}" width="100%" height="350" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(rua.nome_oficial + ', Ouro Branco, MG')}" target="_blank" class="btn-map-external">
+                        <i class="bi bi-box-arrow-up-right"></i> Ver no Google Maps
+                    </a>
+                ` : '<div class="no-data-premium">Mapa não disponível</div>'}
+            </div>
+            <div class="imagem-container-premium">
+                <h4 class="section-title-premium"><i class="bi bi-camera"></i> Foto da Rua</h4>
+                ${rua.imagem ? `
+                    <div class="img-wrapper">
+                        <img src="${rua.imagem}" alt="Imagem da rua ${rua.nome_oficial}">
+                    </div>
+                ` : '<div class="no-data-premium">Foto não disponível</div>'}
+            </div>
+        </div>
+    `;
+
+    // Seção do Homenageado (se houver)
+    const homenageadoHtml = rua.imagemHomenageado ? `
+        <div class="rua-section-premium homenageado-section-premium">
+            <h4 class="section-title-premium"><i class="bi bi-person-badge"></i> Homenageado</h4>
+            <div class="homenageado-flex">
+                <div class="homenageado-img-wrapper">
+                    <img src="${rua.imagemHomenageado}" alt="Homenageado">
+                </div>
+                <div class="homenageado-info-premium">
+                    <p>Informações sobre o homenageado presentes no significado acima.</p>
+                </div>
+            </div>
+        </div>
+    ` : '';
+
+    container.innerHTML = infoGrid + significadoHtml + midiaHtml + homenageadoHtml;
+    return container;
 }
 
 // Função para exibir uma introdução sobre o bairro selecionado
@@ -129,23 +166,30 @@ function agruparRuasPorLetra(ruas) {
 // Função para exibir os detalhes de uma rua
 function exibirDetalhesRua(rua, card) {
     // Fecha qualquer outra tabela que esteja aberta
-    const tabelaAberta = document.querySelector('.detalhes-rua');
-    if (tabelaAberta) {
-        // Se a tabela clicada já está aberta, apenas a fecha.
-        if (tabelaAberta.previousSibling === card) {
-            tabelaAberta.remove();
+    const detalhesAbertos = document.querySelector('.detalhes-rua');
+    if (detalhesAbertos) {
+        // Se o detalhe clicado já está aberto, apenas o fecha.
+        if (detalhesAbertos.previousSibling === card) {
+            detalhesAbertos.remove();
             return;
         }
-        tabelaAberta.remove();
+        detalhesAbertos.remove();
     }
 
     const divDetalhes = document.createElement('div');
     divDetalhes.classList.add('detalhes-rua');
-    const tabelaRua = criarTabelaRua(rua);
-    divDetalhes.appendChild(tabelaRua);
+
+    // Agora usa a versão premium que retorna um container rico
+    const conteudoRua = criarTabelaRua(rua);
+    divDetalhes.appendChild(conteudoRua);
 
     // Insere após o card clicado
     card.parentNode.insertBefore(divDetalhes, card.nextSibling);
+
+    // Scroll suave para os detalhes após um pequeno delay
+    setTimeout(() => {
+        divDetalhes.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 100);
 }
 
 // ========================================
@@ -549,11 +593,17 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotMessages = document.getElementById('chatbotMessages');
 
     chatbotButton.addEventListener('click', function () {
-        chatbot.style.display = "block";
-        chatbotMessages.innerHTML = "Olá, <br> Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição irá agregar muito para o Dicionário de Ruas de Ouro Branco!";
+        chatbot.classList.toggle('chatbot-visible');
+        if (chatbot.classList.contains('chatbot-visible')) {
+            chatbot.style.display = "flex";
+            chatbotMessages.innerHTML = "Hola! Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição será muito valiosa!";
+        } else {
+            chatbot.style.display = "none";
+        }
     });
 
     closeChatbotButton.addEventListener('click', function () {
+        chatbot.classList.remove('chatbot-visible');
         chatbot.style.display = "none";
     });
 
