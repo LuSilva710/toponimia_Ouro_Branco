@@ -13,6 +13,11 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
+
+    }
+
+    html {
+        scroll-padding-top: 110px;
     }
 
     html,
@@ -20,7 +25,7 @@
         min-width: 290px;
         background-color: var(--white);
         color: var(--medium-gray);
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
         min-height: 100vh;
         scroll-behavior: smooth;
@@ -29,7 +34,8 @@
     /* Estilo da Navbar */
     .navbar {
         --bs-navbar-padding-y: 1.2rem;
-        padding: 1rem 0;
+        padding: 0.5rem 0;
+        z-index: 1050 !important;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
@@ -371,13 +377,17 @@
     #navside {
         position: fixed;
         left: 0;
-        top: 84px;
-        width: 150px;
-        height: calc(100% - 76px);
+        top: 0;
+        width: 110px;
+        height: 100vh;
         background-color: #212529;
-        padding: 20px 0;
+
+        padding-top: 80px;
+
+        padding-bottom: 20px;
         overflow-y: auto;
-        z-index: 1000;
+        z-index: 1040;
+        border-right: 1px solid var(--dark-gray);
     }
 
     /* Estilo para a barra de rolagem */
@@ -426,17 +436,6 @@
         font-weight: 600;
     }
 
-    /* Estado desabilitado para letras sem ruas */
-    #navside li.disabled {
-        opacity: 0.3;
-        pointer-events: none;
-        cursor: not-allowed;
-    }
-
-    #navside li.disabled a.nav-link {
-        color: var(--medium-gray);
-    }
-
     /* Efeito decorativo para o item ativo */
     #navside li.active::before,
     #navside li.active::after {
@@ -465,15 +464,16 @@
     /* Estilos para o conteúdo principal */
     #main-doc {
         margin-left: 150px;
-        margin-top: 76px;
+        /* margin-top: 100px; */
         padding: 30px;
-        background-color: var(--lighter-gray);
+        min-height: 100vh;
+        background-color: var(--lighter);
     }
 
     section {
         padding: 30px;
         margin-bottom: 30px;
-        background-color: var(--white);
+        background-color: #fcfcfc;
         border-radius: 4px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -1314,28 +1314,24 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    @media (max-width: 992px) {
-
-        /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
-        #navside {
-            width: 100%;
-            height: 60px;
-            /* Altura fixa para a barra */
-            top: 56px;
-            /* Logo abaixo da Navbar principal */
-            left: 0;
-            z-index: 990;
-            background-color: #212529;
-            overflow-x: auto;
-            /* Permite rolagem horizontal */
-            overflow-y: hidden;
-            white-space: nowrap;
-            padding: 0;
-            border-top: 1px solid #444;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+@media (max-width: 992px) {
+    /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
+    #navside {
+        width: 100%;
+        height: 60px; /* Altura fixa para a barra */
+        top: 56px; /* Logo abaixo da Navbar principal */
+        left: 0;
+        z-index: 990;
+        background-color: #212529;
+        overflow-x: auto; /* Permite rolagem horizontal */
+        overflow-y: hidden;
+        white-space: nowrap;
+        padding: 0;
+        border-top: 1px solid #444;
+        display: flex;
+        align-items: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
 
         /* Ajuste da lista para ficar horizontal */
         #navside ul {
@@ -1385,197 +1381,43 @@
             padding: 20px 15px;
         }
 
-        /* 3. Cards de ruas em mobile */
-        .section-ruas {
-            gap: 10px;
-            padding: 10px 0;
-        }
-
-        .rua-card {
-            padding: 12px 16px;
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        .rua-card:hover {
-            transform: translateX(2px);
-        }
-
-        .rua-card-badge {
-            margin-top: 8px;
-            align-self: flex-end;
-        }
-
-        /* 4. Hero section responsivo */
-        .hero-section {
-            min-height: 40vh;
-            padding: 40px 15px;
-            margin-top: 120px;
-        }
-
-        .hero-title {
-            font-size: 1.8rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1rem;
-            margin-bottom: 30px;
-        }
-
-        .search-input {
-            padding: 14px 16px 14px 45px;
-            font-size: 0.9rem;
-        }
-
-        .search-icon {
-            left: 15px;
-            font-size: 1rem;
-        }
-
-        /* 5. Seções do alfabeto mobile */
-        .main-section {
-            margin: 20px 0;
-            padding: 15px 0;
-        }
-
-        .main-section header {
-            font-size: 1.1rem;
-            padding: 6px 15px;
-            margin-bottom: 15px;
-        }
-
-        .section-ruas {
-            gap: 10px;
-            padding: 0 15px;
-        }
-
-        .empty-section {
-            padding: 30px 15px;
-            font-size: 0.85rem;
-        }
-
-        .empty-section i {
-            font-size: 1.75rem;
-        }
-
-        /* 6. Intro section responsiva */
-        .intro-section {
-            padding: 25px 15px;
-        }
-
-        .intro-header {
-            margin-bottom: 20px;
-        }
-
-        .intro-cards {
-            grid-template-columns: 1fr;
-            gap: 12px;
-        }
-
-        .intro-card {
-            padding: 18px 14px;
-        }
-
-        .intro-card-icon {
-            width: 44px;
-            height: 44px;
-            margin-bottom: 10px;
-        }
-
-        .intro-card-icon i {
-            font-size: 1.3rem;
-        }
-
-        /* 6. Bairro section responsiva */
-        .bairro-header {
-            min-height: 250px;
-        }
-
-        .bairro-info {
-            padding: 20px;
-        }
-
-        .bairro-title {
-            font-size: 1.75rem;
-        }
-
-        .bairro-description {
-            font-size: 0.95rem;
-        }
-
-        /* 4. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
-        table {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-
-        /* Quebra de texto nas células para evitar tabelas muito largas se possível */
-        table th,
-        table td {
-            white-space: normal;
-            min-width: 60px;
-        }
-
-        /* 5. Ajustes de Imagens e Mapas */
-        iframe,
-        img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
-
-        /* Se o mapa for iframe, damos uma altura mínima */
-        iframe {
-            min-height: 300px;
-        }
-
-        /* 5. Botões flutuantes e chatbot responsivos */
-        .fixed-buttons {
-            bottom: 20px;
-            right: 20px;
-            gap: 10px;
-        }
-
-        .fixed-buttons button {
-            width: 50px;
-            height: 50px;
-            font-size: 1rem;
-        }
-
-        #chatbot {
-            width: calc(100% - 40px);
-            right: 20px;
-            left: 20px;
-            bottom: 85px;
-            max-height: 65vh;
-        }
-
-        #chatbotMessages {
-            max-height: calc(65vh - 180px);
-            padding: 12px;
-        }
-
-        /* 6. Footer responsivo */
-        .site-footer {
-            padding: 40px 20px 20px;
-            margin-top: 40px;
-        }
-
-        .footer-content {
-            grid-template-columns: 1fr;
-            gap: 30px;
-        }
-
-        .footer-section {
-            text-align: center;
-        }
-
-        .footer-links a:hover {
-            transform: translateX(0);
-        }
-
+    /* 3. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
+    table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        white-space: nowrap;
     }
+    
+    /* Quebra de texto nas células para evitar tabelas muito largas se possível */
+    table th, table td {
+        white-space: normal;
+        min-width: 60px;
+    }
+
+    /* 4. Ajustes de Imagens e Mapas */
+    iframe, img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Se o mapa for iframe, damos uma altura mínima */
+    iframe {
+        min-height: 300px;
+    }
+
+    /* 5. Chatbot e Botões Flutuantes */
+    .fixed-buttons {
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    #chatbot {
+        width: 95%; /* Ocupa quase toda a largura no celular */
+        right: 2.5%;
+        bottom: 70px;
+    }
+}
 
 
     @media (max-width: 800px) {

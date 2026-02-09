@@ -38,6 +38,7 @@ function gerarSecoesAlfabeto() {
         section.appendChild(header);
         section.appendChild(article);
 
+
         // Adiciona a seção completa ao <main>
         mainDoc.appendChild(section);
     }
@@ -442,7 +443,7 @@ async function main() {
         const dropdownLinks = document.querySelectorAll('.dropdown-item');
 
         async function renderBairro(slug) {
-            console.log("Renderizando bairro:", slug)
+            console.log("Renderizando bairro:", slug);
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
 
