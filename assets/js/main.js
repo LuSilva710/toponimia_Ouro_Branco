@@ -38,88 +38,50 @@ function gerarSecoesAlfabeto() {
         section.appendChild(header);
         section.appendChild(article);
 
-
         // Adiciona a seção completa ao <main>
         mainDoc.appendChild(section);
     }
 }
 
 
-// Função para criar elementos da tabela de informações da rua com design PREMIUM
+// Função para criar elementos da tabela de informações da rua
 function criarTabelaRua(rua) {
-    const container = document.createElement('div');
-    container.className = 'rua-details-premium';
-
-    // Grid de informações principais
-    const infoGrid = `
-        <div class="rua-info-grid">
-            <div class="info-item">
-                <span class="info-label"><i class="bi bi-tag"></i> Código</span>
-                <span class="info-value">${rua.codigo || '---'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label"><i class="bi bi-map"></i> Regional</span>
-                <span class="info-value">${rua.regional || '---'}</span>
-            </div>
-            <div class="info-item">
-                <span class="info-label"><i class="bi bi-hash"></i> Legislação</span>
-                <span class="info-value">${rua.legislacao || '---'}</span>
-            </div>
-        </div>
+    const tabela = document.createElement('table');
+    tabela.innerHTML = `
+        <thead>
+            <tr>
+                <th>Nome Oficial</th>
+                <th>Localização</th>
+                <th>Legislação</th>
+                <th>Código</th>
+                <th>Regional</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>${rua.nome_oficial || ''}</td>
+                <td>${rua.localizacao || ''}</td>
+                <td>${rua.legislacao || ''}</td>
+                <td>${rua.codigo || ''}</td>
+                <td>${rua.regional || ''}</td>
+            </tr>
+            <tr>
+                <td colspan="3">${rua.significado || 'Significado não disponível.'}</td>
+                <td colspan="2">
+                    ${rua.imagemHomenageado ? `<img src="${rua.imagemHomenageado}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin: auto;">` : ''}
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    ${rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.'}
+                </td>
+                <td colspan="2">
+                    ${rua.imagem ? `<img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
+                </td>
+            </tr>
+        </tbody>
     `;
-
-    // Seção de Significado/Histórico
-    const significadoHtml = `
-        <div class="rua-section-premium">
-            <h4 class="section-title-premium"><i class="bi bi-book"></i> Significado e Histórico</h4>
-            <div class="significado-content-premium">
-                ${rua.significado || 'Significado não disponível.'}
-            </div>
-        </div>
-    `;
-
-    // Seção de Mídia (Mapa e Imagem)
-    const midiaHtml = `
-        <div class="rua-media-grid-premium">
-            <div class="mapa-container-premium">
-                <h4 class="section-title-premium"><i class="bi bi-geo-alt"></i> Localização</h4>
-                ${rua.mapa ? `
-                    <div class="iframe-wrapper">
-                        <iframe src="${rua.mapa}" width="100%" height="350" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                    <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(rua.nome_oficial + ', Ouro Branco, MG')}" target="_blank" class="btn-map-external">
-                        <i class="bi bi-box-arrow-up-right"></i> Ver no Google Maps
-                    </a>
-                ` : '<div class="no-data-premium">Mapa não disponível</div>'}
-            </div>
-            <div class="imagem-container-premium">
-                <h4 class="section-title-premium"><i class="bi bi-camera"></i> Foto da Rua</h4>
-                ${rua.imagem ? `
-                    <div class="img-wrapper">
-                        <img src="${rua.imagem}" alt="Imagem da rua ${rua.nome_oficial}">
-                    </div>
-                ` : '<div class="no-data-premium">Foto não disponível</div>'}
-            </div>
-        </div>
-    `;
-
-    // Seção do Homenageado (se houver)
-    const homenageadoHtml = rua.imagemHomenageado ? `
-        <div class="rua-section-premium homenageado-section-premium">
-            <h4 class="section-title-premium"><i class="bi bi-person-badge"></i> Homenageado</h4>
-            <div class="homenageado-flex">
-                <div class="homenageado-img-wrapper">
-                    <img src="${rua.imagemHomenageado}" alt="Homenageado">
-                </div>
-                <div class="homenageado-info-premium">
-                    <p>Informações sobre o homenageado presentes no significado acima.</p>
-                </div>
-            </div>
-        </div>
-    ` : '';
-
-    container.innerHTML = infoGrid + significadoHtml + midiaHtml + homenageadoHtml;
-    return container;
+    return tabela;
 }
 
 // Função para exibir uma introdução sobre o bairro selecionado
@@ -166,30 +128,23 @@ function agruparRuasPorLetra(ruas) {
 // Função para exibir os detalhes de uma rua
 function exibirDetalhesRua(rua, card) {
     // Fecha qualquer outra tabela que esteja aberta
-    const detalhesAbertos = document.querySelector('.detalhes-rua');
-    if (detalhesAbertos) {
-        // Se o detalhe clicado já está aberto, apenas o fecha.
-        if (detalhesAbertos.previousSibling === card) {
-            detalhesAbertos.remove();
+    const tabelaAberta = document.querySelector('.detalhes-rua');
+    if (tabelaAberta) {
+        // Se a tabela clicada já está aberta, apenas a fecha.
+        if (tabelaAberta.previousSibling === card) {
+            tabelaAberta.remove();
             return;
         }
-        detalhesAbertos.remove();
+        tabelaAberta.remove();
     }
 
     const divDetalhes = document.createElement('div');
     divDetalhes.classList.add('detalhes-rua');
-
-    // Agora usa a versão premium que retorna um container rico
-    const conteudoRua = criarTabelaRua(rua);
-    divDetalhes.appendChild(conteudoRua);
+    const tabelaRua = criarTabelaRua(rua);
+    divDetalhes.appendChild(tabelaRua);
 
     // Insere após o card clicado
     card.parentNode.insertBefore(divDetalhes, card.nextSibling);
-
-    // Scroll suave para os detalhes após um pequeno delay
-    setTimeout(() => {
-        divDetalhes.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }, 100);
 }
 
 // ========================================
@@ -357,7 +312,7 @@ async function carregarRuasDoBairro(slug) {
     return ruasIndex
 }
 
-// --- FUNCIONALIDADE DE BUSCA COM AUTOCOMPLETE ---
+// --- FUNCIONALIDADE DE BUSCA ---
 let _todasRuas = [];
 
 // Função debounce para otimizar a busca
@@ -373,19 +328,24 @@ function debounce(func, wait) {
     };
 }
 
-// Função para mostrar sugestões de autocomplete
-function mostrarSugestoes(query) {
-    const autocompleteDiv = document.getElementById('searchAutocomplete');
+// Função para filtrar e exibir ruas baseado na busca
+function filtrarRuas(query) {
     const queryLower = query.trim().toLowerCase();
 
-    // Se a busca estiver vazia ou muito curta, esconde autocomplete
+    // Se a busca estiver vazia, limpa tudo e restaura o estado original
     if (!queryLower || queryLower.length < 2) {
-        autocompleteDiv.classList.remove('active');
-        autocompleteDiv.innerHTML = '';
+        limparBusca(false); // false para não focar o input novamente
         return;
     }
 
-    const resultados = [];
+    // Adiciona feedback de loading no input
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.classList.add('search-loading');
+    }
+
+    const resultados = {};
+    let totalResultados = 0;
 
     // Buscar em todas as ruas carregadas
     _todasRuas.forEach(({ nome, detalhes }) => {
@@ -396,82 +356,109 @@ function mostrarSugestoes(query) {
             detalhes.localizacao.toLowerCase().includes(queryLower);
 
         if (nomeMatch || significadoMatch || localizacaoMatch) {
-            resultados.push({ nome, detalhes });
+            resultados[nome] = detalhes;
+            totalResultados++;
         }
     });
 
-    // Limita a 10 resultados
-    const resultadosLimitados = resultados.slice(0, 10);
+    // Exibir resultados
+    exibirRuasPorLetra(resultados);
 
-    // Monta o HTML do autocomplete
-    if (resultadosLimitados.length === 0) {
-        autocompleteDiv.innerHTML = `
-            <div class="autocomplete-no-results">
-                <i class="bi bi-search"></i>
-                Nenhuma rua encontrada
-            </div>
-        `;
-    } else {
-        const header = `<div class="autocomplete-header">${resultadosLimitados.length} resultado${resultadosLimitados.length > 1 ? 's' : ''} encontrado${resultadosLimitados.length > 1 ? 's' : ''}</div>`;
+    // Mostra feedback de busca
+    mostrarFeedbackBusca(totalResultados, query);
 
-        const items = resultadosLimitados.map(rua => {
-            const primeiraLetra = rua.nome.replace(/^(Rua|Antônio|Ana)\s+/i, "").trim().charAt(0).toUpperCase();
-            return `
-                <div class="autocomplete-item" data-rua="${rua.nome}" data-letra="${primeiraLetra}">
-                    <div class="autocomplete-item-title">
-                        <i class="bi bi-signpost-2"></i>
-                        ${rua.nome}
-                        <span class="autocomplete-item-badge">${primeiraLetra}</span>
-                    </div>
-                    <div class="autocomplete-item-info">${rua.detalhes.localizacao || 'Localização não disponível'}</div>
-                </div>
-            `;
-        }).join('');
-
-        autocompleteDiv.innerHTML = header + items;
-
-        // Adiciona eventos de click nos itens
-        autocompleteDiv.querySelectorAll('.autocomplete-item').forEach(item => {
-            item.addEventListener('click', () => {
-                const nomeRua = item.getAttribute('data-rua');
-                const letra = item.getAttribute('data-letra');
-                navegarParaRua(letra, nomeRua);
-
-                // Esconde autocomplete e limpa input
-                autocompleteDiv.classList.remove('active');
-                document.getElementById('searchInput').value = '';
-            });
-        });
+    // Remove feedback de loading do input
+    if (searchInput) {
+        searchInput.classList.remove('search-loading');
     }
 
-    // Mostra o autocomplete
-    autocompleteDiv.classList.add('active');
+    // Scroll para primeira seção com resultados
+    const primeiraLetra = Object.keys(agruparRuasPorLetra(resultados))[0];
+    if (primeiraLetra) {
+        const secao = document.getElementById(primeiraLetra);
+        if (secao) {
+            secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
 }
 
-// Função para navegar até uma rua específica
-function navegarParaRua(letra, nomeRua) {
-    // Primeiro, faz scroll até a seção da letra
-    const secao = document.getElementById(letra);
-    if (secao) {
-        secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
+// ========================================
+// FUNÇÕES DE FEEDBACK DE BUSCA
+// ========================================
 
-        // Aguarda um pouco para o scroll terminar, então destaca a rua
-        setTimeout(() => {
-            const cards = secao.querySelectorAll('.rua-card');
-            cards.forEach(card => {
-                const titulo = card.querySelector('.rua-card-title');
-                if (titulo && titulo.textContent.includes(nomeRua)) {
-                    // Destaca temporariamente
-                    card.style.backgroundColor = 'rgba(255, 235, 59, 0.2)';
-                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+// Função para mostrar feedback de resultados de busca
+function mostrarFeedbackBusca(quantidade, termo) {
+    // Remove feedback anterior
+    const feedbackAnterior = document.querySelector('.search-results-info');
+    if (feedbackAnterior) feedbackAnterior.remove();
 
-                    // Remove destaque após 2 segundos
-                    setTimeout(() => {
-                        card.style.backgroundColor = '';
-                    }, 2000);
-                }
-            });
-        }, 500);
+    // Se não houver termo de busca, não mostra feedback
+    if (!termo || termo.length < 2) return;
+
+    // Cria elemento de feedback
+    const feedback = document.createElement('div');
+    feedback.className = 'search-results-info';
+
+    if (quantidade === 0) {
+        feedback.innerHTML = `
+            <div class="search-results-count">
+                <i class="bi bi-search"></i>
+                Nenhum resultado encontrado para "${termo}"
+            </div>
+            <button class="clear-search-btn" onclick="limparBusca()">
+                <i class="bi bi-x-circle"></i>
+                Limpar busca
+            </button>
+        `;
+    } else {
+        const plural = quantidade === 1 ? 'resultado' : 'resultados';
+        feedback.innerHTML = `
+            <div class="search-results-count">
+                <i class="bi bi-search"></i>
+                ${quantidade} ${plural} para "${termo}"
+            </div>
+            <button class="clear-search-btn" onclick="limparBusca()">
+                <i class="bi bi-x-circle"></i>
+                Limpar busca
+            </button>
+        `;
+    }
+
+    // Insere o feedback após a hero section (barra de busca)
+    const heroSection = document.querySelector('.hero-section');
+    if (heroSection) {
+        heroSection.after(feedback);
+    }
+}
+
+// Função para limpar a busca
+window.limparBusca = function (shouldFocus = true) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        if (shouldFocus) searchInput.focus();
+    }
+
+    // Remove feedback
+    const feedback = document.querySelector('.search-results-info');
+    if (feedback) feedback.remove();
+
+    // Remove loading do input
+    searchInput?.classList.remove('search-loading');
+
+    // Restaura as ruas do bairro selecionado se possível
+    const dropdownMenu = document.querySelector('.dropdown-menu');
+    const bairoAtivo = dropdownMenu?.querySelector('.dropdown-item.active') ||
+        dropdownMenu?.querySelector('.dropdown-item');
+
+    if (bairoAtivo) {
+        const slug = bairoAtivo.getAttribute('href').replace('#', '');
+        // Usamos uma variável global se existir ou tentamos disparar o clique
+        // Para simplificar, vamos apenas disparar o clique se for manual ou 
+        // recarregar o bairro atual se tivermos o slug
+        if (window.renderBairroAtual) {
+            window.renderBairroAtual(slug);
+        }
     }
 }
 
@@ -487,9 +474,15 @@ async function main() {
         const dropdownLinks = document.querySelectorAll('.dropdown-item');
 
         async function renderBairro(slug) {
-            console.log("Renderizando bairro:", slug);
+            console.log("Renderizando bairro:", slug)
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
+
+            // Limpa a busca ao trocar de bairro
+            const feedback = document.querySelector('.search-results-info');
+            if (feedback) feedback.remove();
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput) searchInput.value = '';
 
             // Mostra skeleton ao trocar de bairro
             mostrarSkeletons(3);
@@ -502,7 +495,19 @@ async function main() {
 
             exibirIntroducaoBairro(bairroComRuas);
             exibirRuasPorLetra(bairroComRuas.ruas);
+
+            // Atualiza o estado visual do menu (bairro ativo)
+            document.querySelectorAll('.dropdown-item').forEach(link => {
+                if (link.getAttribute('href') === `#${slug}`) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            });
         }
+
+        // Torna acessível globalmente for limparBusca
+        window.renderBairroAtual = renderBairro;
 
         dropdownLinks.forEach(link => {
             link.addEventListener('click', (event) => {
@@ -518,30 +523,12 @@ async function main() {
             renderBairro(primeiroSlug);
         }
 
-        // Configurar a busca com debounce e autocomplete
+        // Configurar busca com debounce de 400ms
         const searchInput = document.getElementById('searchInput');
-        const autocompleteDiv = document.getElementById('searchAutocomplete');
-
         if (searchInput) {
-            const debouncedSearch = debounce(mostrarSugestoes, 300);
-            searchInput.addEventListener('input', (e) => {
-                debouncedSearch(e.target.value);
-            });
-
-            // Esconde autocomplete ao clicar fora
-            document.addEventListener('click', (e) => {
-                if (!searchInput.contains(e.target) && !autocompleteDiv.contains(e.target)) {
-                    autocompleteDiv.classList.remove('active');
-                }
-            });
-
-            // Esconde ao pressionar ESC
-            searchInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    autocompleteDiv.classList.remove('active');
-                    searchInput.value = '';
-                }
-            });
+            searchInput.addEventListener('input', debounce((e) => {
+                filtrarRuas(e.target.value);
+            }, 400));
         }
 
     } catch (err) {
@@ -593,17 +580,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const chatbotMessages = document.getElementById('chatbotMessages');
 
     chatbotButton.addEventListener('click', function () {
-        chatbot.classList.toggle('chatbot-visible');
-        if (chatbot.classList.contains('chatbot-visible')) {
-            chatbot.style.display = "flex";
-            chatbotMessages.innerHTML = "Hola! Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição será muito valiosa!";
-        } else {
-            chatbot.style.display = "none";
-        }
+        chatbot.style.display = "block";
+        chatbotMessages.innerHTML = "Olá, <br> Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição irá agregar muito para o Dicionário de Ruas de Ouro Branco!";
     });
 
     closeChatbotButton.addEventListener('click', function () {
-        chatbot.classList.remove('chatbot-visible');
         chatbot.style.display = "none";
     });
 

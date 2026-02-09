@@ -13,11 +13,6 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-
-    }
-
-    html {
-        scroll-padding-top: 110px;
     }
 
     html,
@@ -25,7 +20,7 @@
         min-width: 290px;
         background-color: var(--white);
         color: var(--medium-gray);
-        font-family: "Montserrat", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         line-height: 1.6;
         min-height: 100vh;
         scroll-behavior: smooth;
@@ -34,8 +29,7 @@
     /* Estilo da Navbar */
     .navbar {
         --bs-navbar-padding-y: 1.2rem;
-        padding: 0.5rem 0;
-        z-index: 1050 !important;
+        padding: 1rem 0;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
@@ -377,17 +371,13 @@
     #navside {
         position: fixed;
         left: 0;
-        top: 0;
-        width: 110px;
-        height: 100vh;
+        top: 84px;
+        width: 150px;
+        height: calc(100% - 76px);
         background-color: #212529;
-
-        padding-top: 80px;
-
-        padding-bottom: 20px;
+        padding: 20px 0;
         overflow-y: auto;
-        z-index: 1040;
-        border-right: 1px solid var(--dark-gray);
+        z-index: 1000;
     }
 
     /* Estilo para a barra de rolagem */
@@ -436,6 +426,17 @@
         font-weight: 600;
     }
 
+    /* Estado desabilitado para letras sem ruas */
+    #navside li.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+
+    #navside li.disabled a.nav-link {
+        color: var(--medium-gray);
+    }
+
     /* Efeito decorativo para o item ativo */
     #navside li.active::before,
     #navside li.active::after {
@@ -464,16 +465,15 @@
     /* Estilos para o conteúdo principal */
     #main-doc {
         margin-left: 150px;
-        /* margin-top: 100px; */
+        margin-top: 76px;
         padding: 30px;
-        min-height: 100vh;
-        background-color: var(--lighter);
+        background-color: var(--lighter-gray);
     }
 
     section {
         padding: 30px;
         margin-bottom: 30px;
-        background-color: #fcfcfc;
+        background-color: var(--white);
         border-radius: 4px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -723,124 +723,74 @@
     }
 
     /* ============================================
-       AUTOCOMPLETE DE BUSCA
+       FEEDBACK DE BUSCA
        ============================================ */
-    .search-autocomplete {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background-color: var(--white);
-        border: 1px solid var(--border-color);
-        border-top: none;
-        border-radius: 0 0 8px 8px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        max-height: 400px;
-        overflow-y: auto;
-        z-index: 1000;
-        display: none;
-    }
-
-    .search-autocomplete.active {
-        display: block;
-    }
-
-    .autocomplete-header {
-        padding: 10px 16px;
+    .search-results-info {
         background-color: var(--lighter-gray);
-        border-bottom: 1px solid var(--border-color);
-        font-size: 0.8rem;
-        color: var(--medium-gray);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-    }
-
-    .autocomplete-item {
-        padding: 12px 16px;
-        cursor: pointer;
-        border-bottom: 1px solid var(--border-color);
-        transition: background-color 0.2s;
-    }
-
-    .autocomplete-item:last-child {
-        border-bottom: none;
-    }
-
-    .autocomplete-item:hover,
-    .autocomplete-item.active {
-        background-color: var(--lighter-gray);
-    }
-
-    .autocomplete-item-title {
-        font-size: 0.95rem;
-        font-weight: 600;
-        color: var(--dark-gray);
-        margin-bottom: 4px;
+        border-left: 3px solid var(--dark-gray);
+        padding: 12px 20px;
+        margin: 20px 20px 10px;
         display: flex;
         align-items: center;
-        gap: 6px;
-    }
-
-    .autocomplete-item-title i {
-        color: var(--medium-gray);
-        font-size: 0.85rem;
-    }
-
-    .autocomplete-item-info {
-        font-size: 0.8rem;
-        color: var(--medium-gray);
-    }
-
-    .autocomplete-item-badge {
-        display: inline-block;
-        background-color: var(--light-gray);
-        color: var(--dark-gray);
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.7rem;
-        font-weight: 600;
-        margin-left: 8px;
-    }
-
-    .autocomplete-no-results {
-        padding: 20px;
-        text-align: center;
-        color: var(--medium-gray);
-        font-size: 0.9rem;
-    }
-
-    .autocomplete-no-results i {
-        font-size: 2rem;
-        color: var(--border-color);
-        display: block;
-        margin-bottom: 8px;
-    }
-
-    /* Ajuste na search-container para posição relativa */
-    .search-container {
-        position: relative;
-    }
-
-    /* Scrollbar customizada para autocomplete */
-    .search-autocomplete::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .search-autocomplete::-webkit-scrollbar-track {
-        background: var(--lighter-gray);
-    }
-
-    .search-autocomplete::-webkit-scrollbar-thumb {
-        background: var(--medium-gray);
+        justify-content: space-between;
         border-radius: 4px;
     }
 
-    .search-autocomplete::-webkit-scrollbar-thumb:hover {
-        background: var(--dark-gray);
+    .search-results-count {
+        font-size: 0.9rem;
+        color: var(--dark-gray);
+        font-weight: 600;
     }
 
-    /* Remover feedback antigo - manter apenas para referência */
+    .search-results-count i {
+        color: var(--medium-gray);
+        margin-right: 6px;
+    }
+
+    .clear-search-btn {
+        background: none;
+        border: none;
+        color: var(--medium-gray);
+        font-size: 0.85rem;
+        cursor: pointer;
+        padding: 4px 12px;
+        border-radius: 4px;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .clear-search-btn:hover {
+        background-color: var(--light-gray);
+        color: var(--dark-gray);
+    }
+
+    .no-search-results {
+        text-align: center;
+        padding: 40px 20px;
+        color: var(--medium-gray);
+    }
+
+    .no-search-results i {
+        font-size: 2.5rem;
+        color: var(--border-color);
+        margin-bottom: 12px;
+        display: block;
+    }
+
+    .no-search-results p {
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    .search-highlight {
+        background-color: rgba(255, 235, 59, 0.3);
+        padding: 2px 4px;
+        border-radius: 2px;
+        font-weight: 600;
+    }
+
     /* Detalhes expandidos da rua */
     .detalhes-rua {
         margin: 20px 0;
@@ -903,196 +853,97 @@
         }
     }
 
-    /* ============================================
-       DETALHES DA RUA - DESIGN PREMIUM
-       ============================================ */
-    .rua-details-premium {
+    .detalhes-rua table {
         background-color: var(--white);
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-        border: 1px solid var(--border-color);
-        margin: 15px 0;
-        animation: slideDownFade 0.4s ease-out;
-    }
-
-    @keyframes slideDownFade {
-        from {
-            opacity: 0;
-            transform: translateY(-10px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    /* Grid de Informações Rápidas */
-    .rua-info-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
-        padding-bottom: 20px;
-        border-bottom: 1px dashed var(--border-color);
-    }
-
-    .info-item {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .info-label {
-        font-size: 0.75rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        color: var(--medium-gray);
-        letter-spacing: 0.5px;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .info-label i {
-        color: var(--dark-gray);
-    }
-
-    .info-value {
-        font-size: 1rem;
-        color: var(--black);
-        font-weight: 600;
-    }
-
-    /* Seções Premium */
-    .rua-section-premium {
-        margin-bottom: 30px;
-    }
-
-    .section-title-premium {
-        font-size: 1.1rem;
-        font-weight: 700;
-        color: var(--dark-gray);
-        margin-bottom: 15px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        border-left: 4px solid var(--dark-gray);
-        padding-left: 12px;
-    }
-
-    .significado-content-premium {
-        font-size: 1rem;
-        line-height: 1.8;
-        color: var(--medium-gray);
-        text-align: justify;
-        background-color: var(--lighter-gray);
-        padding: 20px;
         border-radius: 8px;
-    }
-
-    /* Grid de Mídia */
-    .rua-media-grid-premium {
-        display: grid;
-        grid-template-columns: 1.5fr 1fr;
-        gap: 25px;
-        margin-top: 25px;
-    }
-
-    .iframe-wrapper,
-    .img-wrapper {
-        border-radius: 12px;
         overflow: hidden;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        background-color: var(--light-gray);
-        position: relative;
-    }
-
-    .img-wrapper img {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform 0.5s ease;
+        min-width: 600px;
+        border-collapse: collapse;
     }
 
-    .img-wrapper:hover img {
-        transform: scale(1.05);
+    .detalhes-rua::-webkit-scrollbar {
+        height: 8px;
     }
 
-    .btn-map-external {
-        display: inline-flex;
-        align-items: center;
-        gap: 8px;
-        margin-top: 12px;
-        color: var(--dark-gray);
+    .detalhes-rua::-webkit-scrollbar-track {
+        background: var(--lighter-gray);
+        border-radius: 4px;
+    }
+
+    .detalhes-rua::-webkit-scrollbar-thumb {
+        background: var(--medium-gray);
+        border-radius: 4px;
+    }
+
+    .detalhes-rua::-webkit-scrollbar-thumb:hover {
+        background: var(--dark-gray);
+    }
+
+    .detalhes-rua table th {
+        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
+        color: var(--white);
         font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 16px 20px;
+        text-align: left;
+        border-bottom: 3px solid var(--dark-gray);
+    }
+
+    .detalhes-rua table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-color);
+        line-height: 1.7;
         font-size: 0.9rem;
-        transition: all 0.2s;
-        text-decoration: underline;
+        vertical-align: top;
     }
 
-    .btn-map-external:hover {
-        color: var(--black);
-        transform: translateX(3px);
+    .detalhes-rua table td:first-child {
+        font-weight: 600;
+        color: var(--dark-gray);
+        width: 30%;
+        background-color: rgba(250, 250, 250, 0.5);
     }
 
-    /* Seção Homenageado */
-    .homenageado-flex {
-        display: flex;
-        gap: 25px;
-        align-items: center;
-        background: linear-gradient(to right, var(--lighter-gray), var(--white));
-        padding: 20px;
-        border-radius: 12px;
-        border: 1px solid var(--border-color);
+    .detalhes-rua table tr:last-child td {
+        border-bottom: none;
     }
 
-    .homenageado-img-wrapper {
-        width: 120px;
-        height: 120px;
-        min-width: 120px;
-        border-radius: 50%;
-        overflow: hidden;
-        border: 4px solid var(--white);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .homenageado-img-wrapper img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .homenageado-info-premium p {
-        font-style: italic;
-        color: var(--medium-gray);
-        margin: 0;
-    }
-
-    .no-data-premium {
-        height: 200px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .detalhes-rua table tr:hover td {
         background-color: var(--lighter-gray);
-        color: var(--medium-gray);
-        border: 2px dashed var(--border-color);
-        border-radius: 12px;
-        font-size: 0.9rem;
     }
 
-    /* Responsividade Premium */
-    @media (max-width: 992px) {
-        .rua-media-grid-premium {
-            grid-template-columns: 1fr;
-        }
+    .detalhes-rua table tr:hover td:first-child {
+        background-color: rgba(240, 240, 240, 0.8);
+    }
 
-        .homenageado-flex {
-            flex-direction: column;
-            text-align: center;
-        }
+    /* Estilo para valores especiais na tabela */
+    .detalhes-rua table td strong {
+        color: var(--black);
+        font-weight: 700;
+    }
+
+    .detalhes-rua table td em {
+        color: var(--medium-gray);
+        font-style: italic;
+    }
+
+    .detalhes-rua img {
+        max-width: 100%;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 8px 0;
+    }
+
+    .detalhes-rua iframe {
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        height: 300px;
+        border: none;
     }
 
     /* ============================================
@@ -1413,211 +1264,543 @@
         color: rgba(255, 255, 255, 0.6);
     }
 
-    /* ============================================
-       RESPONSIVIDADE E AJUSTES MOBILE
-       ============================================ */
+    @media (max-width: 992px) {
 
-    /* Telas menores que 992px (Tablets e Mobile) */
-    @media (max-width: 991.98px) {
-
-        /* Sidebar Vertical vira Horizontal Sticky no Topo (abaixo da navbar) */
+        /* 1. Transformar Sidebar Vertical em Barra Horizontal no Topo */
         #navside {
-            position: sticky;
-            top: 56px;
-            /* Ajustado para ficar logo abaixo da navbar */
             width: 100%;
-            height: auto;
-            padding: 0;
+            height: 60px;
+            /* Altura fixa para a barra */
+            top: 56px;
+            /* Logo abaixo da Navbar principal */
+            left: 0;
+            z-index: 990;
+            background-color: #212529;
             overflow-x: auto;
+            /* Permite rolagem horizontal */
             overflow-y: hidden;
+            white-space: nowrap;
+            padding: 0;
+            border-top: 1px solid #444;
             display: flex;
-            background-color: var(--dark-gray);
-            border-right: none;
-            border-bottom: 2px solid var(--border-color);
-            z-index: 1000;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
+        /* Ajuste da lista para ficar horizontal */
         #navside ul {
             display: flex;
-            padding: 0 15px;
+            flex-direction: row;
+            padding: 0 10px;
             margin: 0;
-            list-style: none;
+            width: auto;
         }
 
         #navside li {
             padding: 0;
-            min-width: 45px;
+            display: inline-block;
         }
 
         #navside a.nav-link {
-            padding: 12px 15px;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--white);
-            text-align: center;
+            padding: 15px 20px;
+            /* Área de toque maior */
+            font-size: 1.1rem;
+            color: #fff;
         }
 
+        /* Indicador de letra ativa na horizontal */
         #navside li.active {
-            background-color: var(--white);
+            background-color: #198754;
+            /* Verde destaque */
+            border-radius: 4px;
             box-shadow: none;
         }
 
-        #navside li.active a {
-            color: var(--dark-gray);
-        }
-
+        /* Remove os triângulos decorativos da versão desktop */
         #navside li.active::before,
         #navside li.active::after {
             display: none;
         }
 
-        /* Ajustes no Conteúdo Principal */
+        #navside li.active a {
+            color: #fff;
+        }
+
+        /* 2. Ajustar Conteúdo Principal para não ficar escondido */
         #main-doc {
-            margin-left: 0 !important;
-            padding: 15px;
-            margin-top: 20px;
+            margin-left: 0;
+            /* Remove margem da esquerda */
+            margin-top: 120px;
+            /* Compensa Navbar + Barra A-Z */
+            padding: 20px 15px;
         }
 
-        .hero-section {
-            min-height: 40vh;
-        }
-
-        /* Seção de Ruas como Lista Vertical */
+        /* 3. Cards de ruas em mobile */
         .section-ruas {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            padding: 0;
+            gap: 10px;
+            padding: 10px 0;
         }
 
         .rua-card {
-            padding: 15px;
-            flex-direction: row;
-            /* Mantém horizontal mas ajustado */
-            justify-content: space-between;
-            align-items: center;
+            padding: 12px 16px;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
-        .rua-preview {
-            max-width: 70%;
+        .rua-card:hover {
+            transform: translateX(2px);
         }
 
         .rua-card-badge {
-            margin: 0;
+            margin-top: 8px;
+            align-self: flex-end;
         }
 
-        /* Tabelas e Mídia Responsiva */
-        table {
-            display: block;
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        .rua-media-grid-premium {
-            grid-template-columns: 1fr;
-        }
-
-        iframe,
-        img {
-            max-width: 100% !important;
-            height: auto !important;
-        }
-    }
-
-    /* Ajustes específicos para Celulares (abaixo de 576px) */
-    @media (max-width: 575.98px) {
-        .navbar-brand {
-            font-size: 0.8rem;
+        /* 4. Hero section responsivo */
+        .hero-section {
+            min-height: 40vh;
+            padding: 40px 15px;
+            margin-top: 120px;
         }
 
         .hero-title {
             font-size: 1.8rem;
         }
 
-        .bairro-title {
-            font-size: 1.8rem;
+        .hero-subtitle {
+            font-size: 1rem;
+            margin-bottom: 30px;
         }
 
+        .search-input {
+            padding: 14px 16px 14px 45px;
+            font-size: 0.9rem;
+        }
+
+        .search-icon {
+            left: 15px;
+            font-size: 1rem;
+        }
+
+        /* 5. Seções do alfabeto mobile */
+        .main-section {
+            margin: 20px 0;
+            padding: 15px 0;
+        }
+
+        .main-section header {
+            font-size: 1.1rem;
+            padding: 6px 15px;
+            margin-bottom: 15px;
+        }
+
+        .section-ruas {
+            gap: 10px;
+            padding: 0 15px;
+        }
+
+        .empty-section {
+            padding: 30px 15px;
+            font-size: 0.85rem;
+        }
+
+        .empty-section i {
+            font-size: 1.75rem;
+        }
+
+        /* 6. Intro section responsiva */
+        .intro-section {
+            padding: 25px 15px;
+        }
+
+        .intro-header {
+            margin-bottom: 20px;
+        }
+
+        .intro-cards {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .intro-card {
+            padding: 18px 14px;
+        }
+
+        .intro-card-icon {
+            width: 44px;
+            height: 44px;
+            margin-bottom: 10px;
+        }
+
+        .intro-card-icon i {
+            font-size: 1.3rem;
+        }
+
+        /* 6. Bairro section responsiva */
+        .bairro-header {
+            min-height: 250px;
+        }
+
+        .bairro-info {
+            padding: 20px;
+        }
+
+        .bairro-title {
+            font-size: 1.75rem;
+        }
+
+        .bairro-description {
+            font-size: 0.95rem;
+        }
+
+        /* 4. Tabelas Responsivas (Barra de rolagem se estourar a tela) */
+        table {
+            display: block;
+            width: 100%;
+            overflow-x: auto;
+            white-space: nowrap;
+        }
+
+        /* Quebra de texto nas células para evitar tabelas muito largas se possível */
+        table th,
+        table td {
+            white-space: normal;
+            min-width: 60px;
+        }
+
+        /* 5. Ajustes de Imagens e Mapas */
+        iframe,
+        img {
+            max-width: 100% !important;
+            height: auto !important;
+        }
+
+        /* Se o mapa for iframe, damos uma altura mínima */
+        iframe {
+            min-height: 300px;
+        }
+
+        /* 5. Botões flutuantes e chatbot responsivos */
         .fixed-buttons {
             bottom: 20px;
             right: 20px;
-            gap: 8px;
+            gap: 10px;
         }
 
         .fixed-buttons button {
-            width: 48px;
-            height: 48px;
+            width: 50px;
+            height: 50px;
             font-size: 1rem;
         }
 
         #chatbot {
-            width: calc(100% - 30px);
-            right: 15px;
-            left: 15px;
-            bottom: 80px;
+            width: calc(100% - 40px);
+            right: 20px;
+            left: 20px;
+            bottom: 85px;
+            max-height: 65vh;
         }
 
-        .rua-card {
-            flex-direction: column;
-            align-items: flex-start;
+        #chatbotMessages {
+            max-height: calc(65vh - 180px);
+            padding: 12px;
         }
 
-        .rua-preview {
-            max-width: 100%;
-            margin-bottom: 8px;
+        /* 6. Footer responsivo */
+        .site-footer {
+            padding: 40px 20px 20px;
+            margin-top: 40px;
         }
-    }
 
-    /* Ajustes no footer responsivo */
-    @media (max-width: 768px) {
         .footer-content {
             grid-template-columns: 1fr;
-            text-align: center;
             gap: 30px;
         }
 
-        .footer-social {
-            justify-content: center;
-            margin-top: 15px;
+        .footer-section {
+            text-align: center;
+        }
+
+        .footer-links a:hover {
+            transform: translateX(0);
+        }
+
+    }
+
+
+    @media (max-width: 800px) {
+        .navbar-brand {
+            font-size: 0.6rem;
+            padding-right: 15px;
+        }
+
+        .navbar-nav {
+            flex-direction: column;
+        }
+
+        .navbar-nav .nav-item {
+            display: flex;
+            align-items: center;
+            margin: 5px;
+            padding-right: 5px;
+        }
+
+        .dropdown-menu {
+            --bs-dropdown-padding-x: 0;
+            --bs-dropdown-padding-y: 0;
+            margin: 0 10px;
+        }
+
+        #navside {
+            top: 42px;
+            width: 40px;
+            height: 100%;
+            background-color: #000000;
+            border-top: #ccc;
+        }
+
+        #navside li {
+            padding: 10px;
+        }
+
+        #navside a.nav-link {
+            text-decoration: none;
+            color: #fff;
+            font-size: 10px;
+            display: block;
+            padding: 0;
+        }
+
+        #navside ul {
+            list-style: none;
+            margin: auto;
+        }
+
+        #main-doc {
+            margin-top: 60px;
+            margin-left: 45px;
+            padding: 5px;
+        }
+
+        section article {
+            padding: 5px;
+        }
+
+        header {
+            font-size: 1rem;
+        }
+
+        p {
+            font-size: 0.8rem;
+            padding: 10px;
+        }
+
+        table {
+            max-width: 100%;
+            /* Define a largura máxima da tabela */
+            margin-bottom: 20px;
+            /* Adiciona margem inferior para separar as tabelas */
+        }
+
+        table th,
+        table td {
+            max-width: 50px;
+            flex-wrap: wrap;
+            overflow: hidden;
+            font-size: .5rem;
+        }
+
+        /* Estilos para o mapa responsivo */
+        iframe {
+            max-width: 70%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
     }
 
-    /* Utility Helpers */
-    .text-justify {
-        text-align: justify;
-    }
 
-    .mt-4 {
-        margin-top: 1.5rem;
-    }
+    @media only screen and (max-width: 750px) {
+        /* Estilos responsivos para telas menores */
 
-    .mb-4 {
-        margin-bottom: 1.5rem;
-    }
+        html {
+            font-size: 12px;
+        }
 
-    /* Loading state animation */
-    @keyframes spin {
-        to {
-            transform: rotate(360deg);
+        .navbar-brand {
+            font-size: 0.6rem;
+        }
+
+
+        .navbar {
+            padding: 8px;
+        }
+
+
+        .navbar>.container,
+        .navbar>.container-fluid {
+            display: flex;
+            flex-wrap: inherit;
+            align-items: center;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 70%;
         }
     }
 
+    /* Melhorias para mobile (abaixo de 576px) */
+    @media (max-width: 575.98px) {
+
+        /* Navbar mais compacta */
+        .navbar {
+            padding: 0.5rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 0.8rem;
+            padding-right: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 60%;
+        }
+
+        /* Menu lateral mobile */
+        #navside {
+            width: 0;
+            overflow: hidden;
+            transition: width 0.3s ease;
+            top: 56px;
+        }
+
+        #navside.mobile-visible {
+            width: 150px;
+        }
+
+        /* Botão para toggle do menu lateral */
+        .mobile-menu-toggle {
+            display: block;
+            position: fixed;
+            left: 10px;
+            top: 60px;
+            z-index: 1100;
+            background: #212529;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        /* Conteúdo principal ajustado */
+        #main-doc {
+            margin-left: 0;
+            padding: 15px;
+            margin-top: 56px;
+        }
+
+        /* Tabelas com rolagem horizontal */
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        table {
+            min-width: 600px;
+        }
+
+        /* Melhorias nos botões flutuantes */
+        .fixed-buttons {
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .fixed-buttons button {
+            width: 40px;
+            height: 40px;
+            font-size: 0.9rem;
+        }
+
+        /* Chatbot mobile */
+        #chatbot {
+            width: 90%;
+            right: 5%;
+            bottom: 80px;
+        }
+
+        /* Melhorias nas seções */
+        section {
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        section article {
+            padding: 10px;
+        }
+
+        /* Ajuste de iframes */
+        iframe {
+            max-width: 100%;
+            height: 250px;
+        }
+    }
+
+    /* Melhorias de usabilidade gerais */
+    /* Efeito hover nos links das ruas */
+    .section-ruas a {
+        display: inline-block;
+        padding: 5px 0;
+        color: #198754;
+        transition: all 0.2s ease;
+    }
+
+    .section-ruas a:hover {
+        color: #0d6e3f;
+        transform: translateX(3px);
+    }
+
+    /* Feedback visual para tabelas */
+    table tr:hover td {
+        background-color: rgba(25, 135, 84, 0.05);
+    }
+
+    /* Melhorias na acessibilidade */
+    :focus-visible {
+        outline: 2px solid #198754;
+        outline-offset: 2px;
+    }
+
+    /* Loading state */
     .loading-spinner {
         display: none;
-        justify-content: center;
-        padding: 30px;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .loading-spinner.active {
+        display: block;
     }
 
     .loading-spinner::after {
         content: "";
-        width: 30px;
-        height: 30px;
-        border: 4px solid rgba(0, 0, 0, 0.1);
-        border-top-color: var(--dark-gray);
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(25, 135, 84, 0.3);
         border-radius: 50%;
-        animation: spin 1s linear infinite;
+        border-top-color: #198754;
+        animation: spin 1s ease-in-out infinite;
     }
 
-    .loading-spinner.active {
-        display: flex;
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
     }
