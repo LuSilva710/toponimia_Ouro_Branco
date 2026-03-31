@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: '/toponimia_Ouro_Branco/',
   build: {
     rollupOptions: {
       input: {
