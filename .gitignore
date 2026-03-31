@@ -1,4 +1,5 @@
 node_modules/
+dist/
+.env
 migracao.js
 update_ruas.js
-node_modules/*

@@ -1,0 +1,176 @@
+/* ============================================
+   ESTATÍSTICAS - Segue o design do site principal
+   ============================================ */
+
+:root {
+  --black: #000000;
+  --dark-gray: #222222;
+  --medium-gray: #444444;
+  --light-gray: #f5f5f5;
+  --lighter-gray: #fafafa;
+  --white: #ffffff;
+  --border-color: #e0e0e0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--lighter-gray);
+  color: var(--medium-gray);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.skip-link {
+  position: absolute; top: -40px; left: 0;
+  background: var(--dark-gray); color: var(--white);
+  padding: 8px 16px; z-index: 10000; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* Navbar */
+.navbar { --bs-navbar-padding-y: 1.2rem; padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.navbar-brand { padding-right: 25px; border-right: 2px solid var(--white); }
+.navbar-nav .nav-item:hover .nav-link { color: #198754; }
+.navbar-collapse { padding: 15px 0; }
+.navbar-toggler { border: none; }
+
+/* Main */
+.stats-main {
+  margin-top: 76px;
+  padding: 30px 20px;
+  min-height: calc(100vh - 76px);
+}
+
+.stats-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem; margin-bottom: 30px;
+}
+
+.stats-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+/* Summary Cards */
+.summary-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.summary-card {
+  background: var(--white);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px 16px;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--dark-gray), var(--medium-gray));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  border-color: var(--dark-gray);
+}
+
+.summary-card:hover::before { transform: scaleX(1); }
+
+.summary-icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 10px;
+  background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  color: var(--white);
+}
+
+.summary-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--black);
+  line-height: 1;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: var(--medium-gray);
+  margin-top: .35rem;
+}
+
+/* Charts Grid */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.chart-card {
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.chart-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 16px;
+  color: var(--dark-gray);
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--dark-gray);
+}
+
+.chart-card canvas {
+  max-height: 350px;
+}
+
+.chart-card-full {
+  grid-column: 1 / -1;
+}
+
+/* Alert */
+.alert-info {
+  background: var(--light-gray);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--dark-gray);
+  color: var(--medium-gray);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--dark-gray) !important;
+  border-color: var(--dark-gray) !important;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.btn-primary:hover {
+  background: #333 !important;
+  border-color: #333 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+  .charts-grid { grid-template-columns: 1fr; }
+  .summary-cards { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+  .summary-cards { grid-template-columns: 1fr; }
+}

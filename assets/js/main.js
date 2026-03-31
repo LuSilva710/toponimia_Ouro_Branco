@@ -1,12 +1,5 @@
-// Torne seu arquivo um módulo e crie o client aqui.
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-
-const SUPABASE_URL = 'https://vtsuctcmycaiooeubjnk.supabase.co'
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0c3VjdGNteWNhaW9vZXViam5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTcxMTI5MjYsImV4cCI6MjA3MjY4ODkyNn0.YvkjnpNLF-BZALghTD3fTJ7bQbzqc1_ZNlLCb0rUq3Y'
-
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON)
-// (opcional) expõe globalmente:
-window.supabase = supabase
+// Importa o client Supabase do módulo compartilhado
+import { supabase } from './supabase-client.js'
 
 /**
  * NOVA FUNÇÃO: Gera dinamicamente as seções do alfabeto (A-Z) no HTML.

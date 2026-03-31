@@ -1,0 +1,260 @@
+/* ============================================
+   MAPA INTERATIVO - Segue o design do site principal
+   ============================================ */
+
+:root {
+  --black: #000000;
+  --dark-gray: #222222;
+  --medium-gray: #444444;
+  --light-gray: #f5f5f5;
+  --lighter-gray: #fafafa;
+  --white: #ffffff;
+  --border-color: #e0e0e0;
+  --sidebar-width: 300px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--lighter-gray);
+  color: var(--medium-gray);
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+/* Skip Link */
+.skip-link {
+  position: absolute; top: -40px; left: 0;
+  background: var(--dark-gray); color: var(--white);
+  padding: 8px 16px; z-index: 10000; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+/* Navbar - herda do site principal */
+.navbar { --bs-navbar-padding-y: 1.2rem; padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+.navbar-brand { padding-right: 25px; border-right: 2px solid var(--white); }
+.navbar-nav .nav-item:hover .nav-link { color: #198754; }
+.navbar-collapse { padding: 15px 0; }
+.navbar-toggler { border: none; }
+
+/* ============================================
+   LAYOUT
+   ============================================ */
+.map-layout {
+  display: flex;
+  height: calc(100vh - 76px);
+  margin-top: 76px;
+}
+
+/* ============================================
+   SIDEBAR
+   ============================================ */
+.map-sidebar {
+  width: var(--sidebar-width);
+  background: var(--white);
+  border-right: 1px solid var(--border-color);
+  overflow-y: auto;
+  flex-shrink: 0;
+  padding: 1.25rem;
+  z-index: 500;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  padding-bottom: .75rem;
+  border-bottom: 2px solid var(--dark-gray);
+}
+
+.sidebar-header h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0;
+}
+
+/* Filter Groups */
+.filter-group {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-bottom: .75rem;
+}
+
+.filter-options {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .3rem 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  color: var(--medium-gray);
+  transition: color 0.2s;
+}
+
+.filter-checkbox:hover {
+  color: var(--black);
+}
+
+.filter-checkbox input[type="checkbox"] {
+  accent-color: var(--dark-gray);
+  width: 16px;
+  height: 16px;
+}
+
+/* Legend */
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  padding: .25rem 0;
+  font-size: 0.82rem;
+  color: var(--medium-gray);
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid var(--border-color);
+}
+
+.legend-count {
+  margin-left: auto;
+  background: var(--light-gray);
+  color: var(--dark-gray);
+  padding: 1px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.sidebar-stats {
+  padding-top: .75rem;
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+}
+
+.sidebar-stats strong {
+  color: var(--dark-gray);
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   MAP CONTAINER
+   ============================================ */
+.map-container {
+  flex: 1;
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* Mobile sidebar toggle */
+.btn-toggle-sidebar {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000;
+  background: var(--white);
+  border: 1px solid var(--border-color);
+  color: var(--dark-gray);
+  padding: .5rem .75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.btn-toggle-sidebar:hover {
+  background: var(--dark-gray);
+  color: var(--white);
+}
+
+/* ============================================
+   POPUP STYLES
+   ============================================ */
+.mapa-popup h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin: 0 0 .5rem;
+  color: var(--dark-gray);
+}
+
+.popup-bairro {
+  font-size: 0.82rem;
+  color: var(--medium-gray);
+  margin: 0 0 .5rem;
+}
+
+.popup-sig {
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0 0 .5rem;
+  color: var(--medium-gray);
+}
+
+.popup-genero {
+  font-size: 0.8rem;
+  color: var(--medium-gray);
+  margin: 0 0 .5rem;
+}
+
+.popup-link {
+  font-size: 0.82rem;
+  color: var(--dark-gray);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.popup-link:hover {
+  text-decoration: underline;
+  color: #198754;
+}
+
+/* Custom marker */
+.custom-marker {
+  background: none !important;
+  border: none !important;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 991px) {
+  .map-sidebar {
+    position: fixed;
+    top: 76px;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+    box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+  }
+  .map-sidebar.open {
+    transform: translateX(0);
+  }
+  .map-container { width: 100%; }
+}
