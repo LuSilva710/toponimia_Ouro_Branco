@@ -8,7 +8,7 @@ import { supabase } from './supabase-client.js'
 // ============================================
 const OURO_BRANCO_CENTER = [-20.5185, -43.6920]
 const DEFAULT_ZOOM = 15
-const STREETS_GEOJSON_URL = '/assets/data/ouro_branco_streets.json';
+const STREETS_GEOJSON_URL = `${import.meta.env.BASE_URL}assets/data/ouro_branco_streets.json`;
 
 const CORES_CATEGORIA = {
   antropotoponimo: '#2563eb',
