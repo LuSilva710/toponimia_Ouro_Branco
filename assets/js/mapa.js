@@ -8,6 +8,7 @@ import { supabase } from './supabase-client.js'
 // ============================================
 const OURO_BRANCO_CENTER = [-20.5185, -43.6920]
 const DEFAULT_ZOOM = 15
+const STREETS_GEOJSON_URL = '/assets/data/ouro_branco_streets.json'
 
 const CORES_CATEGORIA = {
   antropotoponimo: '#2563eb',
@@ -28,13 +29,24 @@ function normalizarCategoria(cat) {
   return validas.includes(normalizada) ? normalizada : 'outro'
 }
 
+function normalizarNomeRua(nome) {
+  if (!nome) return ''
+  return nome.toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\b(rua|avenida|travessa|alameda|pca|praca|r\.|av\.)\b/gi, '')
+    .trim()
+}
+
 // ============================================
 // STATE
 // ============================================
 let todasRuas = []
 let bairrosMap = {}
+let streetsGeoJSON = null
 let map = null
 let markersLayer = null
+let geojsonLayer = null
 let heatLayerFeminino = null
 let heatLayerMasculino = null
 let showHeatmap = false
@@ -60,6 +72,17 @@ function initMap() {
     showCoverageOnHover: false,
   })
   map.addLayer(markersLayer)
+
+  geojsonLayer = L.geoJSON(null, {
+    style: feature => ({
+      color: '#333',
+      weight: 3,
+      opacity: 0.6
+    }),
+    onEachFeature: (feature, layer) => {
+      // Logic for polyline popups will be handled during filter application
+    }
+  }).addTo(map)
 }
 
 // ============================================
@@ -154,6 +177,9 @@ function aplicarFiltros() {
     }
   })
 
+  // Update GeoJSON Streets
+  renderizarRuasGeoJSON(ruasFiltradas)
+
   // Update legend counts
   Object.keys(CORES_CATEGORIA).forEach(cat => {
     const el = document.getElementById(`cnt-${cat}`)
@@ -168,6 +194,60 @@ function aplicarFiltros() {
   if (showHeatmap) {
     updateHeatmap(ruasFiltradas)
   }
+}
+
+// ============================================
+// RENDER GEOJSON STREETS
+// ============================================
+function renderizarRuasGeoJSON(ruasFiltradas) {
+  if (!geojsonLayer || !streetsGeoJSON) return
+
+  geojsonLayer.clearLayers()
+
+  // Map of normalized names for fast lookup
+  const mapaRuasFiltradas = new Map()
+  ruasFiltradas.forEach(r => {
+    mapaRuasFiltradas.set(normalizarNomeRua(r.nome_oficial), r)
+  })
+
+  // Add features from GeoJSON that match filtered streets
+  const featuresParaExibir = streetsGeoJSON.features.filter(f => {
+    const nomeNorm = normalizarNomeRua(f.properties.name)
+    return mapaRuasFiltradas.has(nomeNorm)
+  })
+
+  geojsonLayer.addData(featuresParaExibir)
+
+  geojsonLayer.eachLayer(layer => {
+    const f = layer.feature
+    const nomeNorm = normalizarNomeRua(f.properties.name)
+    const ruaData = mapaRuasFiltradas.get(nomeNorm)
+
+    if (ruaData) {
+      const cat = normalizarCategoria(ruaData.categoria_toponimica)
+      const cor = CORES_CATEGORIA[cat] || CORES_CATEGORIA.outro
+
+      layer.setStyle({
+        color: cor,
+        weight: 6,
+        opacity: 0.7,
+        lineCap: 'round'
+      })
+
+      // Popup for polyline
+      const significado = ruaData.significado || ''
+      const sigPreview = significado.length > 150 ? significado.substring(0, 150) + '...' : significado
+      
+      layer.bindPopup(`
+        <div class="mapa-popup">
+          <p class="popup-label">Rua Destacada:</p>
+          <h4>${ruaData.nome_oficial}</h4>
+          ${sigPreview ? `<p class="popup-sig">${sigPreview}</p>` : ''}
+          <a href="./index.html" class="popup-link">Ver detalhes →</a>
+        </div>
+      `)
+    }
+  })
 }
 
 // ============================================
@@ -248,6 +328,13 @@ async function carregarDados() {
 
     bairros.forEach(b => { bairrosMap[b.id] = b })
     populateBairroFilter(bairros)
+
+    // Load GeoJSON geometry
+    console.log('Carregando geometria das ruas...')
+    const geoResponse = await fetch(STREETS_GEOJSON_URL)
+    if (geoResponse.ok) {
+      streetsGeoJSON = await geoResponse.json()
+    }
 
     // Load ruas with coords
     const { data: ruas, error: rErr } = await supabase
