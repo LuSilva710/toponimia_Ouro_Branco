@@ -69,7 +69,7 @@ function criarTabelaRua(rua) {
                     ${rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.'}
                 </td>
                 <td colspan="2">
-                    ${rua.imagem ? `<img src="${rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
+                    ${rua.imagem ? `<img src="${rua.imagem.startsWith('/') ? rua.imagem.substring(1) : rua.imagem}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
                 </td>
             </tr>
         </tbody>
@@ -82,7 +82,9 @@ function exibirIntroducaoBairro(bairro) {
     // Atualiza a imagem de capa
     const coverDiv = document.getElementById('bairro-cover');
     if (coverDiv && bairro.imagem_capa) {
-        coverDiv.innerHTML = `<img src="${bairro.imagem_capa}" alt="Capa do bairro ${bairro.nome}">`;
+        // Normaliza o caminho para GitHub Pages (remove / inicial se houver)
+        const imgSrc = bairro.imagem_capa.startsWith('/') ? bairro.imagem_capa.substring(1) : bairro.imagem_capa;
+        coverDiv.innerHTML = `<img src="${imgSrc}" alt="Capa do bairro ${bairro.nome}">`;
     } else if (coverDiv) {
         // Se não houver imagem, usar gradiente padrão
         coverDiv.style.background = 'linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%)';
@@ -464,7 +466,41 @@ async function main() {
         mostrarSkeletons(3);
 
         const bairrosIndex = await carregarBairros();
-        const dropdownLinks = document.querySelectorAll('.dropdown-item');
+        // Lógica do Dropdown Customizado
+        const dropdownTrigger = document.querySelector('.dropdown-trigger');
+        const dropdownMenu = document.querySelector('.dropdown-menu-custom');
+        const selectedBairroSpan = document.getElementById('selected-bairro');
+        const bairroList = document.getElementById('bairro-list');
+
+        if (dropdownTrigger && dropdownMenu && bairroList) {
+          // Fechar ao clicar fora
+          document.addEventListener('click', (e) => {
+            if (!dropdownTrigger.contains(e.target) && !dropdownMenu.contains(e.target)) {
+              dropdownMenu.classList.remove('active');
+            }
+          });
+
+          // Toggle abrir/fechar
+          dropdownTrigger.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('active');
+          });
+
+          // Preencher a lista de bairros
+          bairroList.innerHTML = '';
+          
+          // Bairros da API
+          Object.entries(bairrosIndex).forEach(([slug, b]) => {
+            const li = document.createElement('li');
+            li.textContent = b.nome;
+            li.addEventListener('click', () => {
+              selectedBairroSpan.textContent = b.nome;
+              dropdownMenu.classList.remove('active');
+              renderBairro(slug);
+            });
+            bairroList.appendChild(li);
+          });
+        }
+
 
         async function renderBairro(slug) {
             console.log("Renderizando bairro:", slug)
@@ -497,11 +533,18 @@ async function main() {
                     link.classList.remove('active');
                 }
             });
+
+            // Sincroniza o dropdown customizado
+            const selectedBairroSpan = document.getElementById('selected-bairro');
+            if (selectedBairroSpan && bairroInfo) {
+              selectedBairroSpan.textContent = bairroInfo.nome;
+            }
         }
 
         // Torna acessível globalmente for limparBusca
         window.renderBairroAtual = renderBairro;
 
+        const dropdownLinks = document.querySelectorAll('.dropdown-item');
         dropdownLinks.forEach(link => {
             link.addEventListener('click', (event) => {
                 event.preventDefault();

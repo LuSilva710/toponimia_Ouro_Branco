@@ -84,7 +84,16 @@ function initMap() {
     maxClusterRadius: 50,
     spiderfyOnMaxZoom: true,
     showCoverageOnHover: false,
-  })
+    // Custom cluster icon without number
+    iconCreateFunction: function (cluster) {
+      // Create a simple circle without numeric label
+      return L.divIcon({
+        html: `<div class="custom-cluster-circle"></div>`,
+        className: 'custom-cluster-icon',
+        iconSize: L.point(40, 40)
+      });
+    }
+  });
   map.addLayer(markersLayer)
 
   geojsonLayer = L.geoJSON(null, {

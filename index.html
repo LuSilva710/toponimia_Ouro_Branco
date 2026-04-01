@@ -92,8 +92,7 @@
         <div class="hero-search">
           <div class="search-container">
             <i class="bi bi-search search-icon"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Buscar rua, bairro ou homenageado..."
-              aria-label="Buscar rua">
+            <input type="text" id="searchInput" class="search-input" placeholder="Buscar rua, bairro ou homenageado..." aria-label="Buscar rua">
           </div>
         </div>
       </div>
@@ -158,9 +157,15 @@
           <!-- Imagem de capa será inserida via JS -->
         </div>
         <div class="bairro-info">
-          <div class="bairro-badge" id="bairro-badge">
-            <i class="bi bi-geo-alt-fill"></i>
-            <span>Bairro</span>
+          <div class="custom-dropdown" id="bairro-dropdown">
+            <div class="dropdown-trigger bairro-badge">
+              <i class="bi bi-geo-alt-fill"></i>
+              <span id="selected-bairro">Carregando Bairro...</span>
+              <i class="bi bi-chevron-down ms-1" style="font-size: 0.8rem;"></i>
+            </div>
+            <ul class="dropdown-menu-custom" id="bairro-list">
+              <!-- li items populated via JS -->
+            </ul>
           </div>
           <h2 class="bairro-title" id="bairro-titulo"></h2>
           <p class="bairro-description" id="bairro-descricao"></p>
