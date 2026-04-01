@@ -8,7 +8,7 @@ import { supabase } from './supabase-client.js'
 // ============================================
 const OURO_BRANCO_CENTER = [-20.5185, -43.6920]
 const DEFAULT_ZOOM = 15
-const STREETS_GEOJSON_URL = './assets/data/ouro_branco_streets.json'
+const STREETS_GEOJSON_URL = '/assets/data/ouro_branco_streets.json';
 
 const CORES_CATEGORIA = {
   antropotoponimo: '#2563eb',
@@ -16,7 +16,15 @@ const CORES_CATEGORIA = {
   axiotoponimo: '#9333ea',
   hagiotoponimo: '#ca8a04',
   litotoponimo: '#0d9488',
+  zootoponimo: '#facc15', 
+  corotoponimo: '#fb7185', // Rosa coral
   outro: '#6b7280',
+}
+
+const CORES_GENERO = {
+  masculino: '#06b6d4', 
+  feminino: '#a855f7',  
+  neutro: '#94a3b8',
 }
 
 // ============================================
@@ -25,7 +33,7 @@ const CORES_CATEGORIA = {
 function normalizarCategoria(cat) {
   if (!cat) return 'outro'
   const normalizada = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
-  const validas = ['antropotoponimo', 'fitotoponimo', 'ergotoponimo', 'axiotoponimo', 'hagiotoponimo', 'litotoponimo']
+  const validas = ['antropotoponimo', 'fitotoponimo', 'ergotoponimo', 'axiotoponimo', 'hagiotoponimo', 'litotoponimo', 'zootoponimo', 'corotoponimo']
   return validas.includes(normalizada) ? normalizada : 'outro'
 }
 
@@ -50,6 +58,10 @@ let geojsonLayer = null
 let heatLayerFeminino = null
 let heatLayerMasculino = null
 let showHeatmap = false
+let visualMode = 'genero' // 'genero' ou 'categoria'
+
+// Objeto para acesso rápido às camadas do GeoJSON por nome da rua (normalizado)
+const layersPorRua = {}
 
 // ============================================
 // INIT MAP
@@ -61,9 +73,11 @@ function initMap() {
     zoomControl: true,
   })
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    maxZoom: 19,
+  // Usando um mapa base mais minimalista estilo data-journalism
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    subdomains: 'abcd',
+    maxZoom: 20
   }).addTo(map)
 
   markersLayer = L.markerClusterGroup({
@@ -92,17 +106,41 @@ function criarMarcador(rua) {
   if (!rua.lat || !rua.lng) return null
 
   const categoria = normalizarCategoria(rua.categoria_toponimica)
-  const cor = CORES_CATEGORIA[categoria] || CORES_CATEGORIA.outro
+  const genero = rua.genero_homenageado || 'neutro'
+  
+  const corCat = CORES_CATEGORIA[categoria] || CORES_CATEGORIA.outro
+  const corGen = CORES_GENERO[genero] || CORES_GENERO.neutro
 
-  // Custom icon with color
+  // Definir cor base dependendo do modo visual
+  const corFinal = (visualMode === 'genero') ? corGen : corCat
+
+  // Custom SVG icon
   const icon = L.divIcon({
-    className: 'custom-marker',
-    html: `<div style="background:${cor};width:12px;height:12px;border-radius:50%;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3)"></div>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
+    className: 'premium-marker',
+    html: `
+      <div class="marker-container" data-nome-rua="${normalizarNomeRua(rua.nome_oficial)}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="8" fill="white" fill-opacity="0.2" stroke="${corFinal}" stroke-width="2"/>
+          <circle cx="12" cy="12" r="3" fill="${corFinal}"/>
+        </svg>
+      </div>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 12],
   })
 
   const marker = L.marker([rua.lat, rua.lng], { icon })
+
+  // Interação: Destaque da rua no GeoJSON ao passar o mouse
+  marker.on('mouseover', function () {
+    const nomeNorm = normalizarNomeRua(rua.nome_oficial)
+    destacarRua(nomeNorm)
+  })
+
+  marker.on('mouseout', function () {
+    const nomeNorm = normalizarNomeRua(rua.nome_oficial)
+    removerDestaqueRua(nomeNorm)
+  })
 
   // Popup
   const significado = rua.significado || ''
@@ -111,15 +149,54 @@ function criarMarcador(rua) {
 
   marker.bindPopup(`
     <div class="mapa-popup">
-      <h4>${rua.nome_oficial}</h4>
-      ${bairroNome ? `<p class="popup-bairro"><i class="bi bi-geo-alt"></i> ${bairroNome}</p>` : ''}
-      ${sigPreview ? `<p class="popup-sig">${sigPreview}</p>` : ''}
-      ${rua.genero_homenageado ? `<p class="popup-genero">Gênero: ${rua.genero_homenageado}</p>` : ''}
-      <a href="./index.html" class="popup-link">Ver detalhes →</a>
+      <div class="popup-header" style="border-left: 4px solid ${corGen}">
+        <h4>${rua.nome_oficial}</h4>
+        <span class="badge" style="background: ${corCat}">${categoria}</span>
+      </div>
+      <div class="popup-body">
+        ${bairroNome ? `<p class="popup-bairro"><i class="bi bi-geo-alt"></i> ${bairroNome}</p>` : ''}
+        ${sigPreview ? `<p class="popup-sig">${sigPreview}</p>` : ''}
+        <div class="popup-meta">
+          <span class="genero-tag ${genero}"><i class="bi bi-person"></i> ${genero}</span>
+        </div>
+        <a href="./index.html" class="popup-link">Ver bio completa →</a>
+      </div>
     </div>
   `)
 
   return marker
+}
+
+// Funções de Destaque
+function destacarRua(nomeNorm) {
+  const layer = layersPorRua[nomeNorm]
+  if (layer) {
+    layer.setStyle({
+      weight: 10,
+      opacity: 1,
+      dashArray: ''
+    })
+    layer.bringToFront()
+  }
+}
+
+function removerDestaqueRua(nomeNorm) {
+  const layer = layersPorRua[nomeNorm]
+  if (layer) {
+    // Restaurar estilo original
+    const ruaData = layer.ruaData
+    if (ruaData) {
+      const cat = normalizarCategoria(ruaData.categoria_toponimica)
+      const gen = ruaData.genero_homenageado || 'neutro'
+      const cor = (visualMode === 'genero') ? CORES_GENERO[gen] : CORES_CATEGORIA[cat]
+      
+      layer.setStyle({
+        color: cor || '#6b7280',
+        weight: 8,
+        opacity: 0.8
+      })
+    }
+  }
 }
 
 // ============================================
@@ -151,9 +228,9 @@ function aplicarFiltros() {
     const isGeneroEmpty = generosSelecionados.length === 0
     const isBairroEmpty = bairrosSelecionados.length === 0
 
-    // Se todos os filtros do mapa estiverem completamente desmarcados, limpa o mapa (retorna false)
+    // Se todos os filtros do mapa estiverem completamente desmarcados, mostra todas as ruas (nenhum filtro)
     if (isCategEmpty && isGeneroEmpty && isBairroEmpty) {
-      return false
+      return true;
     }
 
     // Se uma categoria de filtro estiver vazia, mas outras não, ela não restringe a busca (funciona como 'permitir todos')
@@ -194,6 +271,76 @@ function aplicarFiltros() {
   if (showHeatmap) {
     updateHeatmap(ruasFiltradas)
   }
+
+  // Update Gender Statistics
+  atualizarEstatisticasGenero(ruasFiltradas)
+  // Update Category Statistics
+  atualizarEstatisticasCategoria(ruasFiltradas)
+}
+
+function atualizarEstatisticasCategoria(ruas) {
+  const total = ruas.length
+  if (total === 0) return
+
+  const contagem = {}
+  Object.keys(CORES_CATEGORIA).forEach(c => contagem[c] = 0)
+
+  ruas.forEach(r => {
+    const cat = normalizarCategoria(r.categoria_toponimica)
+    if (contagem[cat] !== undefined) contagem[cat]++
+    else contagem.outro++
+  })
+
+  // Atualizar UI
+  const listContainer = document.getElementById('stats-list-categorias')
+  if (!listContainer) return
+
+  listContainer.innerHTML = Object.keys(CORES_CATEGORIA).map(cat => {
+    const count = contagem[cat]
+    const percent = total > 0 ? ((count / total) * 100).toFixed(1) : 0
+    const cor = CORES_CATEGORIA[cat]
+    
+    return `
+      <div class="stat-item">
+        <div class="stat-info">
+          <span class="stat-label" style="text-transform: capitalize;">${cat}</span>
+          <span class="stat-values">${count} (${percent}%)</span>
+        </div>
+        <div class="stat-bar-bg">
+          <div class="stat-bar-fill" style="width: ${percent}%; background: ${cor}"></div>
+        </div>
+      </div>
+    `
+  }).join('')
+}
+
+function atualizarEstatisticasGenero(ruas) {
+  const total = ruas.length
+  if (total === 0) return
+
+  const contagem = { masculino: 0, feminino: 0, neutro: 0 }
+  ruas.forEach(r => {
+    const gen = r.genero_homenageado || 'neutro'
+    if (contagem[gen] !== undefined) contagem[gen]++
+    else contagem.neutro++
+  })
+
+  // Atualizar UI
+  const generos = ['masculino', 'feminino', 'neutro']
+  generos.forEach(gen => {
+    const countEl = document.getElementById(`stats-count-${gen}`)
+    const percentEl = document.getElementById(`stats-percent-${gen}`)
+    const barEl = document.getElementById(`stats-bar-${gen}`)
+    
+    if (countEl && percentEl && barEl) {
+      const count = contagem[gen]
+      const percent = ((count / total) * 100).toFixed(1)
+      
+      countEl.textContent = count
+      percentEl.textContent = `${percent}%`
+      barEl.style.width = `${percent}%`
+    }
+  })
 }
 
 // ============================================
@@ -203,6 +350,8 @@ function renderizarRuasGeoJSON(ruasFiltradas) {
   if (!geojsonLayer || !streetsGeoJSON) return
 
   geojsonLayer.clearLayers()
+  // Limpar cache de camadas
+  for (let key in layersPorRua) delete layersPorRua[key]
 
   // Map of normalized names for fast lookup
   const mapaRuasFiltradas = new Map()
@@ -225,27 +374,61 @@ function renderizarRuasGeoJSON(ruasFiltradas) {
 
     if (ruaData) {
       const cat = normalizarCategoria(ruaData.categoria_toponimica)
-      const cor = CORES_CATEGORIA[cat] || CORES_CATEGORIA.outro
+      const gen = ruaData.genero_homenageado || 'neutro'
+      const cor = (visualMode === 'genero') ? CORES_GENERO[gen] : CORES_CATEGORIA[cat]
+
+      layer.ruaData = ruaData // Guardar dados para fácil acesso
+      layersPorRua[nomeNorm] = layer // Guardar camada para destaque
 
       layer.setStyle({
-        color: cor,
-        weight: 6,
-        opacity: 0.7,
-        lineCap: 'round'
+        color: cor || '#6b7280',
+        weight: 8,
+        opacity: 0.8,
+        lineCap: 'round',
+        lineJoin: 'round'
+      })
+
+      // Interação reversa: Highlight do marcador ao passar o mouse na rua
+      layer.on('mouseover', function () {
+        layer.setStyle({ weight: 10, opacity: 1 })
+        
+        // Tentar encontrar o elemento do marcador no DOM para aplicar efeito CSS
+        const markerEl = document.querySelector(`.marker-container[data-nome-rua="${nomeNorm}"]`)
+        if (markerEl) markerEl.classList.add('highlight-pulse')
+      })
+
+      layer.on('mouseout', function () {
+        layer.setStyle({ weight: 6, opacity: 0.7 })
+        const markerEl = document.querySelector(`.marker-container[data-nome-rua="${nomeNorm}"]`)
+        if (markerEl) markerEl.classList.remove('highlight-pulse')
       })
 
       // Popup for polyline
+      // Popup for polyline - more comprehensive like marker popup
       const significado = ruaData.significado || ''
-      const sigPreview = significado.length > 150 ? significado.substring(0, 150) + '...' : significado
+      const sigPreview = significado.length > 200 ? significado.substring(0, 200) + '...' : significado
+      const bairroNome = bairrosMap[ruaData.bairro_id]?.nome || ''
+      const corGen = CORES_GENERO[gen] || CORES_GENERO.neutro
       
       layer.bindPopup(`
         <div class="mapa-popup">
-          <p class="popup-label">Rua Destacada:</p>
-          <h4>${ruaData.nome_oficial}</h4>
-          ${sigPreview ? `<p class="popup-sig">${sigPreview}</p>` : ''}
-          <a href="./index.html" class="popup-link">Ver detalhes →</a>
+          <div class="popup-header" style="border-left: 4px solid ${corGen}">
+            <h4>${ruaData.nome_oficial}</h4>
+            <span class="badge" style="background: ${cor}">${visualMode === 'genero' ? gen : cat}</span>
+          </div>
+          <div class="popup-body">
+            ${bairroNome ? `<p class="popup-bairro"><i class="bi bi-geo-alt"></i> ${bairroNome}</p>` : ''}
+            ${sigPreview ? `<p class="popup-sig">${sigPreview}</p>` : ''}
+            <div class="popup-meta">
+              <span class="genero-tag ${gen}"><i class="bi bi-person"></i> ${gen}</span>
+            </div>
+            <a href="./index.html" class="popup-link">Ver detalhes →</a>
+          </div>
         </div>
-      `)
+      `, {
+        maxWidth: 300,
+        className: 'premium-popup'
+      })
     }
   })
 }
@@ -331,9 +514,14 @@ async function carregarDados() {
 
     // Load GeoJSON geometry
     console.log('Carregando geometria das ruas...')
-    const geoResponse = await fetch(STREETS_GEOJSON_URL)
+    console.log('Fetching GeoJSON from', STREETS_GEOJSON_URL);
+    const geoResponse = await fetch(STREETS_GEOJSON_URL);
+    console.log('GeoJSON fetch status:', geoResponse.status);
     if (geoResponse.ok) {
-      streetsGeoJSON = await geoResponse.json()
+      streetsGeoJSON = await geoResponse.json();
+      console.log('GeoJSON loaded, features:', streetsGeoJSON.features?.length);
+    } else {
+      console.error('Failed to load GeoJSON:', geoResponse.statusText);
     }
 
     // Load ruas with coords
@@ -401,6 +589,25 @@ function setupEventListeners() {
   if (closeBtn) {
     closeBtn.addEventListener('click', () => sidebar.classList.remove('open'))
   }
+
+  // Visual Mode Toggles
+  const modeToggles = document.querySelectorAll('input[name="visual-mode"]')
+  modeToggles.forEach(toggle => {
+    toggle.addEventListener('change', (e) => {
+      visualMode = e.target.value
+      aplicarFiltros()
+      
+      // Update legend title/visibility
+      document.getElementById('legend-title').textContent = (visualMode === 'genero') ? 'Gêneros' : 'Categorias'
+      document.getElementById('legenda-categorias').style.display = (visualMode === 'genero') ? 'none' : 'block'
+      document.getElementById('legenda-genero').style.display = (visualMode === 'genero') ? 'block' : 'none'
+
+      // Update panorama title/visibility
+      document.getElementById('panorama-title').textContent = (visualMode === 'genero') ? 'Panorama de Gênero' : 'Panorama de Categorias'
+      document.getElementById('panorama-categorias').style.display = (visualMode === 'genero') ? 'none' : 'block'
+      document.getElementById('panorama-genero').style.display = (visualMode === 'genero') ? 'block' : 'none'
+    })
+  })
 }
 
 // ============================================

@@ -89,8 +89,10 @@
           <label class="filter-checkbox"><input type="checkbox" value="fitotoponimo" checked> Fitotopônimo</label>
           <label class="filter-checkbox"><input type="checkbox" value="ergotoponimo" checked> Ergotopônimo</label>
           <label class="filter-checkbox"><input type="checkbox" value="axiotoponimo" checked> Axiotopônimo</label>
+          <label class="filter-checkbox"><input type="checkbox" value="corotoponimo" checked> Corotopônimo </label>
           <label class="filter-checkbox"><input type="checkbox" value="hagiotoponimo" checked> Hagiotopônimo</label>
           <label class="filter-checkbox"><input type="checkbox" value="litotoponimo" checked> Litotopônimo</label>
+          <label class="filter-checkbox"><input type="checkbox" value="zootoponimo" checked> Zootopônimo</label>
           <label class="filter-checkbox"><input type="checkbox" value="outro" checked> Outro</label>
         </div>
       </div>
@@ -108,25 +110,87 @@
       </div>
 
       <div class="filter-group">
-        <h3 class="filter-title"><i class="bi bi-layers me-1"></i>Visualização</h3>
+        <h3 class="filter-title"><i class="bi bi-eye me-1"></i>Modo de Visualização</h3>
+        <div class="visual-mode-toggle mb-3">
+          <input type="radio" class="btn-check" name="visual-mode" id="mode-genero" value="genero" checked autocomplete="off">
+          <label class="btn btn-outline-dark btn-sm w-50" for="mode-genero">Gênero</label>
+          
+          <input type="radio" class="btn-check" name="visual-mode" id="mode-categoria" value="categoria" autocomplete="off">
+          <label class="btn btn-outline-dark btn-sm w-50" for="mode-categoria">Categoria</label>
+        </div>
+        
         <label class="filter-checkbox"><input type="checkbox" id="toggle-heatmap"> Heatmap de Gênero</label>
       </div>
 
       <div class="filter-group">
-        <h3 class="filter-title"><i class="bi bi-palette me-1"></i>Legenda</h3>
+        <h3 class="filter-title"><i class="bi bi-palette me-1"></i><span id="legend-title">Gêneros</span></h3>
         <div class="legend" id="legenda">
-          <div class="legend-item"><span class="legend-color" style="background:#2563eb"></span> Antropotopônimo <span class="legend-count" id="cnt-antropotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#16a34a"></span> Fitotopônimo <span class="legend-count" id="cnt-fitotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#ea580c"></span> Ergotopônimo <span class="legend-count" id="cnt-ergotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#9333ea"></span> Axiotopônimo <span class="legend-count" id="cnt-axiotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#ca8a04"></span> Hagiotopônimo <span class="legend-count" id="cnt-hagiotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#0d9488"></span> Litotopônimo <span class="legend-count" id="cnt-litotoponimo">0</span></div>
-          <div class="legend-item"><span class="legend-color" style="background:#6b7280"></span> Outro <span class="legend-count" id="cnt-outro">0</span></div>
+          <!-- Legenda de Gêneros (Default) -->
+          <div id="legenda-genero">
+            <div class="legend-item"><span class="legend-color" style="background:#a855f7"></span> Feminino</div>
+            <div class="legend-item"><span class="legend-color" style="background:#06b6d4"></span> Masculino</div>
+            <div class="legend-item"><span class="legend-color" style="background:#94a3b8"></span> Neutro</div>
+          </div>
+          
+          <!-- Legenda de Categorias -->
+          <div id="legenda-categorias" style="display: none;">
+            <div class="legend-item"><span class="legend-color" style="background:#2563eb"></span> Antropotopônimo <span class="legend-count" id="cnt-antropotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#16a34a"></span> Fitotopônimo <span class="legend-count" id="cnt-fitotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#ea580c"></span> Ergotopônimo <span class="legend-count" id="cnt-ergotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#9333ea"></span> Axiotopônimo <span class="legend-count" id="cnt-axiotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#fb7185"></span> Corotopônimo <span class="legend-count" id="cnt-corotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#ca8a04"></span> Hagiotopônimo <span class="legend-count" id="cnt-hagiotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#94530d"></span> Litotopônimo <span class="legend-count" id="cnt-litotoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#facc15"></span> Zootopônimo <span class="legend-count" id="cnt-zootoponimo">0</span></div>
+            <div class="legend-item"><span class="legend-color" style="background:#6b7280"></span> Outro <span class="legend-count" id="cnt-outro">0</span></div>
+          </div>
         </div>
       </div>
 
       <div class="sidebar-stats" id="sidebar-stats">
         <p><strong id="total-marcadores">0</strong> ruas no mapa</p>
+      </div>
+
+      <div class="filter-group border-0" id="panorama-container">
+        <h3 class="filter-title"><i class="bi bi-bar-chart-line me-1"></i><span id="panorama-title">Panorama de Gênero</span></h3>
+        
+        <!-- Panorama de Gênero -->
+        <div class="gender-stats-container" id="panorama-genero">
+          <div class="stat-item" id="stat-feminino">
+            <div class="stat-info">
+              <span class="stat-label"><i class="bi bi-gender-female text-danger"></i> Feminino</span>
+              <span class="stat-values"><span id="stats-count-feminino">0</span> (<span id="stats-percent-feminino">0%</span>)</span>
+            </div>
+            <div class="stat-bar-bg">
+              <div class="stat-bar-fill feminino" id="stats-bar-feminino" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="stat-item" id="stat-masculino">
+            <div class="stat-info">
+              <span class="stat-label"><i class="bi bi-gender-male text-primary"></i> Masculino</span>
+              <span class="stat-values"><span id="stats-count-masculino">0</span> (<span id="stats-percent-masculino">0%</span>)</span>
+            </div>
+            <div class="stat-bar-bg">
+              <div class="stat-bar-fill masculino" id="stats-bar-masculino" style="width: 0%"></div>
+            </div>
+          </div>
+          <div class="stat-item" id="stat-neutro">
+            <div class="stat-info">
+              <span class="stat-label"><i class="bi bi-gender-ambiguous text-muted"></i> Neutro</span>
+              <span class="stat-values"><span id="stats-count-neutro">0</span> (<span id="stats-percent-neutro">0%</span>)</span>
+            </div>
+            <div class="stat-bar-bg">
+              <div class="stat-bar-fill neutro" id="stats-bar-neutro" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Panorama de Categorias (Inicialmente Oculto) -->
+        <div class="category-stats-container" id="panorama-categorias" style="display: none;">
+          <div id="stats-list-categorias" class="mt-2">
+            <!-- Gerado dinamicamente via JS -->
+          </div>
+        </div>
       </div>
     </aside>
 
