@@ -70,8 +70,10 @@ function initMap() {
   map = L.map('map', {
     center: OURO_BRANCO_CENTER,
     zoom: DEFAULT_ZOOM,
-    zoomControl: true,
+    zoomControl: false,
   })
+
+  L.control.zoom({ position: 'bottomright' }).addTo(map)
 
   // Usando um mapa base mais minimalista estilo data-journalism
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {

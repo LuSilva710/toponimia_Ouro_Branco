@@ -26,11 +26,13 @@
         scroll-behavior: smooth;
     }
 
-    /* Estilo da Navbar */
+    /* Estilo da Navbar Modernizado */
     .navbar {
-        --bs-navbar-padding-y: 1.2rem;
-        padding: 1rem 0;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        background: rgb(15, 15, 15) !important; 
+        padding: 0.6rem 0; /* Mais fina */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
     }
 
     a {
@@ -38,17 +40,34 @@
     }
 
     .navbar-brand {
-        padding-right: 25px;
-        border-right: 2px solid var(--white);
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        background: linear-gradient(135deg, #ffffff 0%, #bbbbbb 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-size: 1.2rem;
+        margin-right: 15px;
+        padding-right: 15px;
+        border-right: 1px solid rgba(255, 255, 255, 0.2); /* Barra vertical sutil */
+    }
 
+    .nav-link {
+        font-weight: 500;
+        font-size: 0.95rem;
+        padding: 0.5rem 1rem !important;
+        transition: all 0.2s ease;
+        opacity: 0.85;
     }
 
     .navbar-nav .nav-item:hover .nav-link {
-        color: #198754;
+        color: var(--white) !important;
+        opacity: 1;
+        transform: translateY(-1px);
     }
 
     .navbar-collapse {
-        padding: 15px 0;
+        padding: 0;
     }
 
     .navbar-toggler {
@@ -85,7 +104,7 @@
         background-attachment: fixed;
         color: var(--white);
         padding: 60px 20px;
-        margin-top: 76px;
+        margin-top: 60px; /* Ajustado para a nova altura da navbar */
         overflow: hidden;
     }
 
@@ -471,11 +490,11 @@
     #navside {
         position: fixed;
         left: 0;
-        top: 84px;
-        width: 150px;
-        height: calc(100% - 76px);
-        background-color: #212529;
-        padding: 20px 0;
+        top: 60px;
+        width: 60px; 
+        height: calc(100% - 60px);
+        background-color: #0f0f0f;
+        padding: 10px 0;
         overflow-y: auto;
         z-index: 1000;
     }
@@ -501,9 +520,11 @@
     /* Estilo dos itens da lista */
     #navside li {
         position: relative;
-        padding: 10px 20px;
+        padding: 8px 0;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: all 0.3s ease;
+        display: flex;
+        justify-content: center;
     }
 
     /* Estilo para links */
@@ -564,8 +585,8 @@
 
     /* Estilos para o conteúdo principal */
     #main-doc {
-        margin-left: 150px;
-        margin-top: 76px;
+        margin-left: 60px; /* Ajustado para a nova largura da sidebar */
+        margin-top: 60px;
         padding: 30px;
         background-color: var(--lighter-gray);
     }
@@ -1375,7 +1396,7 @@
             /* Logo abaixo da Navbar principal */
             left: 0;
             z-index: 990;
-            background-color: #212529;
+            background-color: #000000;
             overflow-x: auto;
             /* Permite rolagem horizontal */
             overflow-y: hidden;
@@ -1628,147 +1649,59 @@
     }
 
 
-    @media (max-width: 800px) {
-        .navbar-brand {
-            font-size: 0.6rem;
-            padding-right: 15px;
+    @media (max-width: 768px) {
+        html {
+            font-size: 14px;
         }
 
-        .navbar-nav {
-            flex-direction: column;
-        }
-
-        .navbar-nav .nav-item {
-            display: flex;
-            align-items: center;
-            margin: 5px;
-            padding-right: 5px;
-        }
-
-        .dropdown-menu {
-            --bs-dropdown-padding-x: 0;
-            --bs-dropdown-padding-y: 0;
-            margin: 0 10px;
-        }
-
+        /* Navside sidebar ajustado */
         #navside {
-            top: 42px;
-            width: 40px;
-            height: 100%;
-            background-color: #000000;
-            border-top: #ccc;
+            top: 56px;
+            width: 100%;
+            height: 50px;
+            background-color: #000;
         }
 
         #navside li {
-            padding: 10px;
+            display: inline-block;
+            padding: 5px 10px;
         }
 
         #navside a.nav-link {
-            text-decoration: none;
-            color: #fff;
-            font-size: 10px;
-            display: block;
-            padding: 0;
+            font-size: 12px;
         }
 
-        #navside ul {
-            list-style: none;
-            margin: auto;
-        }
-
-        #main-doc {
-            margin-top: 60px;
-            margin-left: 45px;
-            padding: 5px;
-        }
-
-        section article {
-            padding: 5px;
-        }
-
-        header {
-            font-size: 1rem;
-        }
-
-        p {
-            font-size: 0.8rem;
-            padding: 10px;
+        /* Ajuste do form na navbar mobile */
+        .form-control {
+            width: 100%;
+            margin-top: 10px;
         }
 
         table {
             max-width: 100%;
-            /* Define a largura máxima da tabela */
             margin-bottom: 20px;
-            /* Adiciona margem inferior para separar as tabelas */
+            display: block;
+            overflow-x: auto;
+            white-space: nowrap;
         }
 
         table th,
         table td {
-            max-width: 50px;
-            flex-wrap: wrap;
-            overflow: hidden;
-            font-size: .5rem;
-        }
-
-        /* Estilos para o mapa responsivo */
-        iframe {
-            max-width: 70%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-    }
-
-
-    @media only screen and (max-width: 750px) {
-        /* Estilos responsivos para telas menores */
-
-        html {
-            font-size: 12px;
-        }
-
-        .navbar-brand {
-            font-size: 0.6rem;
-        }
-
-
-        .navbar {
+            font-size: 0.8rem;
             padding: 8px;
         }
 
-
-        .navbar>.container,
-        .navbar>.container-fluid {
-            display: flex;
-            flex-wrap: inherit;
-            align-items: center;
-        }
-
-        .dropdown-item {
-            font-size: 14px;
-        }
-
-        .form-control {
-            width: 70%;
+        iframe {
+            max-width: 100%;
+            height: 300px;
+            display: block;
+            margin: 0 auto;
         }
     }
 
     /* Melhorias para mobile (abaixo de 576px) */
     @media (max-width: 575.98px) {
 
-        /* Navbar mais compacta */
-        .navbar {
-            padding: 0.5rem 0;
-        }
-
-        .navbar-brand {
-            font-size: 0.8rem;
-            padding-right: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 60%;
-        }
 
         /* Menu lateral mobile */
         #navside {
@@ -1902,5 +1835,15 @@
     @keyframes spin {
         to {
             transform: rotate(360deg);
+        }
+    }
+
+    @media (max-width: 575.98px) {
+        .navbar-brand {
+            font-size: 0.8rem !important;
+            white-space: nowrap !important;
+            overflow: hidden !important;
+            text-overflow: ellipsis !important;
+            max-width: 60% !important;
         }
     }

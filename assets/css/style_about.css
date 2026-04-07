@@ -26,7 +26,7 @@
             line-height: 1.6;
             color: #333;
             background-color: #f8f9fa;
-            padding-top: 76px;
+            padding-top: 60px; /* Ajustado para a nova altura da navbar */
         }
 
         h1,
@@ -39,33 +39,44 @@
             color: var(--dark);
         }
 
-        /* Estilo da Navbar */
+        /* Navbar Modernizada */
         .navbar {
-            --bs-navbar-padding-y: 1.2rem;
-            padding: 1rem 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        a {
-            text-decoration: none;
+            background: rgb(15, 15, 15) !important;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
         }
 
         .navbar-brand {
-            padding-right: 25px;
-            border-right: 2px solid var(--white);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #ffffff 0%, #bbbbbb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            padding-right: 15px;
+            border-right: 1px solid rgba(255, 255, 255, 0.2); /* Barra vertical sutil */
+        }
+
+        .nav-link {
+            font-weight: 500;
+            font-size: 0.95rem;
+            padding: 0.5rem 1rem !important;
+            transition: all 0.2s ease;
+            opacity: 0.85;
         }
 
         .navbar-nav .nav-item:hover .nav-link {
-            color: #198754;
+            color: var(--white) !important;
+            opacity: 1;
+            transform: translateY(-1px);
         }
 
-        .navbar-collapse {
-            padding: 15px 0;
-        }
-
-        .navbar-toggler {
-            border: none;
-        }
+        .navbar-collapse { padding: 0; }
+        .navbar-toggler { border: none; }
 
 
         /* Hero Section */
@@ -501,5 +512,12 @@
             .container-sm,
             .container-xl {
                 max-width: 1000px;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            .navbar-brand {
+                font-size: 0.8rem !important;
+                white-space: nowrap !important;
             }
         }

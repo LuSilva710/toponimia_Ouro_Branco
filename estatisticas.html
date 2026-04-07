@@ -98,22 +98,23 @@
         <div class="chart-card">
           <h3><i class="bi bi-pie-chart me-2"></i>Distribuição por Categoria Toponímica</h3>
           <canvas id="chart-categorias"></canvas>
+          <div id="legend-html-categorias" class="custom-legend mt-3"></div>
         </div>
         <div class="chart-card">
           <h3><i class="bi bi-bar-chart me-2"></i>Homenagens por Gênero</h3>
           <canvas id="chart-genero"></canvas>
         </div>
-        <div class="chart-card">
-          <h3><i class="bi bi-bar-chart me-2"></i>Top 10 Bairros por Quantidade de Ruas</h3>
-          <canvas id="chart-bairros"></canvas>
+        <div class="chart-card chart-card-full" id="waffle-section">
+          <h3><i class="bi bi-distribute-vertical me-2"></i>Panorama Toponímico de Ouro Branco</h3>
+          <div id="waffle-container" class="waffle-panorama-container"></div>
         </div>
         <div class="chart-card">
           <h3><i class="bi bi-clock-history me-2"></i>Ruas por Década de Nomeação</h3>
           <canvas id="chart-timeline"></canvas>
         </div>
         <div class="chart-card chart-card-full">
-          <h3><i class="bi bi-cloud me-2"></i>Nuvem de Palavras — Significados</h3>
-          <canvas id="chart-wordcloud" width="800" height="400"></canvas>
+          <h3><i class="bi bi-chat-text me-2"></i>Destaques Semânticos das Biografias</h3>
+          <div id="html-wordcloud" class="modern-wordcloud"></div>
         </div>
       </div>
     </div>

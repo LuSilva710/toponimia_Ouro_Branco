@@ -7,12 +7,25 @@ import { supabase } from './supabase-client.js'
 // CHART COLORS
 // ============================================
 const CORES = {
-  antropotoponimo: '#2563eb',
-  fitotoponimo: '#16a34a',
-  ergotoponimo: '#ea580c',
-  axiotoponimo: '#9333ea',
-  hagiotoponimo: '#ca8a04',
-  outro: '#6b7280',
+  antropotoponimo: '#ED4A7B', // Magenta Vibrante
+  fitotoponimo: '#109655',    // Verde Limpo
+  ergotoponimo: '#F6A810',    // Amarelo Ouro
+  axiotoponimo: '#6B4B9A',    // Roxo App
+  hagiotoponimo: '#29B6F6',   // Azul Celeste Suave (Agradável)
+  corotoponimo: '#FF7043',    // Laranja Coral (Agradável)
+  zootoponimo: '#26A69A',     // Verde-água Menta (Agradável)
+  mitotoponimo: '#B23A48',    // Carmesim
+  litotoponimo: '#607D8B',    // Azul Rochoso/Metálico (Agradável e semântico para litos=pedra)
+  outro: '#DFDFDF',           // Cinza claro maciço
+}
+
+function normalizarCategoria(cat) {
+  if (!cat) return 'outro';
+  // Remove acentos, lowercase, e espaços finais
+  let n = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  // Correção fonética: Se a pessoa digitou com "s" no final (plural), nós fatiamos a string e removemos o último caractere, forçando o singular absoluto.
+  if (n.endsWith('toponimos')) return n.slice(0, -1);
+  return n;
 }
 
 const CORES_GENERO = {
@@ -21,7 +34,7 @@ const CORES_GENERO = {
   neutro: '#8b5cf6',
 }
 
-const STOPWORDS = ['de', 'da', 'do', 'em', 'que', 'e', 'a', 'o', 'os', 'as', 'um', 'uma', 'com', 'por', 'para', 'se', 'não', 'mais', 'como', 'na', 'no', 'ao', 'das', 'dos', 'foi', 'ser', 'seu', 'sua', 'ele', 'ela', 'são', 'era', 'isso', 'esse', 'essa', 'este', 'esta', 'muito', 'tem', 'entre', 'já', 'também', 'após', 'até', 'onde', 'quando', 'qual', 'quais', 'sobre', 'grande', 'cidade', 'ouro', 'branco']
+const STOPWORDS = ['de', 'da', 'do', 'em', 'que', 'e', 'a', 'o', 'os', 'as', 'um', 'uma', 'com', 'por', 'para', 'se', 'não', 'mais', 'como', 'na', 'no', 'ao', 'das', 'dos', 'foi', 'ser', 'seu', 'sua', 'ele', 'ela', 'são', 'era', 'isso', 'esse', 'essa', 'este', 'esta', 'muito', 'tem', 'entre', 'já', 'também', 'após', 'até', 'onde', 'quando', 'qual', 'quais', 'sobre', 'grande', 'cidade', 'ouro', 'branco', 'rua', 'nome', 'homenagem', 'filho', 'filha', 'nasceu', 'faleceu', 'ano', 'anos', 'dia', 'mês', 'idade', 'recebeu', 'homenageado', 'homenageada', 'local', 'histórico', 'história', 'pessoa', 'vida', 'suas', 'seus', 'pela', 'pelo', 'aos', 'teve', 'sendo', 'quem', 'foi', 'está']
 
 // ============================================
 // LOAD DATA
@@ -62,7 +75,7 @@ async function carregarDados() {
     // Render charts
     renderCategorias(ruas)
     renderGenero(ruas)
-    renderBairros(ruas, bairros)
+    renderPanorama(ruas)
     renderTimeline(ruas)
     renderWordCloud(ruas)
   } catch (err) {
@@ -76,7 +89,7 @@ async function carregarDados() {
 function renderCategorias(ruas) {
   const contagem = {}
   ruas.forEach(r => {
-    const cat = r.categoria_toponimica || 'outro'
+    const cat = normalizarCategoria(r.categoria_toponimica)
     contagem[cat] = (contagem[cat] || 0) + 1
   })
 
@@ -93,10 +106,21 @@ function renderCategorias(ruas) {
     options: {
       responsive: true,
       plugins: {
-        legend: { position: 'bottom', labels: { color: '#444', padding: 15 } },
+        legend: { display: false },
       },
     },
   })
+
+  // Render HTML legend em duas colunas
+  const legendBox = document.getElementById('legend-html-categorias')
+  if (legendBox) {
+    legendBox.innerHTML = labels.map((label, i) => `
+      <div class="custom-legend-item">
+        <span class="custom-legend-color" style="background-color: ${colors[i]}"></span>
+        <span class="custom-legend-label">${label}</span>
+      </div>
+    `).join('')
+  }
 }
 
 // ============================================
@@ -132,35 +156,111 @@ function renderGenero(ruas) {
 }
 
 // ============================================
-// CHART: Bairros (Top 10)
+// COMPONENTE: Panorama Geral Semântico (Linhas)
 // ============================================
-function renderBairros(ruas, bairros) {
-  const contagem = {}
+function renderPanorama(ruas) {
+  // Contabilizar incidência global das categorias na cidade real
+  const contagemCat = {}
   ruas.forEach(r => {
-    const nome = r.bairros?.nome || 'Desconhecido'
-    contagem[nome] = (contagem[nome] || 0) + 1
+    const cat = normalizarCategoria(r.categoria_toponimica)
+    contagemCat[cat] = (contagemCat[cat] || 0) + 1
   })
 
-  const sorted = Object.entries(contagem).sort((a, b) => b[1] - a[1]).slice(0, 10)
+  // Extrair chaves globais também pela ordem de densidade para montar a legenda alinha
+  const legendCatsOrdenadas = Object.keys(contagemCat).sort((a,b) => contagemCat[b] - contagemCat[a])
 
-  new Chart(document.getElementById('chart-bairros'), {
-    type: 'bar',
-    data: {
-      labels: sorted.map(s => s[0]),
-      datasets: [{
-        data: sorted.map(s => s[1]),
-        backgroundColor: '#222',
-        borderRadius: 6,
-      }],
-    },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        x: { ticks: { color: '#444', maxRotation: 45 }, grid: { display: false } },
-        y: { ticks: { color: '#444' }, grid: { color: 'rgba(0,0,0,0.06)' } },
-      },
-    },
+  // Ordenadão: 
+  // 1. Pelo peso numérico da Categoria Toponímica (para o tufo maior ficar em 1º)
+  // 2. Empate métrico vai pra ordem alfabética da Categoria
+  // 3. Ordem alfabética do logradouro
+  const ruasOrdenadas = [...ruas].sort((a, b) => {
+    const catA = normalizarCategoria(a.categoria_toponimica)
+    const catB = normalizarCategoria(b.categoria_toponimica)
+    
+    if (contagemCat[catB] !== contagemCat[catA]) {
+      return contagemCat[catB] - contagemCat[catA]
+    }
+    
+    if (catA !== catB) {
+      return catA.localeCompare(catB)
+    }
+
+    return (a.nome_oficial || '').localeCompare(b.nome_oficial || '')
+  })
+
+  const container = document.getElementById('waffle-container')
+  if (!container) return
+
+  let hoverTooltip = document.getElementById('custom-waffle-tooltip')
+  if (!hoverTooltip) {
+    hoverTooltip = document.createElement('div')
+    hoverTooltip.id = 'custom-waffle-tooltip'
+    hoverTooltip.className = 'custom-waffle-tooltip'
+    document.body.appendChild(hoverTooltip)
+  }
+
+  // Gerar linhas
+  const blocksHtml = ruasOrdenadas.map((r, index) => {
+    const cat = normalizarCategoria(r.categoria_toponimica)
+    const color = CORES[cat] || CORES.outro
+    const delay = (index % 60) * 8 // Delay suave para fazer as barras escorregarem fluídas
+    const explicitCatName = r.categoria_toponimica ? r.categoria_toponimica.charAt(0).toUpperCase() + r.categoria_toponimica.slice(1) : 'Sem Categoria de Origem'
+    // Remover title do navegador e usar tag HTML Data nativa 
+    return `<div class="waffle-line" style="background-color: ${color}; animation-delay: ${delay}ms" data-rua="${r.nome_oficial}" data-cat="${explicitCatName}"></div>`
+  }).join('')
+
+  // Gerar estrutura HTML da legenda (Círculo de cor, Categoria, e Contagem total)
+  const legendHtml = legendCatsOrdenadas.map(cat => {
+    const count = contagemCat[cat]
+    const color = CORES[cat] || CORES.outro
+    const label = cat.charAt(0).toUpperCase() + cat.slice(1) // Capitaliza
+    return `
+      <div class="waffle-legend-item">
+        <span class="waffle-legend-color" style="background-color: ${color}"></span>
+        <span>${label}:</span>
+        <span class="waffle-legend-count">${count}</span>
+      </div>
+    `
+  }).join('')
+
+  container.innerHTML = `
+    <div class="waffle-cidade-header">
+      <div class="waffle-cidade-title">Percepção Semântica da Malha Urbana Ouro-branquense</div>
+      <div class="waffle-cidade-count">${ruasOrdenadas.length} logradouros processados</div>
+    </div>
+    <div class="waffle-grid">${blocksHtml}</div>
+    <div class="waffle-legend">${legendHtml}</div>
+  `
+
+  // Gatilho de aparecimento magico quando damos Scroll pelo observer
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const lines = entry.target.querySelectorAll('.waffle-line')
+        lines.forEach(l => l.classList.add('animate-in'))
+        observer.unobserve(entry.target)
+      }
+    })
+  }, { rootMargin: '0px 0px -40px 0px' })
+
+  observer.observe(container)
+
+  // Magia de UI: Tooltip Seguindo o Mouse instantaneamente
+  const linesNodes = container.querySelectorAll('.waffle-line')
+  linesNodes.forEach(node => {
+    node.addEventListener('mouseenter', (e) => {
+      hoverTooltip.innerHTML = `<strong>${e.target.dataset.rua}</strong><br><span style="font-size:0.8rem; color:#d1d5db">${e.target.dataset.cat}</span>`
+      hoverTooltip.style.visibility = 'visible'
+      hoverTooltip.style.opacity = '1'
+    })
+    node.addEventListener('mousemove', (e) => {
+      hoverTooltip.style.left = (e.pageX + 15) + 'px'
+      hoverTooltip.style.top = (e.pageY + 15) + 'px'
+    })
+    node.addEventListener('mouseleave', () => {
+      hoverTooltip.style.opacity = '0'
+      hoverTooltip.style.visibility = 'hidden'
+    })
   })
 }
 
@@ -214,7 +314,7 @@ function renderTimeline(ruas) {
 }
 
 // ============================================
-// WORD CLOUD (Canvas API)
+// WORD CLOUD (Modern Flexbox UI)
 // ============================================
 function renderWordCloud(ruas) {
   const freq = {}
@@ -223,45 +323,34 @@ function renderWordCloud(ruas) {
     if (!r.significado) return
     const words = r.significado
       .toLowerCase()
-      .replace(/[^\w\sáàâãéèêíïóôõúüç]/g, '')
+      .replace(/[^\w\sáàâãéèêíïóôõúüç]/g, ' ')
       .split(/\s+/)
-      .filter(w => w.length >= 4 && !STOPWORDS.includes(w))
+      .filter(w => w.length > 3 && !STOPWORDS.includes(w))
 
     words.forEach(w => { freq[w] = (freq[w] || 0) + 1 })
   })
 
-  // Sort and take top 60
-  const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 60)
+  // Sort and take top 65
+  const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 65)
   if (sorted.length === 0) return
 
-  const canvas = document.getElementById('chart-wordcloud')
-  const ctx = canvas.getContext('2d')
-  const W = canvas.width
-  const H = canvas.height
-
-  ctx.clearRect(0, 0, W, H)
+  const container = document.getElementById('html-wordcloud')
+  if (!container) return
 
   const maxFreq = sorted[0][1]
-  const minSize = 12
-  const maxSize = 48
-  const colors = ['#222', '#2563eb', '#16a34a', '#ea580c', '#9333ea', '#ca8a04', '#444', '#3b82f6']
+  const colors = ['#2563eb', '#16a34a', '#ea580c', '#9333ea', '#ca8a04', '#0f172a', '#e11d48', '#0284c7', '#059669', '#d97706']
 
-  sorted.forEach(([word, count], i) => {
-    const size = minSize + ((count / maxFreq) * (maxSize - minSize))
-    ctx.font = `${Math.round(size)}px "Segoe UI", sans-serif`
-    ctx.fillStyle = colors[i % colors.length]
+  // Misturar aleatoriamente para que as palavras grandes não fiquem apenas no começo
+  const scrambled = [...sorted].sort(() => Math.random() - 0.5)
 
-    // Simple placement (grid-based)
-    const cols = 5
-    const row = Math.floor(i / cols)
-    const col = i % cols
-    const x = (col / cols) * W + 20 + Math.random() * 30
-    const y = row * 55 + 35 + Math.random() * 15
-
-    if (y < H - 10) {
-      ctx.fillText(word, x, y)
-    }
-  })
+  container.innerHTML = scrambled.map(([word, count]) => {
+    // Tamanho proporcional (0.9 a 3.5 rem)
+    const size = 0.9 + ((count / maxFreq) * 2.6)
+    const color = colors[Math.floor(Math.random() * colors.length)]
+    const opacity = 0.6 + ((count / maxFreq) * 0.4) // palavras mais raras ficam levemente translúcidas
+    
+    return `<span class="word-badge" style="--base-size: ${size}rem; color: ${color}; opacity: ${opacity}" title="Citada ${count} vezes">${word}</span>`
+  }).join('')
 }
 
 // ============================================

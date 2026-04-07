@@ -27,18 +27,50 @@ body {
 }
 .skip-link:focus { top: 0; }
 
-/* Navbar */
-.navbar { --bs-navbar-padding-y: 1.2rem; padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-.navbar-brand { padding-right: 25px; border-right: 2px solid var(--white); }
-.navbar-nav .nav-item:hover .nav-link { color: #198754; }
-.navbar-collapse { padding: 15px 0; }
+/* Navbar Modernizada */
+.navbar {
+  background: rgb(15, 15, 15) !important;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #ffffff 0%, #bbbbbb 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.2rem;
+    margin-right: 15px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(255, 255, 255, 0.2); /* Barra vertical sutil */
+}
+
+.nav-link {
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem !important;
+    transition: all 0.2s ease;
+    opacity: 0.85;
+}
+
+.navbar-nav .nav-item:hover .nav-link {
+    color: var(--white) !important;
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.navbar-collapse { padding: 0; }
 .navbar-toggler { border: none; }
 
 /* Main */
 .stats-main {
-  margin-top: 76px;
+  margin-top: 60px;
   padding: 30px 20px;
-  min-height: calc(100vh - 76px);
+  min-height: calc(100vh - 60px);
 }
 
 .stats-header {
@@ -139,10 +171,193 @@ body {
 
 .chart-card canvas {
   max-height: 350px;
+  width: 100% !important;
+  max-width: 100%;
 }
 
 .chart-card-full {
   grid-column: 1 / -1;
+}
+
+/* Custom Chart Legend */
+.custom-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 10px;
+}
+
+.custom-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+}
+
+.custom-legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.custom-legend-label {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Modern Wordcloud */
+.modern-wordcloud {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 2.5rem;
+  background: var(--light-gray);
+  border-radius: 12px;
+  min-height: 250px;
+}
+
+.word-badge {
+  font-size: var(--base-size, 1rem); /* Base preenchida pelo JS */
+  display: inline-block;
+  line-height: 1;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: default;
+  font-weight: 700;
+  text-transform: capitalize;
+  user-select: none;
+  max-width: 100%;
+  word-wrap: break-word; /* Previne transbordos muito agressivos em palavras únicas longas */
+}
+
+.word-badge:hover {
+  transform: scale(1.3) rotate(-3deg);
+  z-index: 10;
+  opacity: 1 !important;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ============================================
+   Componente Dinâmico: WAFFLE LINHAS (Panorama Urbano)
+   ============================================ */
+.waffle-panorama-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.8rem;
+  background: var(--lighter-gray);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.waffle-cidade-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 2px solid var(--border-color);
+  padding-bottom: 0.8rem;
+}
+
+.waffle-cidade-title {
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--black);
+}
+
+.waffle-cidade-count {
+  font-size: 0.9rem;
+  color: var(--medium-gray);
+  font-weight: 600;
+}
+
+.waffle-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px; /* Gap quase invisível para juntar as faixas numa fita contínua */
+  align-content: flex-start;
+}
+
+.waffle-line {
+  width: 3px; /* "Fios" muito finos idênticos aos da representação da cidade real */
+  height: 64px; /* Mais altos */
+  border-radius: 0px; /* Sem arredondamento de borda, formando o bloco hermético */
+  opacity: 0; 
+  transform: translateY(15px);
+  transition: transform 0.15s ease, filter 0.2s ease;
+  cursor: crosshair;
+}
+
+.waffle-line:hover {
+  transform: scaleY(1.3) scaleX(3) translateY(-1px) !important; /* Estufa muito a linha para facilitar o Hover em linhas de 3px */
+  z-index: 20;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  filter: brightness(1.2);
+}
+
+.waffle-line.animate-in {
+  animation: waffle-pop 0.5s ease forwards;
+}
+
+/* Legenda do Waffle */
+.waffle-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed var(--border-color);
+}
+
+.waffle-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--medium-gray);
+}
+
+.waffle-legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.waffle-legend-count {
+  font-weight: 700;
+  color: var(--black);
+  margin-left: 2px;
+}
+
+@keyframes waffle-pop {
+  0% { opacity: 0; transform: translateY(15px); }
+  60% { transform: translateY(-3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Tooltip do Waffle de Ruas */
+.custom-waffle-tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(20, 20, 20, 0.95);
+  color: var(--white);
+  padding: 8px 12px;
+  border-radius: 6px;
+  pointer-events: none; /* Para o mouse transpassar ignorando a caixa (Performance) */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+  z-index: 9999;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+  white-space: nowrap;
 }
 
 /* Alert */
@@ -171,6 +386,20 @@ body {
   .summary-cards { grid-template-columns: 1fr 1fr; }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
   .summary-cards { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand {
+      font-size: 0.8rem !important;
+      white-space: nowrap !important;
+  }
+  .modern-wordcloud {
+      padding: 1.25rem 0.75rem; /* Menor respiro lateral */
+      gap: 12px;
+  }
+  .word-badge {
+      font-size: calc(var(--base-size) * 0.55); /* Re-escala para 55% da proporção gigante do JS */
+  }
 }
