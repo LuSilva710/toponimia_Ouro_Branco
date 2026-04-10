@@ -1,5 +1,5 @@
 // ============================================
-// CHATBOT COM IA - chatbot.js
+// CHATBOT PREMIUM - chatbot.js
 // ============================================
 import { supabase } from './supabase-client.js'
 
@@ -7,275 +7,319 @@ import { supabase } from './supabase-client.js'
 // CONFIG
 // ============================================
 const SUGESTOES = [
-  'Quem foi Amaro Lanari?',
-  'Ruas com nomes femininos',
-  'História do bairro Centro',
-  'O que é toponímia?',
-  'Quantas ruas tem Ouro Branco?',
+  { text: 'Quem foi Amaro Lanari?', icon: 'bi-person-badge' },
+  { text: 'História do Centro', icon: 'bi-bank' },
+  { text: 'O que é toponímia?', icon: 'bi-info-circle', response: '<strong>Toponímia</strong> é o estudo dos nomes próprios de lugares (nomes geográficos) e suas origens. No nosso dicionário, focamos nos nomes das ruas de Ouro Branco para preservar a história local.' },
+  { text: 'Quantas ruas tem?', icon: 'bi-hash', response: 'Atualmente, o nosso sistema conta com mais de <strong>1.500 ruas</strong> registradas em diversos bairros de Ouro Branco!' },
 ]
 
 // ============================================
 // STATE
 // ============================================
 let historico = JSON.parse(sessionStorage.getItem('chatbot_historico') || '[]')
+let isOpen = false
 
 // ============================================
-// DOM
+// DOM ELEMENTS (WILL BE INJECTED)
 // ============================================
-const chatbot = document.getElementById('chatbot')
-const chatbotMessages = document.getElementById('chatbotMessages')
-const chatbotButton = document.getElementById('chatbotButton')
-const closeChatbotButton = document.getElementById('closeChatbotButton')
-const userInput = document.getElementById('userInput')
-const sendBtn = document.getElementById('sendMessageButton')
+let chatbotContainer, chatbotWindow, chatbotMessages, userInput, sendBtn, chatbotButton
 
 // ============================================
 // INIT
 // ============================================
 export function initChatbot() {
-  if (!chatbot || !chatbotButton) return
+  injectHTML()
+  bindElements()
+  setupEventListeners()
+  
+  if (historico.length > 0) {
+    restaurarHistorico()
+  }
+}
 
-  // Improve chatbot UI
-  melhorarUI()
+// ============================================
+// HTML INJECTION
+// ============================================
+function injectHTML() {
+  const html = `
+    <div id="newChatbotContainer">
+      <button id="newChatbotButton" aria-label="Abrir assistente">
+        <i class="bi bi-chat-dots-fill"></i>
+      </button>
+      
+      <div id="newChatbotWindow" class="chatbot-hidden">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <div class="chat-avatar-status">
+              <i class="bi bi-robot"></i>
+              <span class="status-indicator"></span>
+            </div>
+            <div>
+              <h3>Assistente Virtual</h3>
+              <span>Online • Ouro Branco</span>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <button id="backToHome" title="Voltar ao início"><i class="bi bi-house-door"></i></button>
+            <button id="closeChat" title="Fechar"><i class="bi bi-x-lg"></i></button>
+          </div>
+        </div>
 
-  chatbotButton.addEventListener('click', () => {
-    chatbot.style.display = 'block'
-    chatbot.classList.remove('chatbot-hidden')
-    if (historico.length === 0) {
-      adicionarMensagemBot('Olá! 👋 Sou o assistente do Dicionário de Ruas de Ouro Branco. Pergunte sobre qualquer rua, homenageado ou bairro!')
-      mostrarSugestoes()
-    } else {
-      restaurarHistorico()
-    }
-    userInput?.focus()
-  })
+        <div id="newChatbotMessages">
+          <!-- Messages or Welcome Screen -->
+        </div>
 
-  closeChatbotButton?.addEventListener('click', () => {
-    chatbot.style.display = 'none'
-  })
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <input type="text" id="newUserInput" placeholder="Pergunte sobre uma rua ou bairro..." autocomplete="off">
+            <button id="newSendMessageButton" aria-label="Enviar">
+              <i class="bi bi-send-fill"></i>
+            </button>
+          </div>
+          <p class="chat-footer">Poderia haver erros na IA. Verifique dados oficiais.</p>
+        </div>
+      </div>
+    </div>
+  `
+  document.body.insertAdjacentHTML('beforeend', html)
+}
 
-  sendBtn?.addEventListener('click', enviarMensagem)
-  userInput?.addEventListener('keydown', (e) => {
+function bindElements() {
+  chatbotContainer = document.getElementById('newChatbotContainer')
+  chatbotWindow = document.getElementById('newChatbotWindow')
+  chatbotMessages = document.getElementById('newChatbotMessages')
+  userInput = document.getElementById('newUserInput')
+  sendBtn = document.getElementById('newSendMessageButton')
+  chatbotButton = document.getElementById('newChatbotButton')
+}
+
+function setupEventListeners() {
+  chatbotButton.addEventListener('click', toggleChat)
+  document.getElementById('closeChat').addEventListener('click', toggleChat)
+  document.getElementById('backToHome').addEventListener('click', irParaInicio)
+  
+  sendBtn.addEventListener('click', () => enviarMensagem())
+  userInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') enviarMensagem()
   })
+
+  // Close on Escape
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && isOpen) toggleChat()
+  })
 }
 
 // ============================================
-// UI IMPROVEMENTS
+// ACTIONS
 // ============================================
-function melhorarUI() {
-  if (!chatbotMessages) return
-
-  // Add aria-live for accessibility
-  chatbotMessages.setAttribute('aria-live', 'polite')
-  chatbotMessages.setAttribute('role', 'log')
-  chatbotMessages.innerHTML = ''
+function toggleChat() {
+  isOpen = !isOpen
+  chatbotWindow.classList.toggle('chatbot-hidden')
+  chatbotWindow.classList.toggle('chatbot-visible')
+  
+  if (isOpen) {
+    chatbotButton.classList.add('active')
+    if (historico.length === 0) {
+      mostrarBoasVindas()
+    }
+    setTimeout(() => userInput.focus(), 300)
+  } else {
+    chatbotButton.classList.remove('active')
+  }
 }
 
-// ============================================
-// MESSAGES
-// ============================================
-function adicionarMensagemBot(texto) {
-  const msg = document.createElement('div')
-  msg.className = 'chat-msg bot'
-  msg.innerHTML = `
-    <div class="chat-avatar"><i class="bi bi-robot"></i></div>
-    <div class="chat-bubble bot-bubble">
-      <div class="chat-text">${texto}</div>
-      <div class="chat-time">${horaAtual()}</div>
+function mostrarBoasVindas() {
+  chatbotMessages.innerHTML = `
+    <div class="welcome-screen">
+      <h2>Como posso ajudar?</h2>
+      <p>Sou o assistente do Dicionário de Ruas. Explore a história de Ouro Branco comigo!</p>
+      
+      <div class="quick-actions">
+        ${SUGESTOES.map(sug => `
+          <button class="quick-action-btn" data-sug="${sug.text}">
+            <i class="bi ${sug.icon}"></i>
+            <span>${sug.text}</span>
+          </button>
+        `).join('')}
+      </div>
     </div>
   `
-  chatbotMessages.appendChild(msg)
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
-
-  historico.push({ role: 'bot', text: texto, time: horaAtual() })
-  salvarHistorico()
+  
+  chatbotMessages.querySelectorAll('.quick-action-btn').forEach((btn, index) => {
+    btn.addEventListener('click', () => {
+      const sug = SUGESTOES[index]
+      enviarMensagem(sug.text, sug.response)
+    })
+  })
 }
 
-function adicionarMensagemUsuario(texto) {
-  const msg = document.createElement('div')
-  msg.className = 'chat-msg user'
-  msg.innerHTML = `
-    <div class="chat-bubble user-bubble">
-      <div class="chat-text">${texto}</div>
-      <div class="chat-time">${horaAtual()}</div>
-    </div>
-    <div class="chat-avatar"><i class="bi bi-person"></i></div>
-  `
-  chatbotMessages.appendChild(msg)
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
+function irParaInicio() {
+  mostrarBoasVindas()
+}
 
-  historico.push({ role: 'user', text: texto, time: horaAtual() })
-  salvarHistorico()
+// ============================================
+// MESSAGES CORE
+// ============================================
+function adicionarMensagem(role, texto) {
+  // Remove welcome screen if present
+  if (chatbotMessages.querySelector('.welcome-screen')) {
+    chatbotMessages.innerHTML = ''
+  }
+
+  const msgDiv = document.createElement('div')
+  msgDiv.className = `chat-msg ${role}`
+  
+  const bubble = document.createElement('div')
+  bubble.className = 'chat-bubble'
+  bubble.innerHTML = `
+    <div class="chat-text">${texto}</div>
+    <div class="chat-time">${horaAtual()}</div>
+  `
+
+  if (role === 'bot') {
+    const avatar = document.createElement('div')
+    avatar.className = 'chat-avatar'
+    avatar.innerHTML = '<i class="bi bi-robot"></i>'
+    msgDiv.appendChild(avatar)
+  }
+
+  msgDiv.appendChild(bubble)
+  chatbotMessages.appendChild(msgDiv)
+  scrollToBottom()
+
+  if (role !== 'typing') {
+    historico.push({ role, text: texto, time: horaAtual() })
+    salvarHistorico()
+  }
+}
+
+async function enviarMensagem(textoManual = null, respostaPronta = null) {
+  const texto = textoManual || userInput.value.trim()
+  if (!texto) return
+
+  userInput.value = ''
+  adicionarMensagem('user', texto)
+  
+  mostrarTyping()
+
+  try {
+    let resposta
+    if (respostaPronta) {
+      // Pequeno delay para simular pensamento
+      await new Promise(res => setTimeout(res, 600))
+      resposta = respostaPronta
+    } else {
+      resposta = await consultarIA(texto)
+    }
+
+    removerTyping()
+    adicionarMensagem('bot', resposta)
+    
+    // Check for contribution context
+    if (!respostaPronta && (texto.toLowerCase().includes('rua') || texto.toLowerCase().includes('quem foi'))) {
+      mostrarOpcaoContribuir(texto)
+    }
+  } catch (err) {
+    removerTyping()
+    adicionarMensagem('bot', 'Ops! Tive um problema técnico. Tente novamente em instantes.')
+    console.error(err)
+  }
 }
 
 function mostrarTyping() {
   const typing = document.createElement('div')
-  typing.className = 'chat-msg bot typing-indicator'
-  typing.id = 'typing'
+  typing.className = 'chat-msg bot typing-msg'
+  typing.id = 'typing-indicator'
   typing.innerHTML = `
     <div class="chat-avatar"><i class="bi bi-robot"></i></div>
-    <div class="chat-bubble bot-bubble">
-      <div class="typing-dots">
-        <span></span><span></span><span></span>
-      </div>
+    <div class="chat-bubble">
+      <div class="typing-dots"><span></span><span></span><span></span></div>
     </div>
   `
   chatbotMessages.appendChild(typing)
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
+  scrollToBottom()
 }
 
 function removerTyping() {
-  document.getElementById('typing')?.remove()
+  document.getElementById('typing-indicator')?.remove()
 }
 
-function mostrarSugestoes() {
-  const chips = document.createElement('div')
-  chips.className = 'chat-chips'
-  SUGESTOES.forEach(sug => {
-    const chip = document.createElement('button')
-    chip.className = 'chat-chip'
-    chip.textContent = sug
-    chip.addEventListener('click', () => {
-      chips.remove()
-      userInput.value = sug
-      enviarMensagem()
-    })
-    chips.appendChild(chip)
-  })
-  chatbotMessages.appendChild(chips)
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
+function mostrarOpcaoContribuir(contexto) {
+  const btn = document.createElement('button')
+  btn.className = 'contrib-btn'
+  btn.innerHTML = '<i class="bi bi-plus-circle-fill"></i> Sabe algo mais? Contribua aqui'
+  btn.onclick = () => {
+    btn.remove()
+    mostrarFormContrib(contexto)
+  }
+  chatbotMessages.appendChild(btn)
+  scrollToBottom()
 }
 
-function mostrarContribuicao(nomeRua) {
+function mostrarFormContrib(rua) {
   const form = document.createElement('div')
-  form.className = 'chat-contrib-form'
+  form.className = 'contrib-form'
   form.innerHTML = `
-    <p><strong>Contribuir informação sobre "${nomeRua}":</strong></p>
-    <textarea class="form-control form-control-sm" rows="3" placeholder="Digite sua contribuição..."></textarea>
-    <input class="form-control form-control-sm mt-1" placeholder="Seu nome (opcional)">
-    <div class="mt-2">
-      <button class="btn btn-sm btn-primary btn-enviar-contrib">Enviar</button>
-      <button class="btn btn-sm btn-outline-secondary btn-cancelar-contrib">Cancelar</button>
+    <h3>Sua contribuição (${rua})</h3>
+    <textarea id="contribText" placeholder="Conte-nos o que você sabe..."></textarea>
+    <div class="contrib-actions">
+      <button class="btn-send"><i class="bi bi-check-lg"></i> Enviar</button>
+      <button class="btn-cancel">Cancelar</button>
     </div>
   `
   chatbotMessages.appendChild(form)
+  scrollToBottom()
 
-  form.querySelector('.btn-enviar-contrib').addEventListener('click', async () => {
-    const contribuicao = form.querySelector('textarea').value.trim()
-    const autor = form.querySelector('input').value.trim()
-    if (!contribuicao) return alert('Digite sua contribuição')
-
+  form.querySelector('.btn-cancel').onclick = () => form.remove()
+  form.querySelector('.btn-send').onclick = async () => {
+    const text = form.querySelector('#contribText').value.trim()
+    if (!text) return
+    
     try {
-      await supabase.from('contribuicoes_chatbot').insert({
-        nome_rua: nomeRua,
-        contribuicao,
-        autor_nome: autor || null,
-      })
-      form.remove()
-      adicionarMensagemBot('✅ Obrigado! Sua contribuição foi enviada para moderação.')
-    } catch (err) {
-      adicionarMensagemBot('❌ Erro ao enviar contribuição. Tente novamente.')
+      await supabase.from('contribuicoes_chatbot').insert({ nome_rua: rua, contribuicao: text })
+      form.innerHTML = '<div class="contrib-success"><i class="bi bi-heart-fill"></i> Obrigado por ajudar!</div>'
+      setTimeout(() => form.remove(), 2000)
+    } catch {
+      alert('Erro ao enviar.')
     }
-  })
-
-  form.querySelector('.btn-cancelar-contrib').addEventListener('click', () => form.remove())
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
-}
-
-// ============================================
-// SEND MESSAGE
-// ============================================
-async function enviarMensagem() {
-  const texto = userInput.value.trim()
-  if (!texto) return
-
-  userInput.value = ''
-  adicionarMensagemUsuario(texto)
-  mostrarTyping()
-
-  // Remove suggestion chips
-  document.querySelectorAll('.chat-chips').forEach(c => c.remove())
-
-  try {
-    const resposta = await consultarIA(texto)
-    removerTyping()
-    adicionarMensagemBot(resposta)
-
-    // Show contribute button if asking about a specific street
-    if (texto.toLowerCase().includes('rua') || texto.toLowerCase().includes('quem foi')) {
-      const contrib = document.createElement('div')
-      contrib.className = 'chat-contrib-btn-container'
-      contrib.innerHTML = `<button class="chat-chip contrib-chip"><i class="bi bi-plus-circle me-1"></i>Contribuir informação</button>`
-      contrib.querySelector('button').addEventListener('click', () => {
-        contrib.remove()
-        mostrarContribuicao(texto)
-      })
-      chatbotMessages.appendChild(contrib)
-      chatbotMessages.scrollTop = chatbotMessages.scrollHeight
-    }
-  } catch (err) {
-    removerTyping()
-    adicionarMensagemBot('Desculpe, ocorreu um erro ao processar sua pergunta. Tente novamente.')
-    console.error('Chatbot error:', err)
   }
 }
 
 // ============================================
-// AI QUERY (RAG with Supabase + Keyword matching)
+// DATA ENGINE (IA)
 // ============================================
 async function consultarIA(pergunta) {
-  // Extract keywords (>= 4 chars, remove stopwords)
   const stopwords = ['de', 'da', 'do', 'em', 'que', 'e', 'a', 'o', 'os', 'as', 'um', 'uma', 'com', 'por', 'para', 'se', 'não', 'mais', 'como', 'qual', 'quais', 'sobre', 'rua', 'ruas', 'bairro', 'quem', 'foi', 'nome']
-  const keywords = pergunta
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(w => w.length >= 4 && !stopwords.includes(w))
+  const keywords = pergunta.toLowerCase().split(/\s+/).filter(w => w.length >= 3 && !stopwords.includes(w))
 
-  if (keywords.length === 0) {
-    return 'Poderia reformular sua pergunta com mais detalhes? Por exemplo: "Quem foi Amaro Lanari?" ou "Quais ruas homenageiam mulheres?"'
-  }
+  if (keywords.length === 0) return 'Como posso ajudar você hoje?'
 
-  // Search relevant ruas via ILIKE
   const orFilter = keywords.map(k => `nome_oficial.ilike.%${k}%,significado.ilike.%${k}%`).join(',')
-
-  const { data: ruas, error } = await supabase
-    .from('ruas')
-    .select('nome_oficial, significado, localizacao, legislacao, genero_homenageado, categoria_toponimica, bairros(nome)')
-    .or(orFilter)
-    .limit(10)
+  const { data: ruas, error } = await supabase.from('ruas').select('*, bairros(nome)').or(orFilter).limit(3)
 
   if (error) throw error
+  if (!ruas || ruas.length === 0) return `Não encontrei dados exatos sobre "${pergunta}". Pode tentar o nome de uma rua específica?`
 
-  if (!ruas || ruas.length === 0) {
-    return `Não encontrei informações sobre "${pergunta}" no nosso dicionário. Que tal perguntar sobre uma rua específica de Ouro Branco?`
-  }
-
-  // Format response from found data (without external AI for now)
-  let resposta = `Encontrei **${ruas.length}** resultado(s):\n\n`
-
+  let resp = `Encontrei informações relevantes:\n\n`
   ruas.forEach(r => {
-    resposta += `🔹 **${r.nome_oficial}**`
-    if (r.bairros?.nome) resposta += ` (${r.bairros.nome})`
-    resposta += '\n'
-    if (r.significado) {
-      const sig = r.significado.length > 200 ? r.significado.substring(0, 200) + '...' : r.significado
-      resposta += `${sig}\n`
-    }
-    resposta += '\n'
+    resp += `📍 **${r.nome_oficial}** ${r.bairros ? `(${r.bairros.nome})` : ''}\n`
+    if (r.significado) resp += `📖 ${r.significado.substring(0, 150)}${r.significado.length > 150 ? '...' : ''}\n\n`
   })
 
-  // Format markdown-like to HTML
-  resposta = resposta
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\n/g, '<br>')
-
-  return resposta
+  return resp.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
 }
 
 // ============================================
-// HISTORY
+// UTILS
 // ============================================
+function scrollToBottom() {
+  chatbotMessages.scrollTo({ top: chatbotMessages.scrollHeight, behavior: 'smooth' })
+}
+
+function horaAtual() {
+  return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+}
+
 function salvarHistorico() {
   sessionStorage.setItem('chatbot_historico', JSON.stringify(historico))
 }
@@ -283,39 +327,11 @@ function salvarHistorico() {
 function restaurarHistorico() {
   chatbotMessages.innerHTML = ''
   historico.forEach(msg => {
-    if (msg.role === 'bot') {
-      const el = document.createElement('div')
-      el.className = 'chat-msg bot'
-      el.innerHTML = `
-        <div class="chat-avatar"><i class="bi bi-robot"></i></div>
-        <div class="chat-bubble bot-bubble">
-          <div class="chat-text">${msg.text}</div>
-          <div class="chat-time">${msg.time}</div>
-        </div>
-      `
-      chatbotMessages.appendChild(el)
-    } else {
-      const el = document.createElement('div')
-      el.className = 'chat-msg user'
-      el.innerHTML = `
-        <div class="chat-bubble user-bubble">
-          <div class="chat-text">${msg.text}</div>
-          <div class="chat-time">${msg.time}</div>
-        </div>
-        <div class="chat-avatar"><i class="bi bi-person"></i></div>
-      `
-      chatbotMessages.appendChild(el)
-    }
+    adicionarMensagem(msg.role, msg.text)
   })
-  chatbotMessages.scrollTop = chatbotMessages.scrollHeight
 }
 
 // ============================================
-// HELPERS
+// AUTO-INIT
 // ============================================
-function horaAtual() {
-  return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-}
-
-// Auto-init
 document.addEventListener('DOMContentLoaded', initChatbot)

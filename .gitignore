@@ -3,3 +3,5 @@ dist/
 .env
 migracao.js
 update_ruas.js
+iniciar-ia.sh
+sql/
