@@ -15,10 +15,23 @@ const CORES_CATEGORIA = {
   fitotoponimo: '#16a34a',
   axiotoponimo: '#9333ea',
   hagiotoponimo: '#ca8a04',
-  litotoponimo: '#0d9488',
-  zootoponimo: '#facc15', 
+  litotoponimo: '#94530d',
+  zootoponimo: '#facc15',
   corotoponimo: '#fb7185', // Rosa coral
+  sociotoponimo: '#C5CB81', // Verde musgo (alinhado às estatísticas)
   outro: '#6b7280',
+}
+
+const ROTULO_CATEGORIA = {
+  antropotoponimo: 'Antropotopônimo',
+  fitotoponimo: 'Fitotopônimo',
+  axiotoponimo: 'Axiotopônimo',
+  hagiotoponimo: 'Hagiotopônimo',
+  corotoponimo: 'Corotopônimo',
+  zootoponimo: 'Zootopônimo',
+  litotoponimo: 'Litotopônimo',
+  sociotoponimo: 'Sociotopônimo',
+  outro: 'Outro',
 }
 
 const CORES_GENERO = {
@@ -32,9 +45,16 @@ const CORES_GENERO = {
 // ============================================
 function normalizarCategoria(cat) {
   if (!cat) return 'outro'
-  const normalizada = cat.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim()
-  const validas = ['antropotoponimo', 'fitotoponimo', 'ergotoponimo', 'axiotoponimo', 'hagiotoponimo', 'litotoponimo', 'zootoponimo', 'corotoponimo']
-  return validas.includes(normalizada) ? normalizada : 'outro'
+  let n = String(cat)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\u200b-\u200d\ufeff]/g, '')
+    .trim()
+  n = n.replace(/[-_\s\u00a0]+/g, '')
+  while (n.endsWith('toponimos')) n = n.slice(0, -1)
+  const chaves = Object.keys(CORES_CATEGORIA).filter((k) => k !== 'outro')
+  return chaves.includes(n) ? n : 'outro'
 }
 
 function normalizarNomeRua(nome) {
@@ -110,6 +130,31 @@ function initMap() {
   }).addTo(map)
 }
 
+/** Leaflet precisa recalcular o tamanho quando o layout ao lado muda (ex.: legenda/panorama). */
+function invalidateMapSizeSoon() {
+  if (!map) return
+  requestAnimationFrame(() => {
+    map.invalidateSize({ animate: false })
+    setTimeout(() => map.invalidateSize({ animate: false }), 150)
+  })
+}
+
+/** Altura real da navbar → --map-navbar-offset (evita desvio entre 100vh e o bloco fixo do mapa). */
+function syncMapNavbarOffset() {
+  const nav = document.querySelector('header .navbar.fixed-top')
+  if (!nav) return
+  document.documentElement.style.setProperty('--map-navbar-offset', `${nav.offsetHeight}px`)
+}
+
+function setupMapResizeObserver() {
+  const el = document.querySelector('.map-container')
+  if (!el || !map || !window.ResizeObserver) return
+  const ro = new ResizeObserver(() => {
+    map.invalidateSize({ animate: false })
+  })
+  ro.observe(el)
+}
+
 // ============================================
 // CREATE MARKER
 // ============================================
@@ -162,7 +207,7 @@ function criarMarcador(rua) {
     <div class="mapa-popup">
       <div class="popup-header" style="border-left: 4px solid ${corGen}">
         <h4>${rua.nome_oficial}</h4>
-        <span class="badge" style="background: ${corCat}">${categoria}</span>
+        <span class="badge" style="background: ${corCat}">${ROTULO_CATEGORIA[categoria] || categoria}</span>
       </div>
       <div class="popup-body">
         ${bairroNome ? `<p class="popup-bairro"><i class="bi bi-geo-alt"></i> ${bairroNome}</p>` : ''}
@@ -314,7 +359,7 @@ function atualizarEstatisticasCategoria(ruas) {
     return `
       <div class="stat-item">
         <div class="stat-info">
-          <span class="stat-label" style="text-transform: capitalize;">${cat}</span>
+          <span class="stat-label">${ROTULO_CATEGORIA[cat] || cat}</span>
           <span class="stat-values">${count} (${percent}%)</span>
         </div>
         <div class="stat-bar-bg">
@@ -425,7 +470,7 @@ function renderizarRuasGeoJSON(ruasFiltradas) {
         <div class="mapa-popup">
           <div class="popup-header" style="border-left: 4px solid ${corGen}">
             <h4>${ruaData.nome_oficial}</h4>
-            <span class="badge" style="background: ${cor}">${visualMode === 'genero' ? gen : cat}</span>
+            <span class="badge" style="background: ${cor}">${visualMode === 'genero' ? (gen.charAt(0).toUpperCase() + gen.slice(1)) : ROTULO_CATEGORIA[cat]}</span>
           </div>
           <div class="popup-body">
             ${bairroNome ? `<p class="popup-bairro"><i class="bi bi-geo-alt"></i> ${bairroNome}</p>` : ''}
@@ -595,10 +640,16 @@ function setupEventListeners() {
   const sidebar = document.getElementById('sidebar')
 
   if (openBtn) {
-    openBtn.addEventListener('click', () => sidebar.classList.add('open'))
+    openBtn.addEventListener('click', () => {
+      sidebar.classList.add('open')
+      invalidateMapSizeSoon()
+    })
   }
   if (closeBtn) {
-    closeBtn.addEventListener('click', () => sidebar.classList.remove('open'))
+    closeBtn.addEventListener('click', () => {
+      sidebar.classList.remove('open')
+      invalidateMapSizeSoon()
+    })
   }
 
   // Visual Mode Toggles
@@ -617,6 +668,8 @@ function setupEventListeners() {
       document.getElementById('panorama-title').textContent = (visualMode === 'genero') ? 'Panorama de Gênero' : 'Panorama de Categorias'
       document.getElementById('panorama-categorias').style.display = (visualMode === 'genero') ? 'none' : 'block'
       document.getElementById('panorama-genero').style.display = (visualMode === 'genero') ? 'block' : 'none'
+
+      invalidateMapSizeSoon()
     })
   })
 }
@@ -625,7 +678,18 @@ function setupEventListeners() {
 // INIT
 // ============================================
 document.addEventListener('DOMContentLoaded', () => {
+  syncMapNavbarOffset()
   initMap()
+  setupMapResizeObserver()
+  invalidateMapSizeSoon()
+  window.addEventListener('resize', syncMapNavbarOffset)
+
+  const navCollapse = document.getElementById('navbarScroll')
+  if (navCollapse) {
+    navCollapse.addEventListener('shown.bs.collapse', syncMapNavbarOffset)
+    navCollapse.addEventListener('hidden.bs.collapse', syncMapNavbarOffset)
+  }
+
   setupEventListeners()
   carregarDados()
 })
