@@ -1,0 +1,30 @@
+{
+  "mcpServers": {
+    "supabase": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "postgresql://postgres:sua_senha_aqui@db.vtsuctcmycaiooeubjnk.supabase.co:5432/postgres"
+      ]
+    },
+    "gemini": {
+      "command": "npx",
+      "args": ["-y", "@google/gemini-cli", "mcp"],
+      "env": {
+        "GEMINI_API_KEY": "${GEMINI_API_KEY}"
+      }
+    },
+    "codex": {
+      "command": "codex",
+      "args": ["--mcp-server"],
+      "env": {
+        "OPENAI_API_KEY": "${OPENAI_API_KEY}"
+      }
+    },
+    "chrome-devtools": {
+      "command": "npx",
+      "args": ["chrome-devtools-mcp@latest"]
+    }
+  }
+}

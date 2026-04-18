@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "ai:build": "npm run build --prefix ai-provider-kit",
+    "ai:classify:dry": "node scripts/ai-classify.mjs --dry-run",
+    "ai:classify": "node scripts/ai-classify.mjs --limit=20",
+    "ai:classify:all": "node scripts/ai-classify.mjs --limit=9999"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.57.2"

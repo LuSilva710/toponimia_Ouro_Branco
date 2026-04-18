@@ -2,6 +2,16 @@
 // CHATBOT PREMIUM - chatbot.js
 // ============================================
 import { supabase } from './supabase-client.js'
+import { SYSTEM_PROMPT } from './systemPrompt.js'
+import { generateText, validateConfig, getProviderLabel } from './ai-client.js'
+
+// Valida configuração do provider ao carregar o módulo (loga no console, não quebra a UI)
+try {
+  validateConfig()
+  console.log(`[Chatbot] Provider de IA: ${getProviderLabel()}`)
+} catch (e) {
+  console.warn('[Chatbot] Aviso de configuração de IA:', e.message)
+}
 
 // ============================================
 // CONFIG
@@ -66,8 +76,7 @@ function injectHTML() {
         </div>
 
         <div id="newChatbotMessages">
-          <!-- Messages or Welcome Screen -->
-        </div>
+          </div>
 
         <div class="chat-input-area">
           <div class="input-wrapper">
@@ -205,7 +214,6 @@ async function enviarMensagem(textoManual = null, respostaPronta = null) {
   try {
     let resposta
     if (respostaPronta) {
-      // Pequeno delay para simular pensamento
       await new Promise(res => setTimeout(res, 600))
       resposta = respostaPronta
     } else {
@@ -215,8 +223,13 @@ async function enviarMensagem(textoManual = null, respostaPronta = null) {
     removerTyping()
     adicionarMensagem('bot', resposta)
     
-    // Check for contribution context
-    if (!respostaPronta && (texto.toLowerCase().includes('rua') || texto.toLowerCase().includes('quem foi'))) {
+
+ // Check for contribution context
+    const textoMin = texto.toLowerCase();
+    // Bloqueia o botão se for pergunta de estatística/contagem
+    const isEstatistica = textoMin.includes('quant') || textoMin.includes('mais') || textoMin.includes('menos') || textoMin.includes('qual bairro');
+    
+    if (!respostaPronta && (textoMin.includes('rua') || textoMin.includes('quem foi')) && !isEstatistica) {
       mostrarOpcaoContribuir(texto)
     }
   } catch (err) {
@@ -286,27 +299,98 @@ function mostrarFormContrib(rua) {
 }
 
 // ============================================
-// DATA ENGINE (IA)
+// DATA ENGINE (IA) - SPRINT 5 (Agente Roteador)
 // ============================================
+
+// 1. O CLASSIFICADOR (Função Auxiliar)
+function classificarIntencao(pergunta) {
+  const p = pergunta.toLowerCase();
+  const palavrasEstatistica = [
+    'quantas', 'quantos', 'qual bairro tem mais', 'qual bairro possui', 
+    'maioria', 'total', 'estatística', 'porcentagem', 'femininos', 'masculinos'
+  ];
+  
+  // Se a pergunta contiver qualquer palavra matemática/contagem, é Estatística
+  for (let palavra of palavrasEstatistica) {
+    if (p.includes(palavra)) return 'ESTATISTICA';
+  }
+  
+  // Caso contrário, é uma busca histórica normal
+  return 'HISTORIA';
+}
+
+// 2. A FUNÇÃO PRINCIPAL DA IA
 async function consultarIA(pergunta) {
-  const stopwords = ['de', 'da', 'do', 'em', 'que', 'e', 'a', 'o', 'os', 'as', 'um', 'uma', 'com', 'por', 'para', 'se', 'não', 'mais', 'como', 'qual', 'quais', 'sobre', 'rua', 'ruas', 'bairro', 'quem', 'foi', 'nome']
-  const keywords = pergunta.toLowerCase().split(/\s+/).filter(w => w.length >= 3 && !stopwords.includes(w))
+  // Passa pelo roteador primeiro
+  const intencao = classificarIntencao(pergunta);
+  let contextoParaIA = '';
+  let instrucaoEspecial = '';
 
-  if (keywords.length === 0) return 'Como posso ajudar você hoje?'
+  console.log(`🧠 Intenção detectada pelo Roteador: ${intencao}`);
 
-  const orFilter = keywords.map(k => `nome_oficial.ilike.%${k}%,significado.ilike.%${k}%`).join(',')
-  const { data: ruas, error } = await supabase.from('ruas').select('*, bairros(nome)').or(orFilter).limit(3)
+  // ==========================================
+  // ROTA A: PERGUNTAS MATEMÁTICAS / ESTATÍSTICAS
+  // ==========================================
+  if (intencao === 'ESTATISTICA') {
+    // Busca dados vivos diretamente do banco via Supabase!
+    const resRuas = await supabase.from('ruas').select('*', { count: 'exact', head: true });
+    const resBairros = await supabase.from('bairros').select('*', { count: 'exact', head: true });
+    
+    const totalRuas = resRuas.count || 'mais de 1500';
+    const totalBairros = resBairros.count || 'dezenas';
 
-  if (error) throw error
-  if (!ruas || ruas.length === 0) return `Não encontrei dados exatos sobre "${pergunta}". Pode tentar o nome de uma rua específica?`
+    // Injeta os dados dinâmicos + curiosidades fixas no contexto
+    contextoParaIA = `
+      DADOS ESTATÍSTICOS OFICIAIS DO BANCO DE DADOS EM TEMPO REAL:
+      - O sistema possui exatamente ${totalRuas} ruas catalogadas na cidade.
+      - A cidade de Ouro Branco possui ${totalBairros} bairros registrados no nosso banco.
+      - A maior categoria de origem dos nomes é 'Antropotopônimo' (homenagens a pessoas, correspondendo à maioria das ruas).
+      - O bairro que possui MAIS nomes femininos registrados é o Luzia Augusta, seguido pelo Pioneiros.
+      - A cidade teve uma forte explosão de novos logradouros registrados na década de 1970 com a chegada da usina Açominas.
+    `;
+    
+    // Instrução dinâmica adaptada
+    instrucaoEspecial = "O usuário está fazendo uma pergunta quantitativa ou estatística. Use EXCLUSIVAMENTE os 'DADOS ESTATÍSTICOS OFICIAIS' abaixo para responder. Não invente números. Após responder gentilmente, convide-o a visitar a nossa aba 'Estatísticas' (no menu principal) para ver gráficos completos.";
+  } 
+  
+  // ==========================================
+  // ROTA B: PERGUNTAS HISTÓRICAS (O RAG Clássico)
+  // ==========================================
+  else {
+    const stopwords = ['de', 'da', 'do', 'em', 'que', 'e', 'a', 'o', 'os', 'as', 'um', 'uma', 'com', 'por', 'para', 'se', 'não', 'mais', 'como', 'qual', 'quais', 'sobre', 'rua', 'ruas', 'bairro', 'quem', 'foi', 'nome'];
+    const keywords = pergunta.toLowerCase().split(/\s+/).filter(w => w.length >= 3 && !stopwords.includes(w));
 
-  let resp = `Encontrei informações relevantes:\n\n`
-  ruas.forEach(r => {
-    resp += `📍 **${r.nome_oficial}** ${r.bairros ? `(${r.bairros.nome})` : ''}\n`
-    if (r.significado) resp += `📖 ${r.significado.substring(0, 150)}${r.significado.length > 150 ? '...' : ''}\n\n`
-  })
+    if (keywords.length > 0) {
+      const orFilter = keywords.map(k => `nome_oficial.ilike.%${k}%,significado.ilike.%${k}%`).join(',');
+      const { data: ruas, error } = await supabase.from('ruas').select('*, bairros(nome)').or(orFilter).limit(3);
 
-  return resp.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      if (!error && ruas && ruas.length > 0) {
+        ruas.forEach(r => {
+          contextoParaIA += `Nome: ${r.nome_oficial} (Bairro: ${r.bairros ? r.bairros.nome : 'Desconhecido'})\nSignificado: ${r.significado || 'Sem dados.'}\n\n`;
+        });
+      }
+    }
+    
+    instrucaoEspecial = "O usuário está buscando a história de uma rua específica. Baseie-se APENAS no contexto histórico abaixo. Se o contexto estiver vazio, diga que ainda não temos esse registro no acervo.";
+  }
+
+  // ==========================================
+  // 3. CHAMADA FINAL PARA O MODELO (ai-client — provider-agnostic)
+  // ==========================================
+  try {
+    // System prompt completo: prompt base + instrução dinâmica do roteador
+    const systemPromptFinal = `${SYSTEM_PROMPT}\n\nINSTRUÇÃO DINÂMICA DO ROTEADOR: ${instrucaoEspecial}`;
+
+    // User prompt: contexto do banco (RAG) + pergunta do usuário
+    const userPrompt = `CONTEXTO INJETADO PELO SISTEMA:\n${contextoParaIA || 'Nenhum registro encontrado.'}\n\nPERGUNTA DO USUÁRIO: ${pergunta}`;
+
+    // Chama o provider configurado via VITE_AI_PROVIDER (Gemini, OpenAI, etc.)
+    return await generateText(systemPromptFinal, userPrompt, 0.2);
+
+  } catch (err) {
+    console.error('[Chatbot] Erro ao consultar IA:', err);
+    return 'Tivemos um problema de conexão com nossos servidores históricos. Tente novamente em instantes.';
+  }
 }
 
 // ============================================

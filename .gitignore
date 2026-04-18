@@ -5,3 +5,11 @@ migracao.js
 update_ruas.js
 iniciar-ia.sh
 sql/
+
+# ai-provider-kit — compilado e dependências (regenerar com: npm run ai:build)
+ai-provider-kit/dist/
+ai-provider-kit/node_modules/
+
+# Outputs gerados pelo ai-classify.mjs (regeneráveis, podem ser grandes)
+scripts/ai-classify-results.json
+scripts/ai-classify.sql

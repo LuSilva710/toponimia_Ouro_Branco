@@ -1,0 +1,32 @@
+{
+  "name": "ai-provider-kit",
+  "version": "1.0.0",
+  "description": "Lightweight, provider-agnostic AI client — supports Google Gemini, OpenAI, and Codex CLI",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "example:gemini": "cross-env AI_PROVIDER=gemini tsx src/examples/basic-usage.ts",
+    "example:openai": "cross-env AI_PROVIDER=openai tsx src/examples/basic-usage.ts",
+    "example:codex": "cross-env AI_PROVIDER=codex tsx src/examples/basic-usage.ts"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "dotenv": "^16.4.7",
+    "openai": "^4.86.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

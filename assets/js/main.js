@@ -324,8 +324,10 @@ function debounce(func, wait) {
 }
 
 // Função para filtrar e exibir ruas baseado na busca
+const removerAcentos = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
 function filtrarRuas(query) {
-    const queryLower = query.trim().toLowerCase();
+    const queryLower = removerAcentos(query.trim().toLowerCase());
 
     // Se a busca estiver vazia, limpa tudo e restaura o estado original
     if (!queryLower || queryLower.length < 2) {
@@ -344,6 +346,8 @@ function filtrarRuas(query) {
 
     // Buscar em todas as ruas carregadas
     _todasRuas.forEach(({ nome, detalhes }) => {
+        const nomeNorm = removerAcentos(nome.toLowerCase());
+        const sigNorm = detalhes.significado ? removerAcentos(detalhes.significado.toLowerCase()) : '';
         const nomeMatch = nome.toLowerCase().includes(queryLower);
         const significadoMatch = detalhes.significado &&
             detalhes.significado.toLowerCase().includes(queryLower);
@@ -609,20 +613,6 @@ document.addEventListener("DOMContentLoaded", function () {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Chatbot
-    const chatbotButton = document.getElementById('chatbotButton');
-    const chatbot = document.getElementById('chatbot');
-    const closeChatbotButton = document.getElementById('closeChatbotButton');
-    const chatbotMessages = document.getElementById('chatbotMessages');
-
-    chatbotButton.addEventListener('click', function () {
-        chatbot.style.display = "block";
-        chatbotMessages.innerHTML = "Olá, <br> Se você conhece a história de alguma rua que não está presente em nosso dicionário, comente aqui. Sua contribuição irá agregar muito para o Dicionário de Ruas de Ouro Branco!";
-    });
-
-    closeChatbotButton.addEventListener('click', function () {
-        chatbot.style.display = "none";
-    });
 
     // Ativação das letras do nav lateral
     document.querySelectorAll("#navside li").forEach((item) => {
