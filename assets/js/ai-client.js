@@ -38,6 +38,20 @@ let _fallbackActive = false; // true quando está usando OpenRouter como fallbac
 
 // ─── Public API ───────────────────────────────────────────────────────────────
 
+/**
+ * Trunca um bloco de contexto RAG para evitar exceder o limite de tokens do provider.
+ * @param {string} contexto - Texto de contexto gerado pelo RAG
+ * @param {number} maxChars - Limite máximo de caracteres (default 6000 ≈ ~1500 tokens)
+ */
+export function truncateContext(contexto, maxChars = 6000) {
+  if (!contexto || contexto.length <= maxChars) return contexto;
+  const truncado = contexto.slice(0, maxChars);
+  // Corta na última quebra de linha completa para não truncar no meio de um campo
+  const ultimaLinha = truncado.lastIndexOf('\n');
+  return (ultimaLinha > maxChars * 0.8 ? truncado.slice(0, ultimaLinha) : truncado)
+    + '\n[contexto truncado — limite de tokens]';
+}
+
 export function getProviderLabel() {
   if (_fallbackActive) return `Ollama (fallback local)`;
   if (AI_PROVIDER === 'openrouter') return `OpenRouter`;
@@ -200,7 +214,7 @@ async function _openaiGenerateText(systemPrompt, userPrompt, temperature, model)
     body: JSON.stringify({
       model,
       temperature,
-      max_tokens: 2048,
+      max_tokens: 800,
       messages: [
         { role: 'system', content: systemPrompt },
         { role: 'user',   content: userPrompt   },
@@ -224,7 +238,9 @@ async function _openaiGenerateText(systemPrompt, userPrompt, temperature, model)
 function _isRecoverableError(err) {
   const msg = err.message ?? '';
   return msg.includes('429') || msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED')
-    || msg.includes('404') || msg.includes('503') || msg.includes('500');
+    || msg.includes('404') || msg.includes('503') || msg.includes('500')
+    || msg.includes('max tokens') || msg.includes('token limit')
+    || msg.includes('exceeded') || msg.includes('context_length');
 }
 
 function _extractStatus(err) {
