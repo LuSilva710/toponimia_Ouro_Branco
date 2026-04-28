@@ -81,31 +81,35 @@
 
         /* Hero Section */
         .hero-section {
-            background: linear-gradient(rgba(180, 160, 141, 0.85), rgba(230, 206, 181, 0.9)), url('https://portalfacilarquivos.blob.core.windows.net/uploads/OUROBRANCO/imgOrig/%7BBC8DCED8-CE22-7A6E-ADBC-E3A1ECA1BD2C%7D.jpeg') no-repeat center center;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.4)), url('https://portalfacilarquivos.blob.core.windows.net/uploads/OUROBRANCO/imgOrig/%7BBC8DCED8-CE22-7A6E-ADBC-E3A1ECA1BD2C%7D.jpeg') no-repeat center center;
             background-size: cover;
-            color: rgb(0, 0, 0);
-            padding: 100px 0;
+            background-attachment: fixed;
+            color: white;
+            padding: 100px 0; /* Reduzi de 120px */
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 60px; /* Reduzi de 80px */
         }
 
         .hero-section h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 24px;
             color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+            font-weight: 800;
         }
 
         .hero-section p {
-            font-size: 1.4rem;
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
             max-width: 800px;
-            margin: 0 auto 30px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            margin: 0 auto 40px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            opacity: 0.9;
+            line-height: 1.4;
         }
 
         .hero-btn {
             background: var(--highlight);
-            color: var(--lightrk);
+            color: var(--dark);
             font-weight: 600;
             padding: 12px 30px;
             border-radius: 30px;
@@ -149,17 +153,19 @@
         .about-card {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            padding: 30px;
-            transition: all 0.4s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            padding: 24px; /* Reduzi ainda mais de 30px para 24px */
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             height: 100%;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         .about-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-color: rgba(180, 160, 141, 0.3);
         }
 
         .about-card h3 {
@@ -171,35 +177,42 @@
         }
 
         .about-card h3 i {
-            background: var(--accent);
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: var(--primary);
+            font-size: 1.6rem;
+            color: var(--dark);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
 
         .about-img {
-            border-radius: 10px;
+            background: #ffffff; /* Alterado de gradiente para branco */
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
             transition: all 0.4s ease;
             height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px; /* Ajustado para melhor respiro em fundo branco */
+            border: 1px solid rgba(0, 0, 0, 0.05); /* Borda mais sutil */
+            min-height: 250px;
         }
 
         .about-img img {
             width: 100%;
+            height: 100%;
+            object-fit: contain; /* Alterado de cover para contain para não cortar a imagem */
             transition: transform 0.5s ease;
         }
 
         .about-img:hover img {
-            transform: scale(1.05);
+            transform: scale(1.08);
         }
 
         /* Timeline */
@@ -511,7 +524,7 @@
             .container-md,
             .container-sm,
             .container-xl {
-                max-width: 1000px;
+                max-width: 900px; /* Reduzi de 1000px para 900px */
             }
         }
 
