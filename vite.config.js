@@ -14,6 +14,7 @@ export default defineConfig({
         portal: 'portaleducativo.html',
         quiz: 'games/quiz.html',
         associacao: 'games/associacao.html',
+        cruzadinha: 'games/cruzadinha.html',
         ranking: 'games/ranking.html',
       }
     }

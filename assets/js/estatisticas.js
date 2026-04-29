@@ -1,6 +1,3 @@
-// ============================================
-// ESTATÍSTICAS - estatisticas.js
-// ============================================
 import { supabase } from './supabase-client.js'
 
 // Chart.js v4: o plugin "colors" aplica paleta padrão e pode ignorar backgroundColor customizado
