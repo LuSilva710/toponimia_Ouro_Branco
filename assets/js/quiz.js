@@ -2,6 +2,7 @@
 // QUIZ INTERATIVO - quiz.js
 // ============================================
 import { supabase } from './supabase-client.js'
+import { PdfGeneratorService } from './PdfGeneratorService.js'
 
 const TOTAL_PERGUNTAS = 10
 const TEMPO_POR_PERGUNTA = 30
@@ -186,40 +187,7 @@ async function mostrarResultado() {
 // CERTIFICATE
 // ============================================
 document.getElementById('btn-certificado')?.addEventListener('click', () => {
-  const { jsPDF } = window.jspdf
-  const pdf = new jsPDF('l', 'mm', 'a4')
-
-  pdf.setFillColor(15, 15, 35)
-  pdf.rect(0, 0, 297, 210, 'F')
-
-  pdf.setDrawColor(108, 99, 255)
-  pdf.setLineWidth(2)
-  pdf.rect(10, 10, 277, 190, 'S')
-
-  pdf.setTextColor(108, 99, 255)
-  pdf.setFontSize(28)
-  pdf.text('Certificado de Participação', 148.5, 40, { align: 'center' })
-
-  pdf.setTextColor(224, 224, 224)
-  pdf.setFontSize(14)
-  pdf.text('Toponímia Urbana de Ouro Branco — IFMG', 148.5, 55, { align: 'center' })
-
-  pdf.setFontSize(16)
-  pdf.text(`Certificamos que`, 148.5, 80, { align: 'center' })
-
-  pdf.setFontSize(24)
-  pdf.setTextColor(108, 99, 255)
-  pdf.text(jogadorNome || 'Participante', 148.5, 95, { align: 'center' })
-
-  pdf.setTextColor(224, 224, 224)
-  pdf.setFontSize(14)
-  pdf.text(`completou o Quiz Toponímia com ${pontuacao} pontos`, 148.5, 115, { align: 'center' })
-
-  pdf.setFontSize(12)
-  pdf.setTextColor(136, 136, 170)
-  pdf.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 148.5, 140, { align: 'center' })
-
-  pdf.save(`certificado-quiz-${jogadorNome || 'participante'}.pdf`)
+  PdfGeneratorService.generateCertificate(jogadorNome, pontuacao)
 })
 
 // ============================================

@@ -1,4 +1,6 @@
 // Configuração inicial do jogo de palavras cruzadas
+import { supabase } from './supabase-client.js'
+
         // Elementos da interface
         const crosswordContainer = document.getElementById('crossword');
         const cluesList = document.getElementById('clues-list');
@@ -159,6 +161,7 @@
         let revealedLetters = Array(gridSize).fill(null).map(() => Array(gridSize).fill(false));  // Letras reveladas por dicas
         let userAnswers = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));         // Respostas do usuário
         let wordEntries = []; // Entradas de palavras com suas posições
+        let hintsUsed = 0;    // Contador de dicas usadas
 
         /**
          * Funções do Timer
@@ -205,9 +208,11 @@
                     }
 
                     correctLetters[currentRow][currentCol] = word[i];
-                    cellIsPartOfWord[currentRow][currentCol] = true;
+                    if (!cellIsPartOfWord[currentRow][currentCol]) {
+                        cellIsPartOfWord[currentRow][currentCol] = true;
+                        totalCells++;
+                    }
                     positions.push({ row: currentRow, col: currentCol });
-                    totalCells++;
                 }
 
                 wordEntries.push({ word, positions });
@@ -220,20 +225,37 @@
          * Calcula o tamanho das células baseado no espaço disponível
          */
         function calculateCellSize() {
-            const availableWidth = crosswordWrapper.clientWidth - 2; // Subtrai a borda
+            if (!crosswordWrapper || crosswordWrapper.clientWidth === 0) {
+                // Tenta novamente em breve se o container ainda não tiver dimensões
+                setTimeout(calculateCellSize, 100);
+                return;
+            }
+
+            const availableWidth = crosswordWrapper.clientWidth - 2;
             const availableHeight = crosswordWrapper.clientHeight - 2;
             
-            // Calcula o tamanho baseado na menor dimensão (largura ou altura)
             const sizeBasedOnWidth = availableWidth / gridSize;
-            const sizeBasedOnHeight = availableHeight / gridSize;
+            // Se availableHeight for 0 ou muito pequeno, foca na largura
+            const sizeBasedOnHeight = availableHeight > 100 ? availableHeight / gridSize : sizeBasedOnWidth;
             
-            // Usa o menor valor para garantir que o grid caiba inteiro
             cellSize = Math.min(sizeBasedOnWidth, sizeBasedOnHeight);
             
-            // Define o tamanho das células
+            // Garante um tamanho mínimo para que as células não sumam
+            if (cellSize < 5) cellSize = 15; 
+
             document.querySelectorAll('.grid-cell').forEach(cell => {
                 cell.style.width = `${cellSize}px`;
                 cell.style.height = `${cellSize}px`;
+                
+                const input = cell.querySelector('input');
+                if (input) {
+                    input.style.fontSize = `${cellSize * 0.6}px`;
+                }
+                
+                const marker = cell.querySelector('.word-number');
+                if (marker) {
+                    marker.style.fontSize = `${cellSize * 0.35}px`;
+                }
             });
         }
 
@@ -294,10 +316,10 @@
                 }
             }
 
-            // Calcular tamanho das células após renderização
+            // Calcular tamanho das células após renderização e garantir que o layout esteja pronto
             setTimeout(() => {
                 calculateCellSize();
-            }, 10);
+            }, 100);
 
             renderClues();
             addEventListeners();
@@ -406,20 +428,52 @@
         /**
          * Vitória no jogo
          */
-        function winGame() {
+        async function winGame() {
             stopTimer();
             statusMessage.textContent = 'Parabéns! Você completou o jogo com sucesso!';
             statusMessage.style.color = '#2c6e49';
             statusMessage.style.fontWeight = 'bold';
             
+            // Cálculo da pontuação
+            const baseScore = 1000;
+            const timePenalty = seconds * 2;
+            const hintPenalty = hintsUsed * 50;
+            const finalScore = Math.max(100, baseScore - timePenalty - hintPenalty);
+
+            // Salvar pontuação no Supabase
+            try {
+                const jogadorNome = document.getElementById('jogador-nome')?.value || 'Anônimo';
+                await supabase.from('pontuacoes').insert({
+                    jogador_nome: jogadorNome,
+                    jogo: 'cruzadinha',
+                    pontos: finalScore
+                });
+            } catch (error) {
+                console.error('Erro ao salvar pontuação:', error);
+            }
+            
             // Confetti effect
             setTimeout(() => {
+                let canvas = document.getElementById('confetti-canvas');
+                if (!canvas) {
+                    canvas = document.createElement('canvas');
+                    canvas.id = 'confetti-canvas';
+                    canvas.style.position = 'fixed';
+                    canvas.style.top = '0';
+                    canvas.style.left = '0';
+                    canvas.style.width = '100%';
+                    canvas.style.height = '100%';
+                    canvas.style.pointerEvents = 'none';
+                    canvas.style.zIndex = '9999';
+                    document.body.appendChild(canvas);
+                }
                 const confettiSettings = { target: 'confetti-canvas', max: 150 };
                 const confetti = new ConfettiGenerator(confettiSettings);
                 confetti.render();
                 
                 setTimeout(() => {
-                    document.getElementById('confetti-canvas').remove();
+                    confetti.clear();
+                    canvas.remove();
                 }, 5000);
             }, 500);
         }
@@ -446,6 +500,7 @@
             revealedLetters[randomPosition.row][randomPosition.col] = true;
             userAnswers[randomPosition.row][randomPosition.col] = correctLetters[randomPosition.row][randomPosition.col];
             completedCells++;
+            hintsUsed++;
 
             // Atualiza a interface
             const input = document.querySelector(`input[data-row="${randomPosition.row}"][data-col="${randomPosition.col}"]`);
