@@ -1,41 +1,48 @@
 /**
  * PdfGeneratorService.js
- * Módulo independente para geração de PDFs (Relatórios e Certificados)
- * Utiliza a biblioteca jsPDF
+ * Módulo para geração de Dossiê Toponímico (Estilo Arquivo Histórico)
+ * Referência Visual: AHM-SP (2021_AHM_Jogo Arquivo Nômade)
  */
 
 import { supabase } from './supabase-client.js'
 
 // ============================================
-// CONSTANTES E CONFIGURAÇÕES
+// CONSTANTES E CONFIGURAÇÕES (ESTILO ARQUIVO)
 // ============================================
-const CORES = {
-  antropotoponimo: '#ED4A7B',
-  fitotoponimo: '#109655',
-  axiotoponimo: '#6B4B9A',
-  hagiotoponimo: '#29B6F6',
-  corotoponimo: '#FF7043',
-  zootoponimo: '#26A69A',
-  litotoponimo: '#607D8B',
-  sociotoponimo: '#C5CB81',
-  outro: '#DFDFDF',
+const ESTILO = {
+    papel: '#FDFBF7',     // Bege arquivo
+    linha: '#8C7E6D',     // Sépia para bordas
+    textoForte: '#2C2621', 
+    recorte: [180, 180, 180] // Cinza claro para o tracejado
+}
+
+const CORES_CATEGORIA = {
+    antropotoponimo: '#8E3E56', // Tons dessaturados (mais sóbrios)
+    fitotoponimo: '#3D6142',
+    axiotoponimo: '#4B3B6D',
+    hagiotoponimo: '#2E5E7A',
+    corotoponimo: '#A3543A',
+    zootoponimo: '#316B61',
+    litotoponimo: '#4D5D66',
+    sociotoponimo: '#7A7D4D',
+    outro: '#A0A0A0',
 }
 
 const ROTULO_CATEGORIA = {
-  antropotoponimo: 'Antropotopônimo',
-  fitotoponimo: 'Fitotopônimo',
-  axiotoponimo: 'Axiotopônimo',
-  hagiotoponimo: 'Hagiotopônimo',
-  corotoponimo: 'Corotopônimo',
-  zootoponimo: 'Zootopônimo',
-  litotoponimo: 'Litotopônimo',
-  sociotoponimo: 'Sociotopônimo',
-  outro: 'Outro / sem classificação',
+    antropotoponimo: 'Antropotopônimo',
+    fitotoponimo: 'Fitotopônimo',
+    axiotoponimo: 'Axiotopônimo',
+    hagiotoponimo: 'Hagiotopônimo',
+    corotoponimo: 'Corotopônimo',
+    zootoponimo: 'Zootopônimo',
+    litotoponimo: 'Litotopônimo',
+    sociotoponimo: 'Sociotopônimo',
+    outro: 'Outro / sem classificação',
 }
 
 const ORDEM_CATEGORIAS = [
-  'antropotoponimo', 'fitotoponimo', 'axiotoponimo', 'hagiotoponimo',
-  'corotoponimo', 'zootoponimo', 'litotoponimo', 'sociotoponimo', 'outro',
+    'antropotoponimo', 'fitotoponimo', 'axiotoponimo', 'hagiotoponimo',
+    'corotoponimo', 'zootoponimo', 'litotoponimo', 'sociotoponimo', 'outro',
 ]
 
 // ============================================
@@ -43,493 +50,578 @@ const ORDEM_CATEGORIAS = [
 // ============================================
 
 function hexRgb(hex) {
-  return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)]
+    return [parseInt(hex.slice(1,3),16), parseInt(hex.slice(3,5),16), parseInt(hex.slice(5,7),16)]
 }
 
 function rotuloCategoriaToponimica(chaveNormalizada) {
-  return ROTULO_CATEGORIA[chaveNormalizada] || (chaveNormalizada.charAt(0).toUpperCase() + chaveNormalizada.slice(1))
+    return ROTULO_CATEGORIA[chaveNormalizada] || (chaveNormalizada.charAt(0).toUpperCase() + chaveNormalizada.slice(1))
 }
 
 function normalizarCategoria(cat) {
-  if (!cat) return 'outro'
-  let n = String(cat)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[\u200b-\u200d\ufeff]/g, '')
-    .trim()
-  n = n.replace(/[-_\s\u00a0]+/g, '')
-  while (n.endsWith('toponimos')) n = n.slice(0, -1)
-  if (CORES[n] !== undefined) return n
-  return 'outro'
+    if (!cat) return 'outro'
+    let n = String(cat).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+    n = n.replace(/[-_\s\u00a0]+/g, '')
+    while (n.endsWith('toponimos')) n = n.slice(0, -1)
+    return CORES_CATEGORIA[n] !== undefined ? n : 'outro'
 }
 
 async function urlParaBase64(url) {
-  if (!url) return null
-  try {
-    const resp = await fetch(url)
-    if (!resp.ok) return null
-    const blob = await resp.blob()
-    return new Promise(resolve => {
-      const reader = new FileReader()
-      reader.onloadend = () => resolve(reader.result)
-      reader.onerror = () => resolve(null)
-      reader.readAsDataURL(blob)
-    })
-  } catch { return null }
+    if (!url) return null
+    try {
+        const resp = await fetch(url)
+        if (!resp.ok) return null
+        const blob = await resp.blob()
+        return new Promise(resolve => {
+            const reader = new FileReader()
+            reader.onloadend = () => resolve(reader.result)
+            reader.readAsDataURL(blob)
+        })
+    } catch { return null }
+}
+
+/**
+ * Função auxiliar para anexar um PDF externo ao final do documento gerado
+ */
+async function anexarCruzadinha(jspdfBuffer) {
+    try {
+        if (!window.PDFLib) {
+            await new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = 'https://unpkg.com/pdf-lib/dist/pdf-lib.min.js';
+                script.onload = resolve;
+                script.onerror = reject;
+                document.head.appendChild(script);
+            });
+        }
+
+        const { PDFDocument, rgb, degrees } = window.PDFLib;
+        
+        const mainPdf = await PDFDocument.load(jspdfBuffer);
+        
+        // Busca o arquivo da cruzadinha (tentando caminhos comuns e tratando espaços)
+        const filePath = 'assets/docs/Cruzadinha (A4).pdf';
+        let response = await fetch('./' + filePath).catch(() => null);
+        
+        if (!response || !response.ok) {
+            // Tenta subir um nível caso esteja em uma subpasta (ex: /games/)
+            response = await fetch('../' + filePath).catch(() => null);
+        }
+
+        if (!response || !response.ok) {
+            console.error('CRÍTICO: Não foi possível encontrar o arquivo em assets/docs/Cruzadinha (A4).pdf');
+            return jspdfBuffer;
+        }
+        
+        const extraPdfBuffer = await response.arrayBuffer();
+        const extraPdf = await PDFDocument.load(extraPdfBuffer);
+        
+        const pages = await mainPdf.copyPages(extraPdf, extraPdf.getPageIndices());
+        
+        const [embeddedPages] = [await mainPdf.embedPages(pages)];
+        
+        for (let i = 0; i < pages.length; i++) {
+            const originalPage = pages[i];
+            const embeddedPage = embeddedPages[i];
+            const { width: origW, height: origH } = originalPage.getSize();
+            const isLandscape = origW > origH;
+
+            // Cria uma nova página A4 Retrato (595.28 x 841.89 pontos)
+            const newPage = mainPdf.addPage([595.28, 841.89]);
+            const PAGE_W = 595.28;
+            const PAGE_H = 841.89;
+            
+            // Área disponível dentro das bordas tracejadas (7mm = 19.84 pts) para igualar ao jspdf
+            const BORDER_PAD = 19.84; 
+            const AVAIL_W = PAGE_W - (BORDER_PAD * 2);
+            const AVAIL_H = PAGE_H - (BORDER_PAD * 2);
+            
+            let scale, drawX, drawY, rotate;
+
+            if (isLandscape) {
+                // Maximiza para caber na área disponível, mantendo proporção
+                scale = Math.min(AVAIL_W / origH, AVAIL_H / origW);
+                const drawW = origH * scale;
+                const drawH = origW * scale;
+                drawX = BORDER_PAD + (AVAIL_W - drawW) / 2;
+                drawY = BORDER_PAD + (AVAIL_H - drawH) / 2;
+                rotate = degrees(90);
+
+                newPage.drawPage(embeddedPage, {
+                    x: drawX + drawW, 
+                    y: drawY,
+                    width: origW * scale,
+                    height: origH * scale,
+                    rotate: rotate,
+                });
+            } else {
+                // Já é retrato
+                scale = Math.min(AVAIL_W / origW, AVAIL_H / origH);
+                const drawW = origW * scale;
+                const drawH = origH * scale;
+                drawX = BORDER_PAD + (AVAIL_W - drawW) / 2;
+                drawY = BORDER_PAD + (AVAIL_H - drawH) / 2;
+                rotate = degrees(0);
+
+                newPage.drawPage(embeddedPage, {
+                    x: drawX,
+                    y: drawY,
+                    width: drawW,
+                    height: drawH,
+                    rotate: rotate,
+                });
+            }
+            
+
+            // Desenha as 4 linhas da borda separadamente para garantir o efeito tracejado (dashArray)
+            const bx = BORDER_PAD;
+            const by = BORDER_PAD;
+            const bw = PAGE_W - (BORDER_PAD * 2);
+            const bh = PAGE_H - (BORDER_PAD * 2);
+            const borderStyle = {
+                color: rgb(0.7, 0.7, 0.7),
+                thickness: 0.85,
+                dashArray: [5.6, 5.6],
+            };
+
+            newPage.drawLine({ start: { x: bx, y: by }, end: { x: bx + bw, y: by }, ...borderStyle });
+            newPage.drawLine({ start: { x: bx + bw, y: by }, end: { x: bx + bw, y: by + bh }, ...borderStyle });
+            newPage.drawLine({ start: { x: bx + bw, y: by + bh }, end: { x: bx, y: by + bh }, ...borderStyle });
+            newPage.drawLine({ start: { x: bx, y: by + bh }, end: { x: bx, y: by }, ...borderStyle });
+
+            // Adiciona a indicação de recorte igual às outras páginas
+            newPage.drawText('Destaque para o seu Dossie de Campo', {
+                x: PAGE_W / 2 - 55,
+                y: PAGE_H - 14, // 5mm do topo
+                size: 8,
+                color: rgb(0.5, 0.5, 0.5),
+            });
+        }
+        
+        return await mainPdf.save();
+    } catch (err) {
+        console.error('Erro ao mesclar e estilizar PDFs:', err);
+        return jspdfBuffer;
+    }
 }
 
 // ============================================
-// COMPONENTES DO PDF (Dicionário)
+// COMPONENTES DO PDF (DOSSIÊ PATRIMONIAL)
 // ============================================
 
+function aplicarGuiaRecorte(pdf, W, H) {
+    pdf.setGState(pdf.GState({ opacity: 0.6 }));
+    pdf.setDrawColor(180, 180, 180);
+    pdf.setLineWidth(0.3);
+    pdf.setLineDash([2, 2]); 
+    pdf.rect(7, 7, W - 14, H - 14, 'S');
+    pdf.setLineDash([]);
+    pdf.setGState(pdf.GState({ opacity: 1 }));
+    
+    pdf.setFontSize(8);
+    pdf.text('✂  Destaque para o seu Dossiê de Campo', W/2, 5, { align: 'center' });
+}
+
 function pdfCapa(pdf, W, H, totalRuas, totalBairros, imgHeroB64) {
-  if (imgHeroB64) {
-    try { pdf.addImage(imgHeroB64, 'PNG', 0, 0, W, H, undefined, 'FAST') }
-    catch { pdf.setFillColor(26, 26, 26); pdf.rect(0, 0, W, H, 'F') }
-  } else {
-    pdf.setFillColor(26, 26, 26); pdf.rect(0, 0, W, H, 'F')
-  }
+    pdf.setFillColor(253, 251, 247);
+    pdf.rect(0, 0, W, H, 'F');
 
-  pdf.setFillColor(0, 0, 0)
-  pdf.setGState(pdf.GState({ opacity: 0.91 }))
-  pdf.rect(0, 0, W, H, 'F')
-  pdf.setGState(pdf.GState({ opacity: 1 }))
+    if (imgHeroB64) {
+        try { 
+            pdf.setGState(pdf.GState({ opacity: 0.2 }));
+            pdf.addImage(imgHeroB64, 'PNG', 0, 0, W, H, undefined, 'FAST');
+            pdf.setGState(pdf.GState({ opacity: 1 }));
+        } catch {}
+    }
 
-  pdf.setFillColor(15, 15, 15); pdf.rect(0, 0, W, 10, 'F')
-  pdf.setFillColor(255, 255, 255)
-  pdf.setGState(pdf.GState({ opacity: 0.1 }))
-  pdf.rect(0, 9, W, 0.5, 'F')
-  pdf.setGState(pdf.GState({ opacity: 1 }))
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(26);
+    pdf.setTextColor(44, 38, 33);
+    pdf.text('DICIONÁRIO DE RUAS', W/2, H/2 - 10, {align:'center'});
+    pdf.setFontSize(14);
+    pdf.text('OURO BRANCO - MINAS GERAIS', W/2, H/2 + 2, {align:'center'});
 
-  pdf.setFillColor(255, 255, 255)
-  pdf.setGState(pdf.GState({ opacity: 0.15 }))
-  pdf.roundedRect(W/2 - 22, 22, 44, 9, 4, 4, 'F')
-  pdf.setGState(pdf.GState({ opacity: 1 }))
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(7); pdf.setTextColor(255,255,255)
-  pdf.text('IFMG · Instituto Federal de Minas Gerais', W/2, 28, {align:'center'})
+    pdf.setDrawColor(140, 126, 109);
+    pdf.line(W/2 - 50, H/2 + 15, W/2 + 50, H/2 + 15);
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(10);
+    pdf.text(`${totalRuas} logradouros catalogados`, W/2, H/2 + 22, {align:'center'});
+    pdf.text(`${totalBairros} bairros registrados`, W/2, H/2 + 28, {align:'center'});
 
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(34); pdf.setTextColor(255,255,255)
-  pdf.text('Dicionário de Ruas', W/2, H/2 - 24, {align:'center'})
-  pdf.text('de Ouro Branco', W/2, H/2 - 6, {align:'center'})
-
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(12); pdf.setTextColor(220, 220, 220)
-  pdf.text('Descubra a história e significado por trás dos nomes das ruas da cidade', W/2, H/2 + 10, {align:'center'})
-
-  pdf.setDrawColor(255,255,255); pdf.setLineWidth(0.3)
-  pdf.setGState(pdf.GState({ opacity: 0.3 }))
-  pdf.line(W/2 - 55, H/2 + 18, W/2 + 55, H/2 + 18)
-  pdf.setGState(pdf.GState({ opacity: 1 }))
-
-  const cardW = 55, cardH2 = 22, cardY = H/2 + 24, gap = 10
-  const totalX = W/2 - cardW - gap/2
-  const bairrX = W/2 + gap/2
-
-  ;[totalX, bairrX].forEach(cx => {
-    pdf.setFillColor(255,255,255)
-    pdf.setGState(pdf.GState({ opacity: 0.12 }))
-    pdf.roundedRect(cx, cardY, cardW, cardH2, 4, 4, 'F')
-    pdf.setGState(pdf.GState({ opacity: 1 }))
-  })
-
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(22); pdf.setTextColor(255,255,255)
-  pdf.text(String(totalRuas), totalX + cardW/2, cardY + 13, {align:'center'})
-  pdf.text(String(totalBairros), bairrX + cardW/2, cardY + 13, {align:'center'})
-
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(8); pdf.setTextColor(200,200,200)
-  pdf.text('Logradouros catalogados', totalX + cardW/2, cardY + 19.5, {align:'center'})
-  pdf.text('Bairros registrados', bairrX + cardW/2, cardY + 19.5, {align:'center'})
-
-  pdf.setFont('helvetica','italic'); pdf.setFontSize(8); pdf.setTextColor(160,160,160)
-  pdf.text('Classificação Taxonômica segundo Dick (1990)', W/2, cardY + cardH2 + 12, {align:'center'})
-
-  pdf.setFillColor(0,0,0)
-  pdf.setGState(pdf.GState({ opacity: 0.5 }))
-  pdf.rect(0, H - 14, W, 14, 'F')
-  pdf.setGState(pdf.GState({ opacity: 1 }))
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(7.5); pdf.setTextColor(180,180,180)
-  pdf.text(`Gerado em ${new Date().toLocaleDateString('pt-BR')}`, 10, H - 5)
-  pdf.text('Ouro Branco, Minas Gerais', W/2, H - 5, {align:'center'})
-  pdf.text('Projeto TCC · IFMG', W - 10, H - 5, {align:'right'})
+    pdf.setFontSize(7);
+    pdf.text('PROJETO TOPONÍMIA URBANA | IFMG CAMPUS OURO BRANCO', W/2, H - 15, {align:'center'});
 }
 
 function pdfPaginaContexto(pdf, W, H, logoHeaderB64) {
-  pdf.setFillColor(255, 255, 255)
-  pdf.rect(0, 0, W, H, 'F')
+    pdf.addPage();
+    pdf.setFillColor(253, 251, 247);
+    pdf.rect(0, 0, W, H, 'F');
+    aplicarGuiaRecorte(pdf, W, H);
 
-  const headerH = 22
-  pdf.setFillColor(0, 0, 0)
-  pdf.rect(0, 0, W, headerH, 'F')
+    const headerH = 22;
+    pdf.setFillColor(44, 38, 33);
+    pdf.rect(7, 7, W-14, headerH, 'F');
 
-  if (logoHeaderB64) {
-    try {
-      const logoW = 30
-      const logoH = 8.4
-      pdf.addImage(logoHeaderB64, 'PNG', (W - logoW) / 2, (headerH - logoH) / 2, logoW, logoH, undefined, 'FAST')
-    } catch {}
-  }
+    if (logoHeaderB64) {
+        try {
+            const logoW = 30;
+            const logoH = 8.4;
+            pdf.addImage(logoHeaderB64, 'PNG', (W - logoW) / 2, 7 + (headerH - logoH) / 2, logoW, logoH, undefined, 'FAST');
+        } catch {}
+    }
 
-  const margemX = 22
-  const gapColunas = 18
-  const colW = (W - (margemX * 2) - gapColunas) / 2
-  const colEsqX = margemX
-  const colDirX = margemX + colW + gapColunas
+    const margemX = 20;
+    let y = 40;
 
-  let yAtual = headerH + 18
+    // ── Título da Seção
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(16);
+    pdf.setTextColor(44, 38, 33);
+    pdf.text('NOTAS TÉCNICAS E CONTEXTO DO PROJETO', W/2, y, { align: 'center' });
+    y += 12;
 
-  const blocos = [
-    {
-      titulo: 'Sobre o Projeto',
-      texto: 'Propõe-se a continuidade do estudo da toponímia urbana ouro-branquense a partir da análise da motivação dos topônimos relativos aos espaços públicos de Ouro Branco - MG, resgatando a história local.',
-      lado: 'esquerda',
-      cor: [130, 90, 70]
-    },
-    {
-      titulo: 'Nossa Missão',
-      texto: 'Mostrar que os topônimos não são escolhidos aleatoriamente; permeiam questões sociopolíticas e culturais. Contribui para estudos linguísticos na inter-relação língua, cultura e sociedade.',
-      lado: 'direita',
-      cor: [130, 90, 70]
-    },
-    {
-      titulo: 'Nossa Jornada',
-      texto: 'Revela as histórias por trás dos nomes dos espaços públicos. Consolida-se com o portal educativo para compartilhar descobertas com a comunidade e escolas da região.',
-      lado: 'esquerda',
-      cor: [130, 90, 70]
-    },
-  ]
+    // ── Bloco: O que é a Toponímia?
+    const boxW = W - (margemX * 2);
+    pdf.setFont('times', 'italic');
+    pdf.setFontSize(10);
+    pdf.setTextColor(60, 50, 45);
+    const introText = 'O projeto tem como foco o estudo da toponímia urbana — ou seja, os nomes de ruas, praças e escolas — da cidade de Ouro Branco/MG. Esses nomes não são aleatórios: refletem aspectos sociais, culturais e históricos da comunidade, funcionando como guardiões da memória coletiva local. Este dossiê apresenta o resultado de anos de pesquisa documental e de campo sobre os logradouros de Ouro Branco - MG, revelando como a história da cidade está "escrita" em suas placas de rua.';
+    const introLines = pdf.splitTextToSize(introText, boxW - 10);
+    pdf.text(introLines, margemX + 5, y);
+    y += (introLines.length * 4) + 10;
 
-  blocos.forEach((bloco) => {
-    const x = bloco.lado === 'direita' ? colDirX : colEsqX
-    const tituloLinhas = pdf.splitTextToSize(bloco.titulo, colW - 10)
-    const textoLinhas = pdf.splitTextToSize(bloco.texto, colW - 10)
-    const alturaTitulo = tituloLinhas.length * 6
-    const alturaTexto = textoLinhas.length * 4.8
-    const blocoH = alturaTitulo + alturaTexto + 4
-
-    pdf.setFillColor(250, 250, 252)
-    pdf.roundedRect(x - 4, yAtual - 5, colW + 4, blocoH + 3, 1.5, 1.5, 'F')
+    // ── Duas Colunas: Missão e Metodologia
+    const colW = (W - (margemX * 2) - 15) / 2;
     
-    pdf.setFillColor(bloco.cor[0], bloco.cor[1], bloco.cor[2])
-    pdf.rect(x - 4, yAtual - 5, 1.8, blocoH + 3, 'F')
+    // Coluna Esquerda: Missão
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(11);
+    pdf.text('NOSSA MISSÃO', margemX, y);
+    pdf.setFont('times', 'normal');
+    pdf.setFontSize(9);
+    const missaoTxt = 'Resgatar a memória local e oferecer um recurso educativo para escolas e pesquisadores, promovendo o sentimento de pertencimento através do conhecimento histórico.';
+    pdf.text(pdf.splitTextToSize(missaoTxt, colW), margemX, y + 5);
 
-    pdf.setFont('helvetica', 'bold')
-    pdf.setFontSize(13)
-    pdf.setTextColor(30, 30, 30)
-    pdf.text(tituloLinhas, x + 2, yAtual)
-
-    pdf.setFont('helvetica', 'normal')
-    pdf.setFontSize(9)
-    pdf.setTextColor(70, 70, 70)
-    pdf.text(textoLinhas, x + 2, yAtual + alturaTitulo - 1)
-
-    yAtual += blocoH + 8
-  })
-
-  const yTimelineBase = 238
-  const margemTimeline = 20
-  const widthTimeline = W - (margemTimeline * 2)
-  
-  pdf.setFillColor(240, 235, 230)
-  pdf.roundedRect(W/2 - 40, yTimelineBase - 32, 80, 10, 5, 5, 'F')
-  pdf.setFont('helvetica', 'bold')
-  pdf.setFontSize(13)
-  pdf.setTextColor(130, 90, 70)
-  pdf.text('LINHA DO TEMPO DO PROJETO', W / 2, yTimelineBase - 25, { align: 'center' })
-
-  pdf.setDrawColor(130, 90, 70)
-  pdf.setLineWidth(0.8)
-  pdf.line(margemTimeline, yTimelineBase, W - margemTimeline, yTimelineBase)
-
-  const marcos = [
-    { ano: '2018-2020', titulo: 'Fase Inicial', desc: 'Análise de nomeação de ruas, avenidas e praças de Ouro Branco.', alunos: 'Naiara e Dérlisson' },
-    { ano: '2019-2020', titulo: 'Expansão da Equipe', desc: 'Continuação da análise da toponímia urbana.', alunos: 'Marcos Paulo e Giovana' },
-    { ano: '2021-2022', titulo: 'Foco nas Escolas', desc: 'Investigação focada na microtoponímia.', alunos: 'Maria Raquel, Bruna e Shirley' },
-    { ano: '2023-Pres.', titulo: 'Portal Educativo', desc: 'Desenvolvimento do portal educativo.', alunos: 'Ludmila e Marcos Túlio' }
-  ]
-
-  const step = widthTimeline / (marcos.length - 1)
-  
-  marcos.forEach((marco, i) => {
-    const x = margemTimeline + (i * step)
-    const intercalado = i % 2 === 0 ? 1 : -1
+    // Coluna Direita: Metodologia
+    pdf.setFont('times', 'bold');
+    pdf.text('METODOLOGIA', margemX + colW + 15, y);
+    pdf.setFont('times', 'normal');
+    const metodoTxt = 'Baseada na taxonomia de Dick (1990), a pesquisa classifica os nomes em categorias (antropotopônimos, fitotopônimos, etc.) para entender as motivações das nomeações.';
+    pdf.text(pdf.splitTextToSize(metodoTxt, colW), margemX + colW + 15, y + 5);
     
-    pdf.setFillColor(255, 255, 255)
-    pdf.setDrawColor(130, 90, 70)
-    pdf.setLineWidth(1)
-    pdf.circle(x, yTimelineBase, 2.8, 'FD')
-    pdf.setFillColor(130, 90, 70)
-    pdf.circle(x, yTimelineBase, 1.2, 'F')
+    y += 28;
 
-    pdf.setFont('helvetica', 'bold')
-    pdf.setFontSize(8.5)
-    pdf.setTextColor(130, 90, 70)
-    pdf.text(marco.ano, x, yTimelineBase - (intercalado * 10), { align: 'center' })
+    // ── Guia de Classificação (O Coração do Dossiê)
+    pdf.setDrawColor(140, 126, 109);
+    pdf.setLineWidth(0.5);
+    pdf.line(margemX, y, W - margemX, y);
+    y += 8;
 
-    const yTextoBase = yTimelineBase + (intercalado * 8)
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(11);
+    pdf.text('GUIA DE LEITURA: CLASSIFICAÇÃO TAXONÔMICA', W/2, y, { align: 'center' });
+    y += 8;
+
+    // Grid de Categorias (3 colunas)
+    const catColW = (W - (margemX * 2)) / 3;
+    ORDEM_CATEGORIAS.forEach((cat, i) => {
+        const col = i % 3;
+        const row = Math.floor(i / 3);
+        const curX = margemX + (col * catColW);
+        const curY = y + (row * 10);
+
+        const [r, g, b] = hexRgb(CORES_CATEGORIA[cat] || CORES_CATEGORIA.outro);
+        pdf.setFillColor(r, g, b);
+        pdf.circle(curX + 2, curY - 1, 1.2, 'F');
+
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(7.5);
+        pdf.setTextColor(44, 38, 33);
+        pdf.text(rotuloCategoriaToponimica(cat).toUpperCase(), curX + 6, curY);
+        
+        pdf.setFont('times', 'italic');
+        pdf.setFontSize(6.5);
+        pdf.setTextColor(100, 90, 80);
+        const descS = {
+            antropotoponimo: 'Nomes de pessoas',
+            fitotoponimo: 'Nomes de plantas',
+            hagiotoponimo: 'Nomes de santos',
+            axiotoponimo: 'Títulos e dignidades',
+            corotoponimo: 'Nomes de regiões',
+            zootoponimo: 'Nomes de animais',
+            litotoponimo: 'Nomes de minerais',
+            sociotoponimo: 'Nomes de grupos sociais',
+            outro: 'Outras motivações'
+        }[cat] || '';
+        pdf.text(descS, curX + 6, curY + 3.5);
+    });
+
+    // ── Título da Evolução (Box Arredondado Sépia)
+    y += 35;
+    const titleW = 80;
+    const titleH = 10;
+    pdf.setFillColor(140, 126, 109);
+    pdf.roundedRect((W - titleW) / 2, y, titleW, titleH, 4, 4, 'F');
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(8.5);
+    pdf.setTextColor(255, 255, 255);
+    pdf.text('Evolução do Projeto: Toponímia', W/2, y + 4, { align: 'center' });
+    pdf.text('Urbana de Ouro Branco (2016-Atual)', W/2, y + 8, { align: 'center' });
     
-    pdf.setFont('helvetica', 'bold')
-    pdf.setFontSize(9)
-    pdf.setTextColor(30, 30, 30)
-    pdf.text(marco.titulo, x, yTextoBase + (intercalado * 2), { align: 'center' })
+    y += titleH + 4;
 
-    pdf.setFont('helvetica', 'normal')
-    pdf.setFontSize(7.5)
-    pdf.setTextColor(80, 80, 80)
-    const descLinhas = pdf.splitTextToSize(marco.desc, (widthTimeline / marcos.length) - 6)
-    pdf.text(descLinhas, x, yTextoBase + (intercalado * 7), { align: 'center' })
+    // ── Estrutura de Linhas (Gaiola)
+    pdf.setDrawColor(140, 126, 109);
+    pdf.setLineWidth(0.3);
+    
+    const timelineMargin = 15;
+    const timelineW = W - (timelineMargin * 2);
+    const startX = timelineMargin;
+    const endX = W - timelineMargin;
+    const forkY = y + 4;
+    const itemY = forkY + 12;
 
-    const yAlunos = yTextoBase + (intercalado * (7 + (descLinhas.length * 4)))
-    pdf.setFillColor(130, 90, 70)
-    pdf.circle(x - 2, yAlunos + (intercalado * 2), 0.6, 'F')
-    pdf.circle(x + 2, yAlunos + (intercalado * 2), 0.6, 'F')
+    // Linha horizontal principal
+    pdf.line(startX, forkY, endX, forkY);
+    
+    const marcos = [
+        { ano: '2016-2020', desc: 'Análise da influência da Metalurgia na denominação de nomes de ruas.\nAlunos: Naiara e Dérlisson.' },
+        { ano: '2019-2020', desc: 'Atenção para dinâmica de ruas, avenidas e praças.\nAlunos: Marcos Paulo e Giovana Lana.' },
+        { ano: '2021', desc: 'Investigação focada na microtoponímia urbana.\nAluna: Maria Raquel Honorata.' },
+        { ano: '2021-2022', desc: 'Análise dos nomes das escolas públicas.\nAlunas: Bruna dos Santos e Shirley Pereira.' },
+        { ano: '2022-2023', desc: 'Continuação da análise microtoponímica.\nAlunas: Shirley Pereira e Ana Paula Rafael.' },
+        { ano: '2023-2024', desc: 'Consolidação da pesquisa em microtoponímia.\nAluna: Ludmila Silva.' },
+        { ano: '2024-Atual', desc: 'Finalização e início da fase de extensão.\nAlunos: Ludmila Silva e Marcos Túlio.' }
+    ];
 
-    pdf.setFont('helvetica', 'italic')
-    pdf.setFontSize(7)
-    pdf.setTextColor(100, 100, 100)
-    pdf.text(marco.alunos, x, yAlunos + (intercalado * 5), { align: 'center' })
-  })
+    const step = timelineW / (marcos.length - 1);
+    
+    marcos.forEach((m, i) => {
+        const x = startX + i * step;
+        
+        pdf.line(x, forkY, x, itemY - 5);
+        
+        pdf.setFillColor(255, 255, 255);
+        pdf.circle(x, itemY, 3.5, 'FD');
+        pdf.setFillColor(140, 126, 109);
+        pdf.circle(x, itemY, 2.2, 'F');
+        
+        pdf.setLineWidth(0.15);
+        pdf.circle(x, itemY, 4.8, 'S');
 
-  pdf.setDrawColor(220, 220, 220)
-  pdf.setLineWidth(0.3)
-  pdf.line(margemX, H - 16, W - margemX, H - 16)
-  pdf.setFont('helvetica', 'normal')
-  pdf.setFontSize(8)
-  pdf.setTextColor(110, 110, 110)
-  pdf.text('Dicionário Toponímico de Ouro Branco-MG', margemX, H - 10.5)
-  pdf.text('Pág. 2', W - margemX, H - 10.5, { align: 'right' })
+        pdf.setFont('times', 'bold');
+        pdf.setFontSize(7);
+        pdf.setTextColor(140, 126, 109);
+        pdf.text(m.ano + ':', x, itemY + 7, { align: 'center' });
+        
+        pdf.setFont('times', 'normal');
+        pdf.setFontSize(5.5);
+        pdf.setTextColor(60, 50, 45);
+        const descLines = pdf.splitTextToSize(m.desc, step - 1);
+        pdf.text(descLines, x, itemY + 10, { align: 'center', lineHeightFactor: 1.15 });
+    });
+
+    // ── Rodapé
+    pdf.setFont('times', 'italic');
+    pdf.setFontSize(7);
+    pdf.setTextColor(150, 140, 130);
+    pdf.text('Dossiê gerado automaticamente pelo Portal Toponímia Urbana - IFMG Campus Ouro Branco', W/2, H - 12, { align: 'center' });
 }
 
-function pdfCardBairro(pdf, W, startY, cardH, bairroNome, ruasDoBairro, imgB64, idx, total) {
-  const PAD = 5
-  const IMG_H = imgB64 ? 22 : 0
-  const HDR_H = 14
-  const NUM_COLS = 4
+function pdfFichaBairro(pdf, W, H, bairroNome, ruasDoBairro, imgB64) {
+    pdf.addPage();
+    pdf.setFillColor(253, 251, 247);
+    pdf.rect(0, 0, W, H, 'F');
+    
+    aplicarGuiaRecorte(pdf, W, H);
 
-  const contagem = {}
-  Object.keys(CORES).forEach(k => { contagem[k] = 0 })
-  ruasDoBairro.forEach(r => {
-    const cat = normalizarCategoria(r.categoria_toponimica)
-    contagem[cat] = (contagem[cat] || 0) + 1
-  })
-  let catPredom = 'outro', maxCt = 0
-  Object.entries(contagem).forEach(([k,v]) => { if (v > maxCt) { maxCt = v; catPredom = k } })
-  const [rC,gC,bC] = hexRgb(CORES[catPredom] || CORES.outro)
-  const catsOrdenadas = ORDEM_CATEGORIAS.filter(k => contagem[k] > 0).sort((a,b) => contagem[b]-contagem[a])
+    if (imgB64) {
+        try { pdf.addImage(imgB64, 'JPEG', 10, 12, W-20, 45, undefined, 'FAST'); } catch {}
+    }
 
-  let innerY = startY
-  if (imgB64) {
-    try { pdf.addImage(imgB64, 'JPEG', 0, startY, W, IMG_H, undefined, 'FAST') }
-    catch { pdf.setFillColor(170,170,185); pdf.rect(0, startY, W, IMG_H, 'F') }
-    pdf.setFillColor(0,0,0)
-    pdf.setGState(pdf.GState({ opacity: 0.4 }))
-    pdf.rect(0, startY, W, IMG_H, 'F')
-    pdf.setGState(pdf.GState({ opacity: 1 }))
-    innerY = startY + IMG_H
-  }
+    pdf.setFont('times', 'bold');
+    pdf.setFontSize(18);
+    pdf.setTextColor(44, 38, 33);
+    pdf.text(`FICHA: ${bairroNome.toUpperCase()}`, 12, 68);
+    
+    // ── Estatísticas por Bairro (Gráfico de Barras)
+    const contagem = {};
+    ORDEM_CATEGORIAS.forEach(k => { contagem[k] = 0 });
+    ruasDoBairro.forEach(r => {
+        const cat = normalizarCategoria(r.categoria_toponimica);
+        contagem[cat] = (contagem[cat] || 0) + 1;
+    });
+    
+    const catsPresentes = ORDEM_CATEGORIAS.filter(k => contagem[k] > 0).sort((a,b) => contagem[b]-contagem[a]);
+    
+    let statsY = 75;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(8);
+    pdf.text('COMPOSIÇÃO TOPONÍMICA DO BAIRRO', 12, statsY);
+    
+    const barMaxW = 40;
+    const barH = 4;
+    const gapY = 5;
+    
+    catsPresentes.slice(0, 5).forEach((cat, i) => {
+        const rowY = statsY + 4 + (i * gapY);
+        const v = contagem[cat];
+        const pct = v / ruasDoBairro.length;
+        const barW = Math.max(1, pct * barMaxW);
+        const [r, g, b] = hexRgb(CORES_CATEGORIA[cat] || CORES_CATEGORIA.outro);
+        
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(6.5);
+        pdf.setTextColor(60, 50, 45);
+        const label = rotuloCategoriaToponimica(cat);
+        pdf.text(label, 12, rowY + 3);
+        
+        pdf.setFillColor(235, 230, 220); // Fundo da barra (bege mais escuro)
+        pdf.rect(45, rowY, barMaxW, barH, 'F');
+        pdf.setFillColor(r, g, b);
+        pdf.rect(45, rowY, barW, barH, 'F');
+        
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`${v}`, 45 + barMaxW + 2, rowY + 3);
+    });
 
-  pdf.setFillColor(rC,gC,bC)
-  pdf.rect(0, innerY, W, HDR_H, 'F')
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(6); pdf.setTextColor(255,255,255)
-  pdf.text(`${String(idx+1).padStart(2,'0')}/${String(total).padStart(2,'0')}`, W-PAD, innerY+5, {align:'right'})
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(13); pdf.setTextColor(255,255,255)
-  pdf.text(bairroNome, PAD, innerY+8)
-  pdf.setFont('helvetica','normal'); pdf.setFontSize(7); pdf.setTextColor(255,255,255)
-  pdf.text(`${ruasDoBairro.length} logradouros  \u00b7  ${rotuloCategoriaToponimica(catPredom)}`, PAD, innerY+HDR_H-2)
+    // Listagem de Ruas
+    let y = 110;
+    const NUM_COLS = 3;
+    const colW = (W - 24) / NUM_COLS;
+    
+    pdf.setFont('times', 'normal');
+    pdf.setFontSize(7.5);
+    pdf.setTextColor(44, 38, 33);
+    
+    ruasDoBairro.forEach((r, i) => {
+        const col = i % NUM_COLS;
+        const row = Math.floor(i / NUM_COLS);
+        const rowY = y + (row * 4.5);
+        
+        if (rowY < H - 25) {
+            const catR = normalizarCategoria(r.categoria_toponimica);
+            const [rc, gc, bc] = hexRgb(CORES_CATEGORIA[catR] || CORES_CATEGORIA.outro);
+            pdf.setDrawColor(rc, gc, bc);
+            pdf.setLineWidth(0.3);
+            pdf.circle(12 + (col * colW), rowY - 1, 0.5, 'S'); // Marcador colorido pela categoria
+            pdf.text(r.nome_oficial || '', 15 + (col * colW), rowY);
+        }
+    });
 
-  let y = innerY + HDR_H + 3
-
-  const BAR_ROW_H = 5.5
-  const BAR_TITLE = 5.5
-  const halfCats = Math.ceil(catsOrdenadas.length / 2)
-
-  if (catsOrdenadas.length > 0) {
-    pdf.setFont('helvetica','bold'); pdf.setFontSize(7); pdf.setTextColor(55,55,75)
-    pdf.text('DISTRIBUIÇÃO POR CATEGORIA TOPONÍMICA', PAD, y + 4); y += BAR_TITLE
-
-    const barColW = (W - PAD*2) / 2 - 3
-    const barLabelW = 38
-    const barMax = barColW - barLabelW - 16
-
-    catsOrdenadas.forEach((k, i) => {
-      const col = i < halfCats ? 0 : 1
-      const row = i < halfCats ? i : i - halfCats
-      const xOff = PAD + col * (barColW + 6)
-      const rowY = y + row * BAR_ROW_H
-
-      const v = contagem[k]
-      const pct = ruasDoBairro.length > 0 ? v / ruasDoBairro.length : 0
-      const barW = Math.max(1, pct * barMax)
-      const [rk,gk,bk] = hexRgb(CORES[k] || CORES.outro)
-
-      pdf.setFont('helvetica','normal'); pdf.setFontSize(6.5); pdf.setTextColor(55,55,72)
-      const label = rotuloCategoriaToponimica(k)
-      pdf.text(label.length > 14 ? label.slice(0,13)+'.' : label, xOff, rowY + 3.5)
-
-      pdf.setFillColor(215,215,228); pdf.roundedRect(xOff+barLabelW, rowY+0.5, barMax, 3.5, 1, 1, 'F')
-      pdf.setFillColor(rk,gk,bk);   pdf.roundedRect(xOff+barLabelW, rowY+0.5, barW,  3.5, 1, 1, 'F')
-
-      pdf.setFont('helvetica','bold'); pdf.setFontSize(5.5); pdf.setTextColor(35,35,60)
-      pdf.text(`${v} (${(pct*100).toFixed(0)}%)`, xOff+barLabelW+barMax+2, rowY+3.5)
-    })
-
-    y += halfCats * BAR_ROW_H + 2
-  }
-
-  pdf.setDrawColor(195,195,212); pdf.setLineWidth(0.2)
-  pdf.line(PAD, y, W-PAD, y); y += 2.5
-  pdf.setFont('helvetica','bold'); pdf.setFontSize(6.5); pdf.setTextColor(55,55,75)
-  pdf.text('LOGRADOUROS \u2014 LISTAGEM COMPLETA ALFAB\u00c9TICA', PAD, y+2.5)
-  y += 5.5
-
-  const espacoRuas = startY + cardH - y - 1
-  const totalN = ruasDoBairro.length
-  const rowsNeeded = Math.ceil(totalN / NUM_COLS)
-  const rowH = Math.max(2.8, Math.min(5.0, espacoRuas / Math.max(rowsNeeded, 1)))
-  const fontSize = Math.max(4.5, Math.min(6.5, rowH * 1.3))
-  const dotR = Math.max(0.6, rowH * 0.22)
-  const maxPorCol = Math.ceil(totalN / NUM_COLS)
-  const ruaColW = (W - PAD*2) / NUM_COLS
-
-  const todasRuas = [...ruasDoBairro].sort((a,b) => (a.nome_oficial||'').localeCompare(b.nome_oficial||''))
-  const colTextW = ruaColW - dotR*2 - 3.5
-
-  todasRuas.forEach((r, i) => {
-    const col = Math.floor(i / maxPorCol)
-    const row = i % maxPorCol
-    if (col >= NUM_COLS) return
-    const xR = PAD + col * ruaColW
-    const rowY = y + row * rowH
-    const catR = normalizarCategoria(r.categoria_toponimica)
-    const [ri,gi,bi] = hexRgb(CORES[catR] || CORES.outro)
-    pdf.setFillColor(ri,gi,bi); pdf.circle(xR+dotR+0.3, rowY+rowH*0.45, dotR, 'F')
-    pdf.setFont('helvetica','normal'); pdf.setFontSize(fontSize); pdf.setTextColor(20,20,45)
-    const nome = r.nome_oficial || '\u2014'
-    const linhas = pdf.splitTextToSize(nome, colTextW)
-    pdf.text(linhas, xR+dotR*2+1.5, rowY+rowH*0.65)
-  })
+    pdf.setFont('times', 'italic');
+    pdf.setFontSize(8);
+    pdf.text('Atividade: Identifique uma rua e pesquise seu significado no portal ONIM.', W/2, H - 12, {align:'center'});
 }
+
+/**
+ * Adiciona uma página de Cards de Memória destacáveis
+ */
 
 // ============================================
 // EXPORTAÇÕES PÚBLICAS
 // ============================================
 
 export const PdfGeneratorService = {
-  /**
-   * Gera o relatório completo do dicionário toponímico
-   */
-  async exportFullReport(btnElement) {
-    const originalContent = btnElement.innerHTML
-    btnElement.disabled = true
-    btnElement.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Gerando PDF...'
+    async exportFullReport(btnElement) {
+        const originalContent = btnElement.innerHTML;
+        btnElement.disabled = true;
+        btnElement.innerHTML = 'Preparando Dossiê...';
 
-    try {
-      const [{ data: ruas, error: errR }, { data: bairrosData, error: errB }] = await Promise.all([
-        supabase.from('ruas').select('nome_oficial, categoria_toponimica, bairros(nome)').order('nome_oficial'),
-        supabase.from('bairros').select('nome, imagem_capa').order('nome')
-      ])
-      if (errR) throw errR
-      if (errB) throw errB
+        try {
+            const [ruasRes, bairrosRes] = await Promise.all([
+                supabase.from('ruas').select('nome_oficial, categoria_toponimica, bairros(nome), significado').order('nome_oficial'),
+                supabase.from('bairros').select('nome, imagem_capa').order('nome')
+            ]);
 
-      const capaMap = {}
-      bairrosData.forEach(b => { if(b.nome) capaMap[b.nome] = b.imagem_capa || null })
+            if (ruasRes.error) throw new Error(`Erro ao buscar ruas: ${ruasRes.error.message}`);
+            if (bairrosRes.error) throw new Error(`Erro ao buscar bairros: ${bairrosRes.error.message}`);
 
-      const bairrosMap = {}
-      ruas.forEach(r => {
-        const nome = r.bairros?.nome || 'Sem Bairro'
-        if (!bairrosMap[nome]) bairrosMap[nome] = []
-        bairrosMap[nome].push(r)
-      })
-      const bairrosList = Object.entries(bairrosMap).sort((a,b) => a[0].localeCompare(b[0]))
+            const ruas = ruasRes.data || [];
+            const bairrosData = bairrosRes.data || [];
 
-      btnElement.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Carregando imagens...'
-      const [imgHeroB64, imgLogoHeaderB64, ...imagensB64] = await Promise.all([
-        urlParaBase64('./assets/images/ouro_branco_historico.png'),
-        urlParaBase64('./assets/images/header/toponimia-black.png'),
-        ...bairrosList.map(([nome]) => urlParaBase64(capaMap[nome]))
-      ])
+            if (ruas.length === 0) throw new Error('Nenhum dado de ruas encontrado para exportação.');
 
-      btnElement.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Montando PDF...'
-      const { jsPDF } = window.jspdf
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const W = 210, H = 297
-      const FOOTER_H = 9
-      const HALF = (H - FOOTER_H) / 2
+            const bairrosMap = {};
+            ruas.forEach(r => {
+                const n = r.bairros?.nome || 'Sem Bairro';
+                if (!bairrosMap[n]) bairrosMap[n] = [];
+                bairrosMap[n].push(r);
+            });
 
-      pdfCapa(pdf, W, H, ruas.length, bairrosList.length, imgHeroB64)
+            if (!window.jspdf) throw new Error('Biblioteca jsPDF não carregada. Verifique sua conexão.');
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const W = 210, H = 297;
 
-      pdf.addPage()
-      pdfPaginaContexto(pdf, W, H, imgLogoHeaderB64)
+            const imgHero = await urlParaBase64('./assets/images/ouro_branco_historico.png');
+            const imgLogo = await urlParaBase64('./assets/images/header/toponimia-black.png');
+            
+            pdfCapa(pdf, W, H, ruas.length, Object.keys(bairrosMap).length, imgHero);
+            
+            // Página de Contexto (Pág 2)
+            pdfPaginaContexto(pdf, W, H, imgLogo);
 
-      const totalPares = Math.ceil(bairrosList.length / 2)
-      for (let i = 0; i < bairrosList.length; i += 2) {
-        pdf.addPage()
-        const paginaIdx = Math.floor(i / 2)
+            for (const [nome, listaRuas] of Object.entries(bairrosMap)) {
+                const bairroInfo = bairrosData.find(b => b.nome === nome);
+                const imgB64 = await urlParaBase64(bairroInfo?.imagem_capa);
+                pdfFichaBairro(pdf, W, H, nome, listaRuas, imgB64);
+            }
 
-        pdf.setFillColor(245, 245, 250); pdf.rect(0, 0, W, H, 'F')
-        pdf.setFillColor(25, 25, 55); pdf.rect(0, H - FOOTER_H, W, FOOTER_H, 'F')
-        pdf.setFont('helvetica','normal'); pdf.setFontSize(6.5); pdf.setTextColor(200,200,220)
-        pdf.text('Dicionário Toponímico de Ouro Branco-MG · IFMG', 8, H-3.5)
-        pdf.text(`Pág. ${paginaIdx + 3} / ${totalPares + 2}`, W-8, H-3.5, {align:'right'})
+            // Em vez de pdf.save, geramos o buffer e tentamos anexar a cruzadinha
+            const dossieBuffer = pdf.output('arraybuffer');
+            const finalBuffer = await anexarCruzadinha(dossieBuffer);
 
-        const [nomeA, ruasA] = bairrosList[i]
-        pdfCardBairro(pdf, W, 0, HALF, nomeA, ruasA, imagensB64[i], i, bairrosList.length)
+            // Download do arquivo final (Dossiê + Cruzadinha)
+            const blob = new Blob([finalBuffer], { type: 'application/pdf' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'dossie-patrimonial-ouro-branco.pdf';
+            link.click();
+            URL.revokeObjectURL(url);
 
-        pdf.setDrawColor(180, 180, 200); pdf.setLineWidth(0.5)
-        pdf.line(0, HALF, W, HALF)
-
-        if (i + 1 < bairrosList.length) {
-          const [nomeB, ruasB] = bairrosList[i + 1]
-          pdfCardBairro(pdf, W, HALF, HALF, nomeB, ruasB, imagensB64[i + 1], i + 1, bairrosList.length)
+        } catch (err) {
+            console.error('Erro detalhado no PDF:', err);
+            alert(`Erro ao gerar documento: ${err.message || 'Erro desconhecido'}`);
+        } finally {
+            btnElement.disabled = false;
+            btnElement.innerHTML = originalContent;
         }
-      }
+    },
 
-      pdf.save('dicionario-toponomico-ouro-branco.pdf')
-    } catch (err) {
-      console.error('Erro ao exportar PDF:', err)
-      alert('Erro ao gerar PDF. Tente novamente.')
-    } finally {
-      btnElement.disabled = false
-      btnElement.innerHTML = originalContent
+    generateCertificate(jogadorNome, pontuacao) {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('l', 'mm', 'a4');
+
+        pdf.setFillColor(44, 38, 33);
+        pdf.rect(0, 0, 297, 210, 'F');
+
+        pdf.setDrawColor(140, 126, 109);
+        pdf.setLineWidth(2);
+        pdf.rect(10, 10, 277, 190, 'S');
+
+        pdf.setTextColor(253, 251, 247);
+        pdf.setFontSize(28);
+        pdf.text('Certificado de Participação', 148.5, 40, { align: 'center' });
+
+        pdf.setFontSize(14);
+        pdf.text('Toponímia Urbana de Ouro Branco — IFMG', 148.5, 55, { align: 'center' });
+
+        pdf.setFontSize(16);
+        pdf.text(`Certificamos que`, 148.5, 80, { align: 'center' });
+
+        pdf.setFontSize(24);
+        pdf.setTextColor(140, 126, 109);
+        pdf.text(jogadorNome || 'Participante', 148.5, 95, { align: 'center' });
+
+        pdf.setTextColor(253, 251, 247);
+        pdf.setFontSize(14);
+        pdf.text(`completou o Quiz Toponímia com ${pontuacao} pontos`, 148.5, 115, { align: 'center' })
+
+        pdf.setFontSize(12);
+        pdf.setTextColor(180, 170, 160);
+        pdf.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 148.5, 140, { align: 'center' });
+
+        pdf.save(`certificado-quiz-${jogadorNome || 'participante'}.pdf`);
     }
-  },
-
-  /**
-   * Gera o certificado de participação para o Quiz
-   */
-  generateCertificate(jogadorNome, pontuacao) {
-    const { jsPDF } = window.jspdf
-    const pdf = new jsPDF('l', 'mm', 'a4')
-
-    pdf.setFillColor(15, 15, 35)
-    pdf.rect(0, 0, 297, 210, 'F')
-
-    pdf.setDrawColor(108, 99, 255)
-    pdf.setLineWidth(2)
-    pdf.rect(10, 10, 277, 190, 'S')
-
-    pdf.setTextColor(108, 99, 255)
-    pdf.setFontSize(28)
-    pdf.text('Certificado de Participação', 148.5, 40, { align: 'center' })
-
-    pdf.setTextColor(224, 224, 224)
-    pdf.setFontSize(14)
-    pdf.text('Toponímia Urbana de Ouro Branco — IFMG', 148.5, 55, { align: 'center' })
-
-    pdf.setFontSize(16)
-    pdf.text(`Certificamos que`, 148.5, 80, { align: 'center' })
-
-    pdf.setFontSize(24)
-    pdf.setTextColor(108, 99, 255)
-    pdf.text(jogadorNome || 'Participante', 148.5, 95, { align: 'center' })
-
-    pdf.setTextColor(224, 224, 224)
-    pdf.setFontSize(14)
-    pdf.text(`completou o Quiz Toponímia com ${pontuacao} pontos`, 148.5, 115, { align: 'center' })
-
-    pdf.setFontSize(12)
-    pdf.setTextColor(136, 136, 170)
-    pdf.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 148.5, 140, { align: 'center' })
-
-    pdf.save(`certificado-quiz-${jogadorNome || 'participante'}.pdf`)
-  }
-}
+};
