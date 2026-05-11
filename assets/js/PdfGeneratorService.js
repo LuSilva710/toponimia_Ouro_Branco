@@ -100,15 +100,31 @@ async function anexarCruzadinha(jspdfBuffer) {
         
         // Busca o arquivo da cruzadinha (tentando caminhos comuns e tratando espaços)
         const filePath = 'assets/docs/Cruzadinha (A4).pdf';
-        let response = await fetch('./' + filePath).catch(() => null);
+        const encodedPath = encodeURI(filePath);
         
-        if (!response || !response.ok) {
-            // Tenta subir um nível caso esteja em uma subpasta (ex: /games/)
-            response = await fetch('../' + filePath).catch(() => null);
+        let response = null;
+        const tries = [
+            './' + encodedPath,
+            '../' + encodedPath,
+            '../../' + encodedPath,
+            window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/' + encodedPath,
+            '/' + encodedPath // Tenta da raiz do domínio
+        ];
+
+        for (const url of tries) {
+            try {
+                const res = await fetch(url);
+                if (res.ok) {
+                    response = res;
+                    break;
+                }
+            } catch (e) {
+                continue;
+            }
         }
 
         if (!response || !response.ok) {
-            console.error('CRÍTICO: Não foi possível encontrar o arquivo em assets/docs/Cruzadinha (A4).pdf');
+            console.error('ERRO: Não foi possível carregar a cruzadinha em nenhuma das rotas:', tries);
             return jspdfBuffer;
         }
         
