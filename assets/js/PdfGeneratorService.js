@@ -102,14 +102,23 @@ async function anexarCruzadinha(jspdfBuffer) {
         const filePath = 'assets/docs/Cruzadinha (A4).pdf';
         const encodedPath = encodeURI(filePath);
         
+        // Determina a base da URL para produção (Vite)
+        const baseUrl = (typeof import.meta !== 'undefined' && import.meta.env?.BASE_URL) ? import.meta.env.BASE_URL : '/';
+        
         let response = null;
         const tries = [
+            baseUrl + encodedPath,
             './' + encodedPath,
-            '../' + encodedPath,
-            '../../' + encodedPath,
-            window.location.origin + window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/')) + '/' + encodedPath,
-            '/' + encodedPath // Tenta da raiz do domínio
-        ];
+            '/' + encodedPath,
+            window.location.origin + baseUrl + encodedPath
+        ].map(url => {
+            // Se a URL começar com http ou https, tratamos com cuidado para não quebrar o protocolo
+            if (url.startsWith('http')) {
+                const parts = url.split('://');
+                return parts[0] + '://' + parts[1].replace(/\/+/g, '/');
+            }
+            return url.replace(/\/+/g, '/');
+        });
 
         for (const url of tries) {
             try {
@@ -225,13 +234,21 @@ async function anexarCruzadinha(jspdfBuffer) {
 // ============================================
 
 function aplicarGuiaRecorte(pdf, W, H) {
-    pdf.setGState(pdf.GState({ opacity: 0.6 }));
+    if (typeof pdf.GState === 'function') {
+        try {
+            pdf.setGState(pdf.GState({ opacity: 0.6 }));
+        } catch (e) { console.warn('GState falhou em aplicarGuiaRecorte:', e); }
+    }
     pdf.setDrawColor(180, 180, 180);
     pdf.setLineWidth(0.3);
     pdf.setLineDash([2, 2]); 
     pdf.rect(7, 7, W - 14, H - 14, 'S');
     pdf.setLineDash([]);
-    pdf.setGState(pdf.GState({ opacity: 1 }));
+    if (typeof pdf.GState === 'function') {
+        try {
+            pdf.setGState(pdf.GState({ opacity: 1 }));
+        } catch (e) {}
+    }
     
     pdf.setFontSize(8);
     pdf.text('✂  Destaque para o seu Dossiê de Campo', W/2, 5, { align: 'center' });
@@ -243,10 +260,16 @@ function pdfCapa(pdf, W, H, totalRuas, totalBairros, imgHeroB64) {
 
     if (imgHeroB64) {
         try { 
-            pdf.setGState(pdf.GState({ opacity: 0.2 }));
+            if (typeof pdf.GState === 'function') {
+                pdf.setGState(pdf.GState({ opacity: 0.2 }));
+            }
             pdf.addImage(imgHeroB64, 'PNG', 0, 0, W, H, undefined, 'FAST');
-            pdf.setGState(pdf.GState({ opacity: 1 }));
-        } catch {}
+            if (typeof pdf.GState === 'function') {
+                pdf.setGState(pdf.GState({ opacity: 1 }));
+            }
+        } catch (e) {
+            console.warn('Falha ao adicionar imagem hero no PDF:', e);
+        }
     }
 
     pdf.setFont('times', 'bold');
@@ -597,8 +620,12 @@ export const PdfGeneratorService = {
             URL.revokeObjectURL(url);
 
         } catch (err) {
-            console.error('Erro detalhado no PDF:', err);
-            alert(`Erro ao gerar documento: ${err.message || 'Erro desconhecido'}`);
+            console.error('ERRO CRÍTICO NA GERAÇÃO DO PDF:', err);
+            let userMsg = 'Erro ao gerar documento.';
+            if (err.message) {
+                userMsg += `\nDetalhe: ${err.message}`;
+            }
+            alert(userMsg);
         } finally {
             btnElement.disabled = false;
             btnElement.innerHTML = originalContent;

@@ -99,10 +99,14 @@ async function carregarDados() {
 
     const ruas = ruasRes.data || []
     const bairros = bairrosRes.data || []
+    
+    // Filtra apenas bairros que possuem pelo menos uma rua vinculada
+    const idsBairrosComRua = new Set(ruas.filter(r => r.bairro_id).map(r => r.bairro_id))
+    const totalBairrosComRua = idsBairrosComRua.size
 
     // Summary cards
     document.getElementById('total-ruas').textContent = ruas.length
-    document.getElementById('total-bairros').textContent = bairros.length
+    document.getElementById('total-bairros').textContent = totalBairrosComRua
 
     const comCategoria = ruas.filter(r => r.categoria_toponimica)
     const comGenero = ruas.filter(r => r.genero_homenageado)
