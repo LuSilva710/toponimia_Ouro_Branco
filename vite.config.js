@@ -19,6 +19,14 @@ export default defineConfig({
       }
     }
   },
+  resolve: {
+    alias: {
+      'langchain/agents': 'langchain/agents',
+    }
+  },
+  optimizeDeps: {
+    include: ['langchain/agents', '@langchain/openai', '@langchain/core'],
+  },
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
@@ -49,7 +57,6 @@ export default defineConfig({
       workbox: {
         runtimeCaching: [
           {
-            // Cache-first for static assets
             urlPattern: /\.(css|js|png|jpg|jpeg|svg|ico|woff2?)$/,
             handler: 'CacheFirst',
             options: {
@@ -58,7 +65,6 @@ export default defineConfig({
             }
           },
           {
-            // Network-first for Supabase API
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/,
             handler: 'NetworkFirst',
             options: {
@@ -68,7 +74,6 @@ export default defineConfig({
             }
           },
           {
-            // Cache-first for CDN resources (Bootstrap, fonts)
             urlPattern: /^https:\/\/(cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com|unpkg\.com)\/.*/,
             handler: 'CacheFirst',
             options: {

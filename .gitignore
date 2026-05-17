@@ -13,3 +13,15 @@ ai-provider-kit/node_modules/
 # Outputs gerados pelo ai-classify.mjs (regeneráveis, podem ser grandes)
 scripts/ai-classify-results.json
 scripts/ai-classify.sql
+
+# Scripts e Arquivos Temporários de Desenvolvimento
+scratch/
+
+# Logs e Arquivos de Sistema
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+
+# Variáveis de Ambiente Locais
+.env.*.local
