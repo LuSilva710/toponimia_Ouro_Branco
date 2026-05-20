@@ -56,7 +56,8 @@ function normalizePath(path) {
     p = p.replace(/^\//, '');
     p = p.replace(/^assets\//, '');
     p = p.replace(/^public\//, '');
-    return '/' + p;
+    const base = import.meta.env.BASE_URL || '/';
+    return base + p;
 }
 
 function hexRgb(hex) {
