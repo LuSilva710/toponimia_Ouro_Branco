@@ -355,55 +355,9 @@ function pdfPaginaContexto(pdf, W, H, logoHeaderB64) {
     const metodoTxt = 'Baseada na taxonomia de Dick (1990), a pesquisa classifica os nomes em categorias (antropotopônimos, fitotopônimos, etc.) para entender as motivações das nomeações.';
     pdf.text(pdf.splitTextToSize(metodoTxt, colW), margemX + colW + 15, y + 5);
     
-    y += 28;
-
-    // ── Guia de Classificação (O Coração do Dossiê)
-    pdf.setDrawColor(140, 126, 109);
-    pdf.setLineWidth(0.5);
-    pdf.line(margemX, y, W - margemX, y);
-    y += 8;
-
-    pdf.setFont('times', 'bold');
-    pdf.setFontSize(11);
-    pdf.text('GUIA DE LEITURA: CLASSIFICAÇÃO TAXIONÔMICA', W/2, y, { align: 'center' });
-    y += 8;
-
-    // Grid de Categorias (3 colunas)
-    const catColW = (W - (margemX * 2)) / 3;
-    ORDEM_CATEGORIAS.forEach((cat, i) => {
-        const col = i % 3;
-        const row = Math.floor(i / 3);
-        const curX = margemX + (col * catColW);
-        const curY = y + (row * 10);
-
-        const [r, g, b] = hexRgb(CORES_CATEGORIA[cat] || CORES_CATEGORIA.outro);
-        pdf.setFillColor(r, g, b);
-        pdf.circle(curX + 2, curY - 1, 1.2, 'F');
-
-        pdf.setFont('helvetica', 'bold');
-        pdf.setFontSize(7.5);
-        pdf.setTextColor(44, 38, 33);
-        pdf.text(rotuloCategoriaToponimica(cat).toUpperCase(), curX + 6, curY);
-        
-        pdf.setFont('times', 'italic');
-        pdf.setFontSize(6.5);
-        pdf.setTextColor(100, 90, 80);
-        const descS = {
-            antropotoponimo: 'Nomes de pessoas',
-            fitotoponimo: 'Nomes de plantas',
-            hagiotoponimo: 'Nomes de santos',
-            axiotoponimo: 'Títulos e dignidades',
-            corotoponimo: 'Nomes de regiões',
-            zootoponimo: 'Nomes de animais',
-            litotoponimo: 'Nomes de minerais',
-            sociotoponimo: 'Nomes de grupos sociais',
-            outro: 'Outras motivações'
-        }[cat] || '';
-        pdf.text(descS, curX + 6, curY + 3.5);
-    });
+    y += 35;
 
     // ── Título da Evolução (Box Arredondado Sépia)
-    y += 35;
     const titleW = 80;
     const titleH = 10;
     pdf.setFillColor(140, 126, 109);
@@ -416,19 +370,20 @@ function pdfPaginaContexto(pdf, W, H, logoHeaderB64) {
     
     y += titleH + 4;
 
-    // ── Estrutura de Linhas (Gaiola)
-    pdf.setDrawColor(140, 126, 109);
-    pdf.setLineWidth(0.3);
-    
-    const timelineMargin = 15;
+    // ── Linha do Tempo Dinâmica (Estilo Infográfico)
+    const timelineMargin = 30;
     const timelineW = W - (timelineMargin * 2);
     const startX = timelineMargin;
     const endX = W - timelineMargin;
-    const forkY = y + 4;
-    const itemY = forkY + 12;
+    const centerY = y + 22; // Eixo central da linha do tempo
 
-    // Linha horizontal principal
-    pdf.line(startX, forkY, endX, forkY);
+    // Desenhar o eixo principal grosso (barra de evolução)
+    pdf.setFillColor(215, 208, 198); // Bege suave
+    pdf.roundedRect(startX - 4, centerY - 2, timelineW + 8, 4, 2, 2, 'F');
+    // Linha interna de detalhe
+    pdf.setDrawColor(255, 255, 255);
+    pdf.setLineWidth(0.5);
+    pdf.line(startX - 2, centerY, endX + 2, centerY);
     
     const marcos = [
         { ano: '2016-2020', desc: 'Análise da influência da Metalurgia na denominação de nomes de ruas.\nAlunos: Naiara e Dérlisson.' },
@@ -442,29 +397,66 @@ function pdfPaginaContexto(pdf, W, H, logoHeaderB64) {
 
     const step = timelineW / (marcos.length - 1);
     
+    // Paleta de cores em degradê (tons terrosos/históricos) para cada marco
+    const boxColors = [
+        [90, 75, 65],
+        [115, 95, 80],
+        [140, 115, 95],
+        [165, 135, 110],
+        [190, 155, 125],
+        [165, 135, 110],
+        [140, 115, 95]
+    ];
+
     marcos.forEach((m, i) => {
         const x = startX + i * step;
+        const isTop = i % 2 === 0;
+        const c = boxColors[i];
         
-        pdf.line(x, forkY, x, itemY - 5);
+        const boxW = 18;
+        const boxH = 5.5;
         
+        // Posição da caixinha do ano
+        const boxY = isTop ? centerY - 10 - boxH : centerY + 10;
+        const lineDestY = isTop ? boxY + boxH : boxY;
+        
+        // Haste conectora
+        pdf.setDrawColor(c[0], c[1], c[2]);
+        pdf.setLineWidth(0.5);
+        pdf.line(x, centerY, x, lineDestY);
+        
+        // Marcador (Pino) no eixo principal
+        pdf.setFillColor(c[0], c[1], c[2]);
+        pdf.circle(x, centerY, 2.0, 'F');
         pdf.setFillColor(255, 255, 255);
-        pdf.circle(x, itemY, 3.5, 'FD');
-        pdf.setFillColor(140, 126, 109);
-        pdf.circle(x, itemY, 2.2, 'F');
+        pdf.circle(x, centerY, 0.8, 'F');
         
-        pdf.setLineWidth(0.15);
-        pdf.circle(x, itemY, 4.8, 'S');
-
+        // Caixinha do Ano
+        pdf.setFillColor(c[0], c[1], c[2]);
+        pdf.roundedRect(x - (boxW/2), boxY, boxW, boxH, 1.5, 1.5, 'F');
+        
+        // Texto do Ano
         pdf.setFont('times', 'bold');
         pdf.setFontSize(7);
-        pdf.setTextColor(140, 126, 109);
-        pdf.text(m.ano + ':', x, itemY + 7, { align: 'center' });
+        pdf.setTextColor(255, 255, 255);
+        pdf.text(m.ano, x, boxY + 4, { align: 'center' });
         
+        // Texto da Descrição
         pdf.setFont('times', 'normal');
-        pdf.setFontSize(5.5);
+        pdf.setFontSize(5.8);
         pdf.setTextColor(60, 50, 45);
-        const descLines = pdf.splitTextToSize(m.desc, step - 1);
-        pdf.text(descLines, x, itemY + 10, { align: 'center', lineHeightFactor: 1.15 });
+        // Permitimos que o texto ocupe um pouco mais que o "step" pois eles são intercalados (não colidem)
+        const descLines = pdf.splitTextToSize(m.desc, step * 1.5);
+        const textH = descLines.length * 2.2;
+        
+        let descY;
+        if (isTop) {
+            descY = boxY - 1.5 - textH + 2.2; // Cresce para cima
+        } else {
+            descY = boxY + boxH + 3.0; // Cresce para baixo
+        }
+        
+        pdf.text(descLines, x, descY, { align: 'center', lineHeightFactor: 1.15 });
     });
 
     // ── Rodapé
