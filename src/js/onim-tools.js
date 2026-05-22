@@ -146,7 +146,7 @@ ${categoriasMarkdown}
  */
 export const neighborhoodContextTool = new DynamicStructuredTool({
   name: "neighborhood_info",
-  description: "Busca a história de um bairro específico.",
+  description: "Busca a história, detalhes e estatísticas (como quantidade de ruas e divisão por gênero) de um bairro específico.",
   schema: z.object({
     bairro: z.string().describe("O nome do bairro (obrigatório)")
   }),
@@ -154,13 +154,33 @@ export const neighborhoodContextTool = new DynamicStructuredTool({
     if (typeof window !== 'undefined') onimLog('FERRAMENTA', `Bairro: "${bairro}"`);
     const { data: bairros } = await supabase
       .from('bairros')
-      .select('nome, titulo, descricao')
+      .select('id, nome, titulo, descricao')
       .ilike('nome', `%${bairro}%`)
       .limit(1);
 
     if (!bairros || bairros.length === 0) return "Bairro não encontrado.";
 
     const b = bairros[0];
-    return `Bairro: ${b.nome}\nTítulo: ${b.titulo || 'N/A'}\nHistória: ${b.descricao || 'Sem descrição disponível.'}`;
+    
+    // Busca a quantidade de ruas que pertencem a esse bairro, incluindo o gênero
+    const { data: ruasNoBairro, count } = await supabase
+      .from('ruas')
+      .select('genero_homenageado', { count: 'exact' })
+      .eq('bairro_id', b.id);
+
+    let masc = 0;
+    let fem = 0;
+    let neutro = 0;
+    
+    if (ruasNoBairro) {
+      ruasNoBairro.forEach(r => {
+        const gen = (r.genero_homenageado || '').toLowerCase();
+        if (gen === 'feminino') fem++;
+        else if (gen === 'masculino') masc++;
+        else neutro++;
+      });
+    }
+
+    return `Bairro: ${b.nome}\nTítulo: ${b.titulo || 'N/A'}\nHistória: ${b.descricao || 'Sem descrição disponível.'}\nQuantidade de ruas registradas no acervo: ${count || 0}\nEstatísticas de gênero dos logradouros: ${fem} nomes femininos, ${masc} masculinos, ${neutro} neutros/outros.`;
   }
 });
