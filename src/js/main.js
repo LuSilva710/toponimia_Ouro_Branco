@@ -213,6 +213,7 @@ function exibirRuasPorLetra(ruas) {
             // Criar CARD em lista
             const card = document.createElement('div');
             card.className = 'rua-card';
+            card.setAttribute('data-rua-nome', rua.nome);
 
             // Container de conteúdo (lado esquerdo)
             const content = document.createElement('div');
@@ -281,6 +282,7 @@ function marcarLetrasVazias(ruasPorLetra) {
 // --- LÓGICA DE CARREGAMENTO DA API ---
 
 let _bairrosIndexCache = null
+let _todasRuas = [];
 
 async function carregarBairros() {
     const { data, error } = await supabase
@@ -297,33 +299,40 @@ async function carregarBairros() {
     return bairrosIndex
 }
 
+async function carregarTodasRuas() {
+    const { data, error } = await supabase
+        .from('ruas')
+        .select(`*`)
+        .order('nome_oficial', { ascending: true })
+
+    if (error) throw error
+
+    _todasRuas = data.map(rua => {
+        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
+        delete adaptada.imagemhomenageado
+        return { nome: rua.nome_oficial, detalhes: adaptada }
+    })
+}
+
 async function carregarRuasDoBairro(slug) {
     if (!_bairrosIndexCache) await carregarBairros()
     const bairro = _bairrosIndexCache[slug]
     if (!bairro) return {}
 
-    const { data, error } = await supabase
-        .from('ruas')
-        .select(`*`) // Seleciona todas as colunas
-        .eq('bairro_id', bairro.id)
-        .order('nome_oficial', { ascending: true })
-
-    if (error) throw error
+    if (_todasRuas.length === 0) {
+        await carregarTodasRuas()
+    }
 
     const ruasIndex = {}
-    for (const rua of data) {
-        const adaptada = { ...rua, imagemHomenageado: rua.imagemhomenageado }
-        delete adaptada.imagemhomenageado
-        ruasIndex[rua.nome_oficial] = adaptada
-
-        // Adiciona ao array global para busca
-        _todasRuas.push({ nome: rua.nome_oficial, detalhes: adaptada });
-    }
+    _todasRuas.forEach(({ nome, detalhes }) => {
+        if (detalhes.bairro_id === bairro.id) {
+            ruasIndex[nome] = detalhes
+        }
+    })
     return ruasIndex
 }
 
 // --- FUNCIONALIDADE DE BUSCA ---
-let _todasRuas = [];
 
 // Função debounce para otimizar a busca
 function debounce(func, wait) {
@@ -339,7 +348,40 @@ function debounce(func, wait) {
 }
 
 // Função para filtrar e exibir ruas baseado na busca
+// Função para filtrar e exibir ruas baseado na busca
 const removerAcentos = (str) => str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+function obterNomeBairro(bairroId) {
+    if (!_bairrosIndexCache) return '';
+    const bairro = Object.values(_bairrosIndexCache).find(b => b.id === bairroId);
+    return bairro ? bairro.nome : '';
+}
+
+function obterSlugBairro(bairroId) {
+    if (!_bairrosIndexCache) return '';
+    const bairro = Object.values(_bairrosIndexCache).find(b => b.id === bairroId);
+    return bairro ? bairro.slug : '';
+}
+
+async function irParaRuaNoBairro(slugBairro, nomeRua) {
+    limparBusca(false);
+
+    if (window.renderBairroAtual) {
+        await window.renderBairroAtual(slugBairro);
+    }
+
+    setTimeout(() => {
+        const card = document.querySelector(`[data-rua-nome="${nomeRua}"]`);
+        if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+            const isExpanded = card.nextSibling && card.nextSibling.classList && card.nextSibling.classList.contains('detalhes-rua');
+            if (!isExpanded) {
+                card.click();
+            }
+        }
+    }, 150);
+}
 
 function filtrarRuas(query) {
     const queryLower = removerAcentos(query.trim().toLowerCase());
@@ -375,24 +417,12 @@ function filtrarRuas(query) {
         }
     });
 
-    // Exibir resultados
-    exibirRuasPorLetra(resultados);
-
-    // Mostra feedback de busca
-    mostrarFeedbackBusca(totalResultados, query);
+    // Mostra feedback de busca com os resultados correspondentes
+    mostrarFeedbackBusca(totalResultados, query, resultados);
 
     // Remove feedback de loading do input
     if (searchInput) {
         searchInput.classList.remove('search-loading');
-    }
-
-    // Scroll para primeira seção com resultados
-    const primeiraLetra = Object.keys(agruparRuasPorLetra(resultados))[0];
-    if (primeiraLetra) {
-        const secao = document.getElementById(primeiraLetra);
-        if (secao) {
-            secao.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     }
 }
 
@@ -401,7 +431,7 @@ function filtrarRuas(query) {
 // ========================================
 
 // Função para mostrar feedback de resultados de busca
-function mostrarFeedbackBusca(quantidade, termo) {
+function mostrarFeedbackBusca(quantidade, termo, resultados) {
     // Remove feedback anterior
     const feedbackAnterior = document.querySelector('.search-results-info');
     if (feedbackAnterior) feedbackAnterior.remove();
@@ -413,29 +443,63 @@ function mostrarFeedbackBusca(quantidade, termo) {
     const feedback = document.createElement('div');
     feedback.className = 'search-results-info';
 
-    if (quantidade === 0) {
-        feedback.innerHTML = `
-            <div class="search-results-count">
-                <i class="bi bi-search"></i>
-                Nenhum resultado encontrado para "${termo}"
-            </div>
-            <button class="clear-search-btn" onclick="limparBusca()">
-                <i class="bi bi-x-circle"></i>
-                Limpar busca
-            </button>
-        `;
-    } else {
-        const plural = quantidade === 1 ? 'resultado' : 'resultados';
-        feedback.innerHTML = `
-            <div class="search-results-count">
-                <i class="bi bi-search"></i>
-                ${quantidade} ${plural} para "${termo}"
-            </div>
-            <button class="clear-search-btn" onclick="limparBusca()">
-                <i class="bi bi-x-circle"></i>
-                Limpar busca
-            </button>
-        `;
+    const plural = quantidade === 1 ? 'resultado' : 'resultados';
+    const countText = quantidade === 0 
+        ? `Nenhum resultado encontrado para "${termo}"` 
+        : `${quantidade} ${plural} para "${termo}"`;
+
+    // Cria o cabeçalho
+    const headerDiv = document.createElement('div');
+    headerDiv.className = 'search-results-header';
+    headerDiv.innerHTML = `
+        <div class="search-results-count">
+            <i class="bi bi-search"></i>
+            ${countText}
+        </div>
+        <button class="clear-search-btn" onclick="limparBusca()">
+            <i class="bi bi-x-circle"></i>
+            Limpar busca
+        </button>
+    `;
+    feedback.appendChild(headerDiv);
+
+    // Se houver resultados, cria a lista de cards
+    if (quantidade > 0 && resultados) {
+        const listDiv = document.createElement('div');
+        listDiv.className = 'search-results-list';
+
+        Object.entries(resultados).forEach(([nome, detalhes]) => {
+            const card = document.createElement('div');
+            card.className = 'search-result-card';
+            card.style.cursor = 'pointer';
+
+            const nomeBairro = obterNomeBairro(detalhes.bairro_id);
+            const slugBairro = obterSlugBairro(detalhes.bairro_id);
+
+            // Cabeçalho do card
+            const cardHeader = document.createElement('div');
+            cardHeader.className = 'search-result-card-header';
+            cardHeader.style.marginBottom = '0';
+            cardHeader.innerHTML = `
+                <span class="search-result-card-title">
+                    <i class="bi bi-signpost-2"></i> ${nome}
+                </span>
+                <span class="search-result-card-bairro"><i class="bi bi-geo-alt-fill"></i> ${nomeBairro || 'Sem Bairro'}</span>
+            `;
+            card.appendChild(cardHeader);
+
+            // Redireciona ao clicar no card
+            card.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (slugBairro) {
+                    irParaRuaNoBairro(slugBairro, nome);
+                }
+            });
+
+            listDiv.appendChild(card);
+        });
+
+        feedback.appendChild(listDiv);
     }
 
     // Insere o feedback após a hero section (barra de busca)
@@ -485,6 +549,7 @@ async function main() {
         mostrarSkeletons(3);
 
         const bairrosIndex = await carregarBairros();
+        await carregarTodasRuas(); // Pré-carrega todas as ruas para busca global rápida
         // Lógica do Dropdown Customizado
         const dropdownTrigger = document.querySelector('.dropdown-trigger');
         const dropdownMenu = document.querySelector('.dropdown-menu-custom');
@@ -584,6 +649,21 @@ async function main() {
             searchInput.addEventListener('input', debounce((e) => {
                 filtrarRuas(e.target.value);
             }, 400));
+
+            // Permite busca imediata ao pressionar Enter
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    filtrarRuas(e.target.value);
+                }
+            });
+        }
+
+        // Configurar clique no ícone de busca como um botão de pesquisa
+        const searchIcon = document.querySelector('.search-icon');
+        if (searchIcon && searchInput) {
+            searchIcon.addEventListener('click', () => {
+                filtrarRuas(searchInput.value);
+            });
         }
 
     } catch (err) {
