@@ -3,17 +3,17 @@
    ============================================ */
 
 :root {
-  --admin-bg: #0f0f23;
-  --admin-surface: #1a1a2e;
-  --admin-surface-hover: #252542;
-  --admin-border: #2d2d52;
-  --admin-text: #e0e0e0;
-  --admin-text-muted: #8888aa;
-  --admin-primary: #6c63ff;
-  --admin-primary-hover: #5a52e0;
-  --admin-success: #2ecc71;
-  --admin-danger: #e74c3c;
-  --admin-warning: #f39c12;
+  --admin-bg: #f5f5f5;
+  --admin-surface: #ffffff;
+  --admin-surface-hover: #fafafa;
+  --admin-border: #e0e0e0;
+  --admin-text: #222222;
+  --admin-text-muted: #666666;
+  --admin-primary: #222222;
+  --admin-primary-hover: #000000;
+  --admin-success: #198754;
+  --admin-danger: #dc3545;
+  --admin-warning: #ffc107;
   --sidebar-width: 240px;
 }
 
@@ -36,7 +36,7 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+  background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(45, 45, 45, 0.9) 50%, rgba(10, 10, 10, 0.98) 100%);
 }
 
 .login-card {
@@ -46,7 +46,8 @@ body {
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  color: var(--admin-text);
 }
 
 .login-header {
@@ -74,7 +75,7 @@ body {
 }
 
 .login-card .form-control {
-  background: var(--admin-bg);
+  background: #ffffff;
   border: 1px solid var(--admin-border);
   color: var(--admin-text);
   padding: .75rem 1rem;
@@ -83,7 +84,7 @@ body {
 
 .login-card .form-control:focus {
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+  box-shadow: 0 0 0 3px rgba(34,34,34,0.1);
 }
 
 .login-card .form-label {
@@ -99,6 +100,7 @@ body {
   border-radius: 8px;
   font-weight: 600;
   transition: all 0.2s;
+  color: #ffffff;
 }
 
 .login-card .btn-primary:hover {
@@ -142,8 +144,8 @@ body {
 /* Sidebar */
 .admin-sidebar {
   width: var(--sidebar-width);
-  background: var(--admin-surface);
-  border-right: 1px solid var(--admin-border);
+  background: rgb(20, 20, 20);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
   position: fixed;
@@ -164,7 +166,7 @@ body {
   align-items: center;
   gap: .75rem;
   padding: .75rem 1.25rem;
-  color: var(--admin-text-muted);
+  color: rgba(255, 255, 255, 0.65);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -173,14 +175,14 @@ body {
 }
 
 .sidebar-link:hover {
-  color: var(--admin-text);
-  background: var(--admin-surface-hover);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .sidebar-link.active {
-  color: var(--admin-primary);
-  background: rgba(108,99,255,0.08);
-  border-left-color: var(--admin-primary);
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+  border-left-color: #ffffff;
 }
 
 .sidebar-link i {
@@ -190,7 +192,7 @@ body {
 }
 
 .sidebar-footer {
-  border-top: 1px solid var(--admin-border);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: .5rem 0;
 }
 
@@ -397,7 +399,7 @@ body {
 .modal-content .form-control:focus,
 .modal-content .form-select:focus {
   border-color: var(--admin-primary);
-  box-shadow: 0 0 0 3px rgba(108,99,255,0.15);
+  box-shadow: 0 0 0 3px rgba(34,34,34,0.1);
 }
 
 .modal-content .form-label {
@@ -407,7 +409,7 @@ body {
 }
 
 .btn-close {
-  filter: invert(1);
+  filter: none;
 }
 
 /* ============================================
