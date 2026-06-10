@@ -240,7 +240,7 @@
      display: grid;
      grid-gap: 0;
      background: transparent;
-     padding: 0;
+     padding: 6px 0 0 0;
      border: 1px solid var(--border-color);
      width: 100%;
      height: auto;
@@ -285,8 +285,24 @@
  }
 
  .grid-cell input:focus {
-     background-color: rgba(0, 0, 0, 0.05);
+     background-color: rgba(0, 0, 0, 0.12);
+     box-shadow: inset 0 0 0 2px #333;
      z-index: 10;
+ }
+
+ /* Highlight visual para toda a palavra ativa */
+ .grid-cell.highlighted {
+     background: rgba(0, 0, 0, 0.06);
+     transition: background 0.2s ease;
+ }
+
+ /* Feedback sutil de palavra completa */
+ .grid-cell.word-complete input {
+     border-bottom: 2px solid #4a7;
+ }
+
+ .grid-cell.word-complete input:disabled {
+     border-bottom: 2px solid #4a7;
  }
 
  .grid-cell.empty {
@@ -310,12 +326,16 @@
 
  .word-number {
      position: absolute;
-     top: 2px;
-     left: 2px;
-     font-size: 0.5rem;
-     font-weight: bold;
+     top: -9px;
+     left: 0;
+     font-size: 0.9rem;
+     font-weight: 700;
      color: var(--dark);
-     z-index: 2;
+     opacity: 0.75;
+     z-index: 3;
+     line-height: 1;
+     pointer-events: none;
+     white-space: nowrap;
  }
 
  #clues-list {
@@ -329,14 +349,35 @@
      background: white;
      border-radius: 6px;
      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-     transition: all 0.3s ease;
+     transition: all 0.25s ease;
      border-left: 3px solid var(--dark);
      font-size: 0.95rem;
+     cursor: pointer;
+     user-select: none;
  }
 
  #clues-list li:hover {
      transform: translateX(3px);
      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+ }
+
+ /* Dica ativa — sincronizada com o grid */
+ #clues-list li.clue-active {
+     background: #eee;
+     border-left: 4px solid #333;
+     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+     transform: translateX(3px);
+ }
+
+ /* Badge de direção dentro da dica */
+ .clue-direction {
+     display: inline-block;
+     font-size: 0.7rem;
+     color: #888;
+     margin-left: 4px;
+     font-weight: 400;
+     vertical-align: middle;
+     letter-spacing: 0.3px;
  }
 
  #clues-list li strong {
@@ -461,6 +502,7 @@
  .crossword-scroll-wrapper {
      width: 100%;
      overflow-x: auto;
+     overflow-y: hidden;
      -webkit-overflow-scrolling: touch;
      position: relative;
  }
@@ -524,6 +566,7 @@
 
      .crossword-section {
          overflow-x: auto;
+         overflow-y: hidden;
          width: 100%;
          padding: 10px;
          -webkit-overflow-scrolling: touch;

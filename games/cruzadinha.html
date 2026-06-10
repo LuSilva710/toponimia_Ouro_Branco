@@ -56,7 +56,7 @@
       <div class="crossword-section">
         <div class="crossword-scroll-wrapper">
           <div class="scroll-hint"><i class="bi bi-arrows-expand"></i>Role para ver tudo</div>
-          <div id="crossword-container">
+          <div id="crossword-container" role="grid" aria-label="Grade de palavras cruzadas">
             <div id="crossword"></div>
           </div>
         </div>
@@ -67,7 +67,7 @@
         <ul id="clues-list"></ul>
         
         <div class="game-status">
-          <div id="status-message">Complete a cruzadinha!</div>
+          <div id="status-message" aria-live="polite" role="status">Complete a cruzadinha!</div>
           <div class="progress-container">
             <div id="progress-bar"></div>
           </div>

@@ -154,6 +154,7 @@ import { supabase } from './supabase-client.js'
         let totalCells = 0;
         let completedCells = 0;
         let cellSize = 0; // Tamanho será calculado dinamicamente
+        let activeWordIndex = -1; // Índice da palavra ativa (para sincronização)
 
         // Estruturas de dados para armazenamento de estado
         let correctLetters = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));  // Letras corretas das palavras
@@ -162,6 +163,8 @@ import { supabase } from './supabase-client.js'
         let userAnswers = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));         // Respostas do usuário
         let wordEntries = []; // Entradas de palavras com suas posições
         let hintsUsed = 0;    // Contador de dicas usadas
+        // Mapa de célula → índice(s) de palavra(s) que passam por ela
+        let cellToWordIndices = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null).map(() => []));
 
         /**
          * Funções do Timer
@@ -188,12 +191,14 @@ import { supabase } from './supabase-client.js'
             // Reinicializa as estruturas de dados
             correctLetters = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
             cellIsPartOfWord = Array(gridSize).fill(null).map(() => Array(gridSize).fill(false));
+            cellToWordIndices = Array(gridSize).fill(null).map(() => Array(gridSize).fill(null).map(() => []));
             wordEntries = [];
             totalCells = 0;
             completedCells = 0;
+            activeWordIndex = -1;
 
             // Posiciona cada palavra no grid
-            words.forEach(item => {
+            words.forEach((item, wordIdx) => {
                 const { word, start, direction } = item;
                 const [row, col] = start;
                 const positions = [];
@@ -213,9 +218,10 @@ import { supabase } from './supabase-client.js'
                         totalCells++;
                     }
                     positions.push({ row: currentRow, col: currentCol });
+                    cellToWordIndices[currentRow][currentCol].push(wordIdx);
                 }
 
-                wordEntries.push({ word, positions });
+                wordEntries.push({ word, positions, direction });
             });
             
             updateProgressBar();
@@ -254,7 +260,7 @@ import { supabase } from './supabase-client.js'
                 
                 const marker = cell.querySelector('.word-number');
                 if (marker) {
-                    marker.style.fontSize = `${cellSize * 0.35}px`;
+                    marker.style.fontSize = `${cellSize * 0.5}px`;
                 }
             });
         }
@@ -284,10 +290,19 @@ import { supabase } from './supabase-client.js'
                     cellElement.className = 'grid-cell';
 
                     if (cellIsPartOfWord[row][col]) {
+                        cellElement.setAttribute('role', 'gridcell');
                         const input = document.createElement('input');
                         input.maxLength = 1;
                         input.dataset.row = row;
                         input.dataset.col = col;
+                        input.setAttribute('autocomplete', 'off');
+                        input.setAttribute('autocorrect', 'off');
+                        input.setAttribute('spellcheck', 'false');
+
+                        // ARIA label para acessibilidade
+                        const wordIndices = cellToWordIndices[row][col];
+                        const ariaWords = wordIndices.map(i => `Palavra ${i + 1}`).join(', ');
+                        input.setAttribute('aria-label', `Linha ${row + 1}, Coluna ${col + 1} — ${ariaWords}`);
 
                         // Define o valor do input baseado no estado
                         input.value = revealedLetters[row][col]
@@ -331,6 +346,7 @@ import { supabase } from './supabase-client.js'
         function addEventListeners() {
             document.querySelectorAll('#crossword input').forEach(input => {
                 input.addEventListener('input', handleInput);
+                input.addEventListener('focus', handleCellFocus);
                 input.addEventListener('click', handleClick);
                 input.addEventListener('keydown', handleKeyDown);
             });
@@ -344,57 +360,268 @@ import { supabase } from './supabase-client.js'
             const row = parseInt(input.dataset.row);
             const col = parseInt(input.dataset.col);
             const value = input.value.toUpperCase();
+            input.value = value;
             
             // Atualiza a resposta do usuário
             userAnswers[row][col] = value;
             
-            // Verifica se a letra está correta
-            if (value === correctLetters[row][col]) {
-                input.classList.remove('incorrect');
-                input.classList.add('correct');
-                completedCells++;
-            } else if (value !== '') {
-                input.classList.add('incorrect');
-                input.classList.remove('correct');
-            } else {
-                input.classList.remove('incorrect', 'correct');
+            // Recalcula o progresso dinamicamente (corrige o bug de contagem)
+            recalculateProgress();
+            
+            // Auto-avanço: move para a próxima célula na direção da palavra ativa
+            if (value !== '' && activeWordIndex >= 0) {
+                advanceToNextCell(row, col);
             }
             
-            updateProgressBar();
+            // Verifica se alguma palavra foi completada
+            checkWordCompletion();
             
-            // Verifica se todas as células foram preenchidas corretamente
+            // Verifica se TODAS as células foram preenchidas corretamente
             if (completedCells === totalCells) {
                 winGame();
             }
         }
         
         /**
+         * Recalcula o progresso contando dinamicamente (corrige bug de incremento-só)
+         */
+        function recalculateProgress() {
+            completedCells = 0;
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    if (cellIsPartOfWord[r][c]) {
+                        const val = userAnswers[r][c] || '';
+                        if (val !== '' && val === correctLetters[r][c]) {
+                            completedCells++;
+                        }
+                    }
+                }
+            }
+            updateProgressBar();
+        }
+        
+        /**
          * Atualiza a barra de progresso
          */
         function updateProgressBar() {
-            const percentage = (completedCells / totalCells) * 100;
+            const percentage = totalCells > 0 ? (completedCells / totalCells) * 100 : 0;
             progressBar.style.width = `${percentage}%`;
         }
-        
+
         /**
-         * Manipulador de clique
+         * Avança o cursor para a próxima célula vazia na direção da palavra ativa
+         */
+        function advanceToNextCell(row, col) {
+            if (activeWordIndex < 0 || activeWordIndex >= wordEntries.length) return;
+            const entry = wordEntries[activeWordIndex];
+            const positions = entry.positions;
+            
+            // Encontra a posição atual na palavra
+            const currentIdx = positions.findIndex(p => p.row === row && p.col === col);
+            if (currentIdx < 0 || currentIdx >= positions.length - 1) return;
+            
+            // Avança para a próxima célula não-revelada
+            for (let i = currentIdx + 1; i < positions.length; i++) {
+                const nextPos = positions[i];
+                if (!revealedLetters[nextPos.row][nextPos.col]) {
+                    const nextInput = document.querySelector(`input[data-row="${nextPos.row}"][data-col="${nextPos.col}"]`);
+                    if (nextInput && !nextInput.disabled) {
+                        nextInput.focus();
+                        nextInput.select();
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Volta o cursor para a célula anterior na palavra ativa
+         */
+        function retreatToPreviousCell(row, col) {
+            if (activeWordIndex < 0 || activeWordIndex >= wordEntries.length) return;
+            const entry = wordEntries[activeWordIndex];
+            const positions = entry.positions;
+            
+            const currentIdx = positions.findIndex(p => p.row === row && p.col === col);
+            if (currentIdx <= 0) return;
+            
+            for (let i = currentIdx - 1; i >= 0; i--) {
+                const prevPos = positions[i];
+                if (!revealedLetters[prevPos.row][prevPos.col]) {
+                    const prevInput = document.querySelector(`input[data-row="${prevPos.row}"][data-col="${prevPos.col}"]`);
+                    if (prevInput && !prevInput.disabled) {
+                        prevInput.focus();
+                        prevInput.select();
+                        return;
+                    }
+                }
+            }
+        }
+
+        /**
+         * Verifica se alguma palavra foi completamente preenchida corretamente
+         */
+        function checkWordCompletion() {
+            wordEntries.forEach((entry, idx) => {
+                const isComplete = entry.positions.every(pos => {
+                    const val = userAnswers[pos.row][pos.col] || '';
+                    return val === correctLetters[pos.row][pos.col];
+                });
+                
+                entry.positions.forEach(pos => {
+                    const cell = getCellElement(pos.row, pos.col);
+                    if (cell) {
+                        if (isComplete) {
+                            cell.classList.add('word-complete');
+                        } else {
+                            cell.classList.remove('word-complete');
+                        }
+                    }
+                });
+
+                // Atualiza a dica correspondente
+                const clueItem = cluesList.children[idx];
+                if (clueItem) {
+                    if (isComplete) {
+                        clueItem.style.opacity = '0.6';
+                        clueItem.style.textDecoration = 'line-through';
+                    } else {
+                        clueItem.style.opacity = '1';
+                        clueItem.style.textDecoration = 'none';
+                    }
+                }
+            });
+        }
+
+        /**
+         * Retorna o elemento DOM da célula numa posição
+         */
+        function getCellElement(row, col) {
+            const input = document.querySelector(`input[data-row="${row}"][data-col="${col}"]`);
+            return input ? input.closest('.grid-cell') : null;
+        }
+
+        /**
+         * Sincronização: destaca a palavra ativa no grid e na lista de dicas
+         */
+        function highlightActiveWord(wordIdx) {
+            // Remove highlights anteriores
+            document.querySelectorAll('.grid-cell.highlighted').forEach(el => el.classList.remove('highlighted'));
+            document.querySelectorAll('#clues-list li.clue-active').forEach(el => {
+                el.classList.remove('clue-active');
+                el.removeAttribute('aria-current');
+            });
+            
+            if (wordIdx < 0 || wordIdx >= wordEntries.length) return;
+            
+            activeWordIndex = wordIdx;
+            const entry = wordEntries[wordIdx];
+            
+            // Destaca as células da palavra no grid
+            entry.positions.forEach(pos => {
+                const cell = getCellElement(pos.row, pos.col);
+                if (cell) cell.classList.add('highlighted');
+            });
+            
+            // Destaca a dica correspondente e faz scroll
+            const clueItem = cluesList.children[wordIdx];
+            if (clueItem) {
+                clueItem.classList.add('clue-active');
+                clueItem.setAttribute('aria-current', 'true');
+                clueItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+
+        /**
+         * Manipulador de foco numa célula — sincroniza com dicas
+         */
+        function handleCellFocus(event) {
+            const input = event.target;
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            
+            const wordIndices = cellToWordIndices[row][col];
+            if (wordIndices.length === 0) return;
+            
+            // Se a célula pertence à palavra já ativa, mantém
+            if (wordIndices.includes(activeWordIndex)) {
+                highlightActiveWord(activeWordIndex);
+                return;
+            }
+            
+            // Senão, ativa a primeira palavra encontrada
+            highlightActiveWord(wordIndices[0]);
+        }
+
+        /**
+         * Manipulador de clique — alterna entre palavras no cruzamento
          */
         function handleClick(event) {
-            // Destaca a célula clicada
-            document.querySelectorAll('#crossword input').forEach(input => {
-                input.classList.remove('active');
-            });
-            event.target.classList.add('active');
+            const input = event.target;
+            const row = parseInt(input.dataset.row);
+            const col = parseInt(input.dataset.col);
+            
+            const wordIndices = cellToWordIndices[row][col];
+            if (wordIndices.length === 0) return;
+            
+            // Se a célula pertence a múltiplas palavras, alterna entre elas
+            if (wordIndices.length > 1 && wordIndices.includes(activeWordIndex)) {
+                const currentPos = wordIndices.indexOf(activeWordIndex);
+                const nextIdx = (currentPos + 1) % wordIndices.length;
+                highlightActiveWord(wordIndices[nextIdx]);
+            } else {
+                highlightActiveWord(wordIndices[0]);
+            }
         }
         
         /**
-         * Manipulador de teclas
+         * Manipulador de teclas — navegação inteligente
          */
         function handleKeyDown(event) {
             const input = event.target;
             const row = parseInt(input.dataset.row);
             const col = parseInt(input.dataset.col);
             
+            // Backspace: apaga e volta para a célula anterior
+            if (event.key === 'Backspace') {
+                if (input.value === '') {
+                    event.preventDefault();
+                    retreatToPreviousCell(row, col);
+                } else {
+                    // Deixa o browser apagar, depois volta
+                    userAnswers[row][col] = '';
+                    setTimeout(() => {
+                        recalculateProgress();
+                        checkWordCompletion();
+                    }, 0);
+                }
+                return;
+            }
+
+            // Tab / Shift+Tab: navega entre palavras
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                const direction = event.shiftKey ? -1 : 1;
+                let nextWordIdx = activeWordIndex + direction;
+                if (nextWordIdx >= wordEntries.length) nextWordIdx = 0;
+                if (nextWordIdx < 0) nextWordIdx = wordEntries.length - 1;
+                
+                highlightActiveWord(nextWordIdx);
+                
+                // Foca a primeira célula vazia da palavra, ou a primeira célula
+                const entry = wordEntries[nextWordIdx];
+                const emptyPos = entry.positions.find(p => 
+                    !revealedLetters[p.row][p.col] && userAnswers[p.row][p.col] === ''
+                ) || entry.positions.find(p => !revealedLetters[p.row][p.col]) || entry.positions[0];
+                
+                const nextInput = document.querySelector(`input[data-row="${emptyPos.row}"][data-col="${emptyPos.col}"]`);
+                if (nextInput) {
+                    nextInput.focus();
+                    nextInput.select();
+                }
+                return;
+            }
+
             // Movimentação com setas
             if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
                 event.preventDefault();
@@ -510,10 +737,11 @@ import { supabase } from './supabase-client.js'
                 input.classList.add('revealed');
             }
             
-            updateProgressBar();
+            recalculateProgress();
+            checkWordCompletion();
             
             // Feedback visual
-            statusMessage.textContent = `Dica revelada na posição (${randomPosition.row+1}, ${randomPosition.col+1})!`;
+            statusMessage.textContent = `Dica revelada! (${hintsUsed} dica${hintsUsed > 1 ? 's' : ''} usada${hintsUsed > 1 ? 's' : ''})`;
             statusMessage.style.color = '#666';
             setTimeout(() => {
                 if (completedCells < totalCells) {
@@ -530,6 +758,7 @@ import { supabase } from './supabase-client.js'
         function checkAnswers() {
             let allCorrect = true;
             let errorsFound = 0;
+            let emptyCells = 0;
 
             document.querySelectorAll('#crossword input:not(.revealed)').forEach(input => {
                 const row = parseInt(input.dataset.row);
@@ -540,22 +769,32 @@ import { supabase } from './supabase-client.js'
                 // Atualiza o estado e a interface
                 userAnswers[row][col] = userInput;
 
-                if (userInput !== correctAnswer && userInput !== '') {
+                if (userInput === '') {
+                    emptyCells++;
+                    allCorrect = false;
+                    input.classList.remove('incorrect', 'correct');
+                } else if (userInput !== correctAnswer) {
                     allCorrect = false;
                     errorsFound++;
                     input.classList.add('incorrect');
                     input.classList.remove('correct');
-                } else if (userInput === correctAnswer) {
+                } else {
                     input.classList.add('correct');
                     input.classList.remove('incorrect');
                 }
             });
 
-            // Atualiza mensagem de status
-            if (allCorrect) {
+            recalculateProgress();
+            checkWordCompletion();
+
+            // Atualiza mensagem de status — corrige bug de auto-win com board vazio
+            if (emptyCells > 0 && errorsFound === 0) {
+                statusMessage.textContent = `Ainda faltam ${emptyCells} célula${emptyCells > 1 ? 's' : ''} vazias. Continue preenchendo!`;
+                statusMessage.style.color = '#888';
+            } else if (allCorrect && emptyCells === 0) {
                 winGame();
             } else if (errorsFound > 0) {
-                statusMessage.textContent = `Foram encontrados ${errorsFound} erro(s). Continue tentando!`;
+                statusMessage.textContent = `Encontrado${errorsFound > 1 ? 's' : ''} ${errorsFound} erro${errorsFound > 1 ? 's' : ''}. Continue tentando!`;
                 statusMessage.style.color = '#d1495b';
             } else {
                 statusMessage.textContent = 'Todas as respostas estão corretas até agora! Continue!';
@@ -577,6 +816,7 @@ import { supabase } from './supabase-client.js'
             // Reinicializa estruturas de dados
             revealedLetters = Array(gridSize).fill(null).map(() => Array(gridSize).fill(false));
             userAnswers = Array(gridSize).fill(null).map(() => Array(gridSize).fill(''));
+            activeWordIndex = -1;
 
             fillGrid();
             renderGrid();
@@ -596,7 +836,31 @@ import { supabase } from './supabase-client.js'
             cluesList.innerHTML = '';
             words.forEach((item, index) => {
                 const clueItem = document.createElement('li');
-                clueItem.innerHTML = `<strong>${index + 1}</strong> ${item.clue}`;
+                const dirIcon = item.direction === 'horizontal' ? '→' : '↓';
+                const dirLabel = item.direction === 'horizontal' ? 'Horizontal' : 'Vertical';
+                clueItem.innerHTML = `<strong>${index + 1}</strong><span class="clue-direction" title="${dirLabel}">${dirIcon}</span> ${item.clue}`;
+                clueItem.dataset.wordIndex = index;
+                
+                // Clique na dica → foca a primeira célula vazia da palavra
+                clueItem.addEventListener('click', () => {
+                    highlightActiveWord(index);
+                    const entry = wordEntries[index];
+                    if (!entry) return;
+                    
+                    // Procura a primeira célula vazia, ou a primeira célula da palavra
+                    const targetPos = entry.positions.find(p => 
+                        !revealedLetters[p.row][p.col] && userAnswers[p.row][p.col] === ''
+                    ) || entry.positions.find(p => !revealedLetters[p.row][p.col]) || entry.positions[0];
+                    
+                    const targetInput = document.querySelector(`input[data-row="${targetPos.row}"][data-col="${targetPos.col}"]`);
+                    if (targetInput) {
+                        targetInput.focus();
+                        targetInput.select();
+                        // Scroll a célula para o viewport
+                        targetInput.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+                    }
+                });
+                
                 cluesList.appendChild(clueItem);
             });
         }
