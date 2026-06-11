@@ -33,7 +33,13 @@ jobs:
         run: npm run build
         env:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || vars.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || vars.VITE_SUPABASE_ANON_KEY }}
+          VITE_AI_PROVIDER: ${{ secrets.VITE_AI_PROVIDER || vars.VITE_AI_PROVIDER || 'gemini' }}
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+          VITE_GEMINI_MODEL: ${{ secrets.VITE_GEMINI_MODEL || vars.VITE_GEMINI_MODEL || 'gemini-2.0-flash' }}
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_OPENAI_BASE_URL: ${{ secrets.VITE_OPENAI_BASE_URL || vars.VITE_OPENAI_BASE_URL }}
+          VITE_OPENAI_MODEL: ${{ secrets.VITE_OPENAI_MODEL || vars.VITE_OPENAI_MODEL }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
