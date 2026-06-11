@@ -25,3 +25,5 @@ yarn-error.log*
 
 # Variáveis de Ambiente Locais
 .env.*.local
+.env.bak
+.env.*.bak
