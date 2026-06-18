@@ -1,6 +1,20 @@
 // Importa o client Supabase do módulo compartilhado
 import { supabase } from './supabase-client.js'
 
+// Cache para as instâncias de mini-mapas do Leaflet ativos na página
+const activeMiniMaps = {};
+
+function destruirMiniMapa(ruaId) {
+    if (activeMiniMaps[ruaId]) {
+        try {
+            activeMiniMaps[ruaId].remove();
+        } catch (err) {
+            console.error('Erro ao destruir mini-mapa:', err);
+        }
+        delete activeMiniMaps[ruaId];
+    }
+}
+
 /**
  * Função utilitária para normalizar caminhos de assets vindos do banco de dados.
  * Remove prefixos antigos como 'assets/' ou '/assets/' e garante caminho absoluto.
@@ -83,7 +97,9 @@ function criarTabelaRua(rua) {
             </tr>
             <tr>
                 <td colspan="3">
-                    ${rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.'}
+                    ${(rua.lat && rua.lng)
+                        ? `<div id="mini-map-${rua.id}" class="mini-map"></div>`
+                        : (rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.')}
                 </td>
                 <td colspan="2">
                     ${rua.imagem ? `<img src="${normalizePath(rua.imagem)}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
@@ -135,26 +151,98 @@ function agruparRuasPorLetra(ruas) {
     return ruasPorLetra;
 }
 
-// Função para exibir os detalhes de uma rua
-function exibirDetalhesRua(rua, card) {
-    // Fecha qualquer outra tabela que esteja aberta
-    const tabelaAberta = document.querySelector('.detalhes-rua');
-    if (tabelaAberta) {
-        // Se a tabela clicada já está aberta, apenas a fecha.
-        if (tabelaAberta.previousSibling === card) {
-            tabelaAberta.remove();
-            return;
+// Função para exibir os detalhes de uma rua (accordion acessível)
+function idDetalhesRua(nome) {
+    return 'detalhes-' + String(nome).replace(/[^a-zA-Z0-9]/g, '-').replace(/-+/g, '-').toLowerCase();
+}
+
+function fecharTodosDetalhes(exceptCard = null) {
+    document.querySelectorAll('.rua-card[aria-expanded="true"]').forEach(btn => {
+        if (btn !== exceptCard) btn.setAttribute('aria-expanded', 'false');
+    });
+    document.querySelectorAll('.detalhes-rua').forEach(panel => {
+        if (exceptCard && panel.previousElementSibling === exceptCard) return;
+        
+        // Destruir mapa associado antes de remover o painel para liberar memória
+        const miniMapContainer = panel.querySelector('.mini-map');
+        if (miniMapContainer) {
+            const match = miniMapContainer.id.match(/^mini-map-(.+)$/);
+            if (match && match[1]) {
+                destruirMiniMapa(match[1]);
+            }
         }
-        tabelaAberta.remove();
+        
+        panel.remove();
+    });
+}
+
+function exibirDetalhesRua(rua, card) {
+    const panelId = card.getAttribute('aria-controls');
+    const isOpen = card.getAttribute('aria-expanded') === 'true';
+
+    if (isOpen) {
+        const panel = card.nextElementSibling;
+        if (panel?.classList.contains('detalhes-rua')) {
+            destruirMiniMapa(rua.id);
+            panel.remove();
+        }
+        card.setAttribute('aria-expanded', 'false');
+        return;
     }
+
+    fecharTodosDetalhes(card);
 
     const divDetalhes = document.createElement('div');
     divDetalhes.classList.add('detalhes-rua');
-    const tabelaRua = criarTabelaRua(rua);
-    divDetalhes.appendChild(tabelaRua);
+    divDetalhes.id = panelId;
+    divDetalhes.setAttribute('role', 'region');
+    divDetalhes.setAttribute('aria-label', `Detalhes de ${rua.nome_oficial || card.dataset.ruaNome}`);
+    divDetalhes.appendChild(criarTabelaRua(rua));
 
-    // Insere após o card clicado
     card.parentNode.insertBefore(divDetalhes, card.nextSibling);
+    card.setAttribute('aria-expanded', 'true');
+
+    // Inicializar o mini-mapa com Leaflet se as coordenadas estiverem disponíveis
+    if (rua.lat && rua.lng) {
+        const containerId = `mini-map-${rua.id}`;
+        // Timeout para garantir que o contêiner já esteja renderizado e visível no DOM
+        setTimeout(() => {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            destruirMiniMapa(rua.id);
+
+            try {
+                const miniMap = L.map(containerId, {
+                    center: [rua.lat, rua.lng],
+                    zoom: 16,
+                    zoomControl: true,
+                    dragging: !L.Browser.mobile,
+                    tap: !L.Browser.mobile
+                });
+
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                    subdomains: 'abcd',
+                    maxZoom: 20
+                }).addTo(miniMap);
+
+                L.marker([rua.lat, rua.lng]).addTo(miniMap)
+                    .bindPopup(`<b>${rua.nome_oficial}</b><br>${rua.localizacao || ''}`)
+                    .openPopup();
+
+                activeMiniMaps[rua.id] = miniMap;
+            } catch (err) {
+                console.error('Erro ao inicializar mini-mapa do Leaflet:', err);
+                // Fallback para iframe se disponível
+                if (rua.mapa) {
+                    container.innerHTML = `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+                } else {
+                    container.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--medium-gray);">Mapa não disponível.</div>';
+                }
+            }
+        }, 150);
+    }
 }
 
 // ========================================
@@ -163,12 +251,28 @@ function exibirDetalhesRua(rua, card) {
 
 // Função para mostrar skeleton screens
 function mostrarSkeletons(quantidade = 5) {
+    const mainDoc = document.getElementById('main-doc');
+    if (mainDoc) {
+        mainDoc.setAttribute('aria-busy', 'true');
+        let announcer = document.getElementById('loading-announcer');
+        if (!announcer) {
+            announcer = document.createElement('div');
+            announcer.id = 'loading-announcer';
+            announcer.className = 'visually-hidden';
+            announcer.setAttribute('role', 'status');
+            announcer.setAttribute('aria-live', 'polite');
+            mainDoc.insertAdjacentElement('afterbegin', announcer);
+        }
+        announcer.textContent = 'Carregando ruas, aguarde.';
+    }
+
     const secoesLetras = document.querySelectorAll('.section-ruas');
     secoesLetras.forEach(secao => {
         secao.innerHTML = '';
         for (let i = 0; i < quantidade; i++) {
             const skeleton = document.createElement('div');
             skeleton.className = 'skeleton-card';
+            skeleton.setAttribute('aria-hidden', 'true');
             skeleton.innerHTML = `
                 <div class="skeleton-content">
                     <div class="skeleton-line skeleton-title"></div>
@@ -185,8 +289,10 @@ function mostrarSkeletons(quantidade = 5) {
 function mostrarSpinner(container) {
     const spinner = document.createElement('div');
     spinner.className = 'loading-spinner';
+    spinner.setAttribute('role', 'status');
+    spinner.setAttribute('aria-live', 'polite');
     spinner.innerHTML = `
-        <div class="spinner"></div>
+        <div class="spinner" aria-hidden="true"></div>
         <div class="loading-text">Carregando ruas...</div>
     `;
     container.appendChild(spinner);
@@ -195,6 +301,12 @@ function mostrarSpinner(container) {
 // Função para remover skeletons e spinners
 function limparLoading() {
     document.querySelectorAll('.skeleton-card, .loading-spinner').forEach(el => el.remove());
+
+    const mainDoc = document.getElementById('main-doc');
+    if (mainDoc) mainDoc.removeAttribute('aria-busy');
+
+    const announcer = document.getElementById('loading-announcer');
+    if (announcer) announcer.textContent = '';
 }
 
 // Função para exibir as ruas de uma letra do alfabeto com CARDS
@@ -210,46 +322,44 @@ function exibirRuasPorLetra(ruas) {
         if (!divRuas) continue;
 
         ruasPorLetra[letra].forEach(rua => {
-            // Criar CARD em lista
-            const card = document.createElement('div');
+            const panelId = idDetalhesRua(rua.nome);
+
+            const card = document.createElement('button');
+            card.type = 'button';
             card.className = 'rua-card';
             card.setAttribute('data-rua-nome', rua.nome);
+            card.setAttribute('aria-expanded', 'false');
+            card.setAttribute('aria-controls', panelId);
+            card.setAttribute('aria-label', `Ver detalhes de ${rua.nome}`);
 
-            // Container de conteúdo (lado esquerdo)
             const content = document.createElement('div');
             content.className = 'rua-card-content';
 
-            // Título do card
             const title = document.createElement('div');
             title.className = 'rua-card-title';
-            title.innerHTML = `<i class="bi bi-signpost-2"></i> ${rua.nome}`;
+            title.innerHTML = `<i class="bi bi-signpost-2" aria-hidden="true"></i> ${rua.nome}`;
 
-            // Informações do card (preview)
             const info = document.createElement('div');
             info.className = 'rua-card-info';
 
-            // Trunca o significado para preview
             const significado = rua.detalhes.significado || 'Significado não disponível';
             const significadoPreview = significado.length > 120
                 ? significado.substring(0, 120) + '...'
                 : significado;
             info.textContent = significadoPreview;
 
-            // Monta o conteúdo
             content.appendChild(title);
             content.appendChild(info);
 
-            // Badge (lado direito)
             const badge = document.createElement('div');
             badge.className = 'rua-card-badge';
+            badge.setAttribute('aria-hidden', 'true');
             badge.innerHTML = `<i class="bi bi-info-circle"></i> Ver detalhes`;
 
-            // Monta o card
             card.appendChild(content);
             card.appendChild(badge);
 
-            // Evento de click para expandir detalhes
-            card.addEventListener('click', function () {
+            card.addEventListener('click', () => {
                 exibirDetalhesRua(rua.detalhes, card);
             });
             divRuas.appendChild(card);
@@ -268,21 +378,155 @@ function marcarLetrasVazias(ruasPorLetra) {
         const navItem = document.querySelector(`#navside a[href="#${letra}"]`)?.parentElement;
 
         if (navItem) {
+            const link = navItem.querySelector('a');
             if (ruasPorLetra[letra] && ruasPorLetra[letra].length > 0) {
-                // Remove disabled se tiver ruas
                 navItem.classList.remove('disabled');
+                navItem.removeAttribute('aria-disabled');
+                if (link) {
+                    link.removeAttribute('aria-disabled');
+                    link.removeAttribute('title');
+                }
             } else {
-                // Adiciona disabled se não tiver ruas
                 navItem.classList.add('disabled');
+                navItem.setAttribute('aria-disabled', 'true');
+                if (link) {
+                    link.setAttribute('aria-disabled', 'true');
+                    link.setAttribute('title', 'Nenhuma rua neste bairro começa com esta letra');
+                }
             }
         }
     });
+}
+
+// --- Dropdown de bairro (combobox acessível) ---
+
+function initBairroCombobox({ trigger, menu, list, selectedSpan, bairrosIndex, onSelect }) {
+    let activeIndex = -1;
+    let isOpen = false;
+
+    function getOptions() {
+        return [...list.querySelectorAll('[role="option"]')];
+    }
+
+    function setOpen(open) {
+        isOpen = open;
+        trigger.setAttribute('aria-expanded', String(open));
+        menu.classList.toggle('active', open);
+        if (open) {
+            menu.focus();
+        } else {
+            activeIndex = -1;
+            getOptions().forEach(opt => opt.classList.remove('is-focused'));
+        }
+    }
+
+    function focusOption(index) {
+        const options = getOptions();
+        if (!options.length) return;
+        activeIndex = ((index % options.length) + options.length) % options.length;
+        options.forEach((opt, i) => opt.classList.toggle('is-focused', i === activeIndex));
+        options[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    function selectOption(li) {
+        const slug = li.dataset.slug;
+        selectedSpan.textContent = li.textContent;
+        getOptions().forEach(opt => {
+            opt.setAttribute('aria-selected', opt === li ? 'true' : 'false');
+        });
+        setOpen(false);
+        trigger.focus();
+        onSelect(slug);
+    }
+
+    list.innerHTML = '';
+    Object.entries(bairrosIndex).forEach(([slug, b]) => {
+        const li = document.createElement('li');
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', 'false');
+        li.dataset.slug = slug;
+        li.textContent = b.nome;
+        li.addEventListener('click', () => selectOption(li));
+        list.appendChild(li);
+    });
+
+    trigger.addEventListener('click', () => setOpen(!isOpen));
+
+    trigger.addEventListener('keydown', (e) => {
+        const options = getOptions();
+        if (!options.length) return;
+
+        if (['ArrowDown', 'ArrowUp', 'Enter', ' ', 'Home', 'End', 'Escape'].includes(e.key)) {
+            e.preventDefault();
+        }
+
+        if (e.key === 'Escape') {
+            setOpen(false);
+            return;
+        }
+
+        if (!isOpen && ['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) {
+            setOpen(true);
+            const selectedIdx = options.findIndex(o => o.getAttribute('aria-selected') === 'true');
+            focusOption(selectedIdx >= 0 ? selectedIdx : 0);
+            return;
+        }
+
+        if (!isOpen) return;
+
+        if (e.key === 'ArrowDown') focusOption(activeIndex + 1);
+        else if (e.key === 'ArrowUp') focusOption(activeIndex - 1);
+        else if (e.key === 'Home') focusOption(0);
+        else if (e.key === 'End') focusOption(options.length - 1);
+        else if ((e.key === 'Enter' || e.key === ' ') && activeIndex >= 0) {
+            selectOption(options[activeIndex]);
+        }
+    });
+
+    menu.addEventListener('keydown', (e) => {
+        const options = getOptions();
+        if (!options.length) return;
+
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            setOpen(false);
+            trigger.focus();
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            focusOption(activeIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            focusOption(activeIndex - 1);
+        } else if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            if (activeIndex >= 0) selectOption(options[activeIndex]);
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!trigger.contains(e.target) && !menu.contains(e.target)) {
+            setOpen(false);
+        }
+    });
+
+    return {
+        setSelected(slug) {
+            const li = list.querySelector(`[data-slug="${slug}"]`);
+            if (!li) return;
+            selectedSpan.textContent = li.textContent;
+            getOptions().forEach(opt => {
+                opt.setAttribute('aria-selected', opt === li ? 'true' : 'false');
+            });
+        }
+    };
 }
 
 // --- LÓGICA DE CARREGAMENTO DA API ---
 
 let _bairrosIndexCache = null
 let _todasRuas = [];
+let _bairroAtualSlug = null;
+let _bairroCombobox = null;
 
 async function carregarBairros() {
     const { data, error } = await supabase
@@ -375,7 +619,7 @@ async function irParaRuaNoBairro(slugBairro, nomeRua) {
         if (card) {
             card.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-            const isExpanded = card.nextSibling && card.nextSibling.classList && card.nextSibling.classList.contains('detalhes-rua');
+            const isExpanded = card.getAttribute('aria-expanded') === 'true';
             if (!isExpanded) {
                 card.click();
             }
@@ -392,11 +636,13 @@ function filtrarRuas(query) {
         return;
     }
 
-    // Adiciona feedback de loading no input
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.classList.add('search-loading');
     }
+
+    const searchStatus = document.getElementById('search-status');
+    if (searchStatus) searchStatus.textContent = 'Buscando...';
 
     const resultados = {};
     let totalResultados = 0;
@@ -405,11 +651,10 @@ function filtrarRuas(query) {
     _todasRuas.forEach(({ nome, detalhes }) => {
         const nomeNorm = removerAcentos(nome.toLowerCase());
         const sigNorm = detalhes.significado ? removerAcentos(detalhes.significado.toLowerCase()) : '';
-        const nomeMatch = nome.toLowerCase().includes(queryLower);
-        const significadoMatch = detalhes.significado &&
-            detalhes.significado.toLowerCase().includes(queryLower);
+        const nomeMatch = nomeNorm.includes(queryLower);
+        const significadoMatch = sigNorm.includes(queryLower);
         const localizacaoMatch = detalhes.localizacao &&
-            detalhes.localizacao.toLowerCase().includes(queryLower);
+            removerAcentos(detalhes.localizacao.toLowerCase()).includes(queryLower);
 
         if (nomeMatch || significadoMatch || localizacaoMatch) {
             resultados[nome] = detalhes;
@@ -456,12 +701,18 @@ function mostrarFeedbackBusca(quantidade, termo, resultados) {
             <i class="bi bi-search"></i>
             ${countText}
         </div>
-        <button class="clear-search-btn" onclick="limparBusca()">
-            <i class="bi bi-x-circle"></i>
+        <button type="button" class="clear-search-btn">
+            <i class="bi bi-x-circle" aria-hidden="true"></i>
             Limpar busca
         </button>
     `;
     feedback.appendChild(headerDiv);
+    headerDiv.querySelector('.clear-search-btn').addEventListener('click', () => limparBusca());
+
+    const searchStatus = document.getElementById('search-status');
+    if (searchStatus) {
+        searchStatus.textContent = countText;
+    }
 
     // Se houver resultados, cria a lista de cards
     if (quantidade > 0 && resultados) {
@@ -469,31 +720,25 @@ function mostrarFeedbackBusca(quantidade, termo, resultados) {
         listDiv.className = 'search-results-list';
 
         Object.entries(resultados).forEach(([nome, detalhes]) => {
-            const card = document.createElement('div');
-            card.className = 'search-result-card';
-            card.style.cursor = 'pointer';
-
             const nomeBairro = obterNomeBairro(detalhes.bairro_id);
             const slugBairro = obterSlugBairro(detalhes.bairro_id);
 
-            // Cabeçalho do card
-            const cardHeader = document.createElement('div');
-            cardHeader.className = 'search-result-card-header';
-            cardHeader.style.marginBottom = '0';
-            cardHeader.innerHTML = `
-                <span class="search-result-card-title">
-                    <i class="bi bi-signpost-2"></i> ${nome}
-                </span>
-                <span class="search-result-card-bairro"><i class="bi bi-geo-alt-fill"></i> ${nomeBairro || 'Sem Bairro'}</span>
-            `;
-            card.appendChild(cardHeader);
+            const card = document.createElement('button');
+            card.type = 'button';
+            card.className = 'search-result-card';
+            card.setAttribute('aria-label', `Ir para ${nome}${nomeBairro ? ` no bairro ${nomeBairro}` : ''}`);
 
-            // Redireciona ao clicar no card
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (slugBairro) {
-                    irParaRuaNoBairro(slugBairro, nome);
-                }
+            card.innerHTML = `
+                <span class="search-result-card-header">
+                    <span class="search-result-card-title">
+                        <i class="bi bi-signpost-2" aria-hidden="true"></i> ${nome}
+                    </span>
+                    <span class="search-result-card-bairro"><i class="bi bi-geo-alt-fill" aria-hidden="true"></i> ${nomeBairro || 'Sem Bairro'}</span>
+                </span>
+            `;
+
+            card.addEventListener('click', () => {
+                if (slugBairro) irParaRuaNoBairro(slugBairro, nome);
             });
 
             listDiv.appendChild(card);
@@ -521,22 +766,15 @@ window.limparBusca = function (shouldFocus = true) {
     const feedback = document.querySelector('.search-results-info');
     if (feedback) feedback.remove();
 
+    const searchStatus = document.getElementById('search-status');
+    if (searchStatus) searchStatus.textContent = '';
+
     // Remove loading do input
     searchInput?.classList.remove('search-loading');
 
-    // Restaura as ruas do bairro selecionado se possível
-    const dropdownMenu = document.querySelector('.dropdown-menu');
-    const bairoAtivo = dropdownMenu?.querySelector('.dropdown-item.active') ||
-        dropdownMenu?.querySelector('.dropdown-item');
-
-    if (bairoAtivo) {
-        const slug = bairoAtivo.getAttribute('href').replace('#', '');
-        // Usamos uma variável global se existir ou tentamos disparar o clique
-        // Para simplificar, vamos apenas disparar o clique se for manual ou 
-        // recarregar o bairro atual se tivermos o slug
-        if (window.renderBairroAtual) {
-            window.renderBairroAtual(slug);
-        }
+    // Restaura o bairro atual após limpar a busca
+    if (_bairroAtualSlug && window.renderBairroAtual) {
+        window.renderBairroAtual(_bairroAtualSlug);
     }
 }
 
@@ -550,66 +788,35 @@ async function main() {
 
         const bairrosIndex = await carregarBairros();
         await carregarTodasRuas(); // Pré-carrega todas as ruas para busca global rápida
-        // Lógica do Dropdown Customizado
-        const dropdownTrigger = document.querySelector('.dropdown-trigger');
+        const dropdownTrigger = document.getElementById('bairro-dropdown-trigger');
         const dropdownMenu = document.querySelector('.dropdown-menu-custom');
         const selectedBairroSpan = document.getElementById('selected-bairro');
         const bairroList = document.getElementById('bairro-list');
-
-        if (dropdownTrigger && dropdownMenu && bairroList) {
-          // Fechar ao clicar fora
-          document.addEventListener('click', (e) => {
-            if (!dropdownTrigger.contains(e.target) && !dropdownMenu.contains(e.target)) {
-              dropdownMenu.classList.remove('active');
-            }
-          });
-
-          // Toggle abrir/fechar
-          dropdownTrigger.addEventListener('click', () => {
-            dropdownMenu.classList.toggle('active');
-          });
-
-          // Preencher a lista de bairros
-          bairroList.innerHTML = '';
-          
-          // Bairros da API
-          Object.entries(bairrosIndex).forEach(([slug, b]) => {
-            const li = document.createElement('li');
-            li.textContent = b.nome;
-            li.addEventListener('click', () => {
-              selectedBairroSpan.textContent = b.nome;
-              dropdownMenu.classList.remove('active');
-              renderBairro(slug);
-            });
-            bairroList.appendChild(li);
-          });
-        }
-
 
         async function renderBairro(slug) {
             console.log("Renderizando bairro:", slug)
             const bairroInfo = bairrosIndex[slug];
             if (!bairroInfo) return;
 
-            // Limpa a busca ao trocar de bairro
+            _bairroAtualSlug = slug;
+
             const feedback = document.querySelector('.search-results-info');
             if (feedback) feedback.remove();
             const searchInput = document.getElementById('searchInput');
             if (searchInput) searchInput.value = '';
+            const searchStatus = document.getElementById('search-status');
+            if (searchStatus) searchStatus.textContent = '';
 
-            // Mostra skeleton ao trocar de bairro
             mostrarSkeletons(3);
 
             const ruasIndex = await carregarRuasDoBairro(slug);
             const bairroComRuas = { ...bairroInfo, ruas: ruasIndex };
 
-            // Limpa skeletons antes de exibir
             limparLoading();
 
             exibirIntroducaoBairro(bairroComRuas);
             exibirRuasPorLetra(bairroComRuas.ruas);
 
-            // Atualiza o estado visual do menu (bairro ativo)
             document.querySelectorAll('.dropdown-item').forEach(link => {
                 if (link.getAttribute('href') === `#${slug}`) {
                     link.classList.add('active');
@@ -618,12 +825,20 @@ async function main() {
                 }
             });
 
-            // Sincroniza o dropdown customizado
-            const selectedBairroSpan = document.getElementById('selected-bairro');
-            if (selectedBairroSpan && bairroInfo) {
-              selectedBairroSpan.textContent = bairroInfo.nome;
-            }
+            _bairroCombobox?.setSelected(slug);
         }
+
+        if (dropdownTrigger && dropdownMenu && bairroList && selectedBairroSpan) {
+          _bairroCombobox = initBairroCombobox({
+            trigger: dropdownTrigger,
+            menu: dropdownMenu,
+            list: bairroList,
+            selectedSpan: selectedBairroSpan,
+            bairrosIndex,
+            onSelect: renderBairro,
+          });
+        }
+
 
         // Torna acessível globalmente for limparBusca
         window.renderBairroAtual = renderBairro;
@@ -637,20 +852,18 @@ async function main() {
             });
         });
 
-        // Carrega o primeiro bairro por padrão
         if (Object.keys(bairrosIndex).length > 0) {
             const primeiroSlug = Object.keys(bairrosIndex)[0];
             renderBairro(primeiroSlug);
         }
 
-        // Configurar busca com debounce de 400ms
         const searchInput = document.getElementById('searchInput');
+        const searchSubmit = document.getElementById('searchSubmit');
         if (searchInput) {
             searchInput.addEventListener('input', debounce((e) => {
                 filtrarRuas(e.target.value);
             }, 400));
 
-            // Permite busca imediata ao pressionar Enter
             searchInput.addEventListener('keydown', (e) => {
                 if (e.key === 'Enter') {
                     filtrarRuas(e.target.value);
@@ -658,20 +871,20 @@ async function main() {
             });
         }
 
-        // Configurar clique no ícone de busca como um botão de pesquisa
-        const searchIcon = document.querySelector('.search-icon');
-        if (searchIcon && searchInput) {
-            searchIcon.addEventListener('click', () => {
+        if (searchSubmit && searchInput) {
+            searchSubmit.addEventListener('click', () => {
                 filtrarRuas(searchInput.value);
+                searchInput.focus();
             });
         }
 
     } catch (err) {
         console.error('Erro ao carregar da API:', err);
-        // Opcional: Mostrar uma mensagem de erro para o usuário na tela
+        limparLoading();
         const mainDoc = document.getElementById('main-doc');
         if (mainDoc) {
-            mainDoc.innerHTML = `<p style="text-align: center; color: red;">Não foi possível carregar os dados. Verifique sua conexão e tente novamente.</p>`;
+            mainDoc.removeAttribute('aria-busy');
+            mainDoc.innerHTML = `<p role="alert" aria-live="assertive" style="text-align: center; color: red;">Não foi possível carregar os dados. Verifique sua conexão e tente novamente.</p>`;
         }
     }
 }

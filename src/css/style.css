@@ -37,6 +37,22 @@
         scroll-behavior: smooth;
     }
 
+    .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--dark-gray);
+        color: var(--white);
+        padding: 8px 16px;
+        z-index: 10001;
+        text-decoration: none;
+        border-radius: 0 0 4px 0;
+    }
+
+    .skip-link:focus {
+        top: 0;
+    }
+
     /* Estilo da Navbar Modernizado */
     .navbar {
         background: rgb(15, 15, 15) !important; 
@@ -169,14 +185,26 @@
         align-items: center;
     }
 
-    .search-icon {
+    .search-submit {
         position: absolute;
-        left: 20px;
-        font-size: 1.2rem;
+        right: 8px;
+        width: 42px;
+        height: 42px;
+        border: none;
+        border-radius: 50%;
+        background: transparent;
         color: var(--medium-gray);
-        pointer-events: auto;
+        font-size: 1.2rem;
         cursor: pointer;
-        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .search-submit:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+        color: var(--dark-gray);
     }
 
     .search-input {
@@ -184,7 +212,7 @@
         background-color: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
         border: none;
-        padding: 18px 20px 18px 55px;
+        padding: 18px 52px 18px 22px;
         font-size: 1rem;
         border-radius: 50px;
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -512,6 +540,12 @@
         user-select: none;
     }
 
+    button.dropdown-trigger.bairro-badge {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        font-family: inherit;
+        color: inherit;
+    }
+
     .dropdown-trigger:hover {
         background-color: rgba(255, 255, 255, 0.35);
         border-color: rgba(255, 255, 255, 0.5);
@@ -568,10 +602,16 @@
         transition: all 0.2s ease;
     }
 
-    .dropdown-menu-custom li:hover {
+    .dropdown-menu-custom li:hover,
+    .dropdown-menu-custom li.is-focused {
         background-color: rgba(255, 255, 255, 0.1);
         color: white;
-        padding-left: 20px; /* Subtle movement effect */
+        padding-left: 20px;
+    }
+
+    .dropdown-menu-custom li[aria-selected="true"] {
+        background-color: rgba(255, 255, 255, 0.15);
+        font-weight: 600;
     }
 
     @keyframes fadeInDown {
@@ -756,10 +796,21 @@
         box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
         transition: all 0.3s ease;
         cursor: pointer;
+        border: none;
         border-left: 3px solid var(--medium-gray);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
+    }
+
+    .rua-card[aria-expanded="true"] {
+        border-left-color: #198754;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
     }
 
     .rua-card:hover {
@@ -1028,6 +1079,11 @@
         display: flex;
         flex-direction: column;
         cursor: pointer;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
+        font-size: inherit;
+        color: inherit;
     }
 
     .search-result-card:hover {
@@ -1240,12 +1296,16 @@
         margin: 8px 0;
     }
 
-    .detalhes-rua iframe {
+    .detalhes-rua iframe,
+    .detalhes-rua .mini-map {
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         width: 100%;
-        height: 300px;
+        height: 380px;
         border: none;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
     }
 
     /* ============================================
@@ -2015,12 +2075,14 @@
         }
 
         .search-input {
-            padding: 14px 16px 14px 45px;
+            padding: 14px 48px 14px 18px;
             font-size: 0.9rem;
         }
 
-        .search-icon {
-            left: 15px;
+        .search-submit {
+            width: 36px;
+            height: 36px;
+            right: 6px;
             font-size: 1rem;
         }
 
@@ -2164,6 +2226,28 @@
             padding: 12px;
         }
 
+        #newChatbotContainer {
+            bottom: 88px;
+            right: 20px;
+        }
+
+        .fixed-buttons {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        body.chatbot-open .fixed-buttons {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
+        }
+
+        #newChatbotWindow {
+            width: min(420px, calc(100vw - 40px));
+            right: 0;
+            bottom: 60px;
+        }
+
         /* 6. Footer responsivo */
         .site-footer {
             padding: 40px 20px 20px;
@@ -2298,17 +2382,24 @@
             font-size: 0.9rem;
         }
 
-        /* Chatbot mobile */
+        /* Chatbot mobile — empilhado acima do botão voltar ao topo */
         #newChatbotContainer {
-            bottom: 20px;
+            bottom: 80px;
             right: 20px;
-            right: 80px; /* Mantém do lado do return top */
         }
 
         #newChatbotWindow {
             width: calc(100vw - 40px);
-            right: -60px; /* Centraliza relativo ao botão */
-            bottom: 80px;
+            max-width: 420px;
+            right: 0;
+            bottom: 60px;
+        }
+
+        /* Esconde "voltar ao topo" enquanto o chat estiver aberto */
+        body.chatbot-open .fixed-buttons {
+            opacity: 0;
+            pointer-events: none;
+            visibility: hidden;
         }
 
         /* Melhorias nas seções */
@@ -2378,6 +2469,31 @@
     @keyframes spin {
         to {
             transform: rotate(360deg);
+        }
+    }
+
+    /* Respeita preferência do usuário por menos movimento (WCAG 2.3.3) */
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+
+        *,
+        *::before,
+        *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+
+        .hero-section {
+            background-attachment: scroll;
+        }
+
+        .fixed-buttons button:hover,
+        .rua-card:hover,
+        #newChatbotButton:hover {
+            transform: none;
         }
     }
 

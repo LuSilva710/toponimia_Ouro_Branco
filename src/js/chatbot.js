@@ -82,36 +82,36 @@ export function initChatbot() {
 function injectHTML() {
   const html = `
     <div id="newChatbotContainer">
-      <button id="newChatbotButton" aria-label="Abrir assistente">
-        <i class="bi bi-chat-dots-fill"></i>
+      <button id="newChatbotButton" type="button" aria-label="Abrir assistente virtual" aria-expanded="false" aria-controls="newChatbotWindow">
+        <i class="bi bi-chat-dots-fill" aria-hidden="true"></i>
       </button>
       
-      <div id="newChatbotWindow" class="chatbot-hidden">
+      <div id="newChatbotWindow" class="chatbot-hidden" role="dialog" aria-modal="true" aria-labelledby="chatbot-title" aria-hidden="true">
         <div class="chat-header">
           <div class="chat-header-info">
             <div class="chat-avatar-status">
-              <i class="bi bi-robot"></i>
-              <span class="status-indicator"></span>
+              <i class="bi bi-robot" aria-hidden="true"></i>
+              <span class="status-indicator" aria-hidden="true"></span>
             </div>
             <div>
-              <h3>Assistente Virtual</h3>
+              <h3 id="chatbot-title">Assistente Virtual</h3>
               <span>Online • Ouro Branco</span>
             </div>
           </div>
           <div class="chat-header-actions">
-            <button id="backToHome" title="Voltar ao início"><i class="bi bi-house-door"></i></button>
-            <button id="closeChat" title="Fechar"><i class="bi bi-x-lg"></i></button>
+            <button type="button" id="backToHome" aria-label="Voltar ao início da conversa"><i class="bi bi-house-door" aria-hidden="true"></i></button>
+            <button type="button" id="closeChat" aria-label="Fechar assistente virtual"><i class="bi bi-x-lg" aria-hidden="true"></i></button>
           </div>
         </div>
 
-        <div id="newChatbotMessages">
+        <div id="newChatbotMessages" aria-live="polite" aria-relevant="additions">
           </div>
 
         <div class="chat-input-area">
           <div class="input-wrapper">
-            <input type="text" id="newUserInput" placeholder="Pergunte sobre uma rua ou bairro..." autocomplete="off">
-            <button id="newSendMessageButton" aria-label="Enviar">
-              <i class="bi bi-send-fill"></i>
+            <input type="text" id="newUserInput" placeholder="Pergunte sobre uma rua ou bairro..." autocomplete="off" aria-label="Pergunte sobre uma rua ou bairro">
+            <button type="button" id="newSendMessageButton" aria-label="Enviar mensagem">
+              <i class="bi bi-send-fill" aria-hidden="true"></i>
             </button>
           </div>
           <p class="chat-footer">Poderia haver erros na IA. Verifique dados oficiais.</p>
@@ -155,6 +155,14 @@ function toggleChat() {
   chatbotWindow.classList.toggle('chatbot-hidden')
   chatbotWindow.classList.toggle('chatbot-visible')
 
+  chatbotButton.setAttribute('aria-expanded', String(isOpen))
+  chatbotWindow.setAttribute('aria-hidden', String(!isOpen))
+  chatbotButton.setAttribute(
+    'aria-label',
+    isOpen ? 'Fechar assistente virtual' : 'Abrir assistente virtual'
+  )
+  document.body.classList.toggle('chatbot-open', isOpen)
+
   if (isOpen) {
     chatbotButton.classList.add('active')
     if (historico.length === 0) {
@@ -163,6 +171,7 @@ function toggleChat() {
     setTimeout(() => userInput.focus(), 300)
   } else {
     chatbotButton.classList.remove('active')
+    chatbotButton.focus()
   }
 }
 
@@ -211,12 +220,13 @@ function adicionarMensagem(role, texto) {
 
   const msgDiv = document.createElement('div')
   msgDiv.className = `chat-msg ${role}`
+  if (role === 'bot') msgDiv.setAttribute('role', 'article')
 
   const bubble = document.createElement('div')
   bubble.className = 'chat-bubble'
   bubble.innerHTML = `
     <div class="chat-text">${texto}</div>
-    <div class="chat-time">${horaAtual()}</div>
+    <div class="chat-time" aria-hidden="true">${horaAtual()}</div>
   `
 
   if (role === 'bot') {
@@ -289,6 +299,9 @@ function mostrarTyping() {
   const typing = document.createElement('div')
   typing.className = 'chat-msg bot typing-msg'
   typing.id = 'typing-indicator'
+  typing.setAttribute('role', 'status')
+  typing.setAttribute('aria-live', 'polite')
+  typing.setAttribute('aria-label', 'Assistente está digitando')
   typing.innerHTML = `
     <div class="chat-avatar"><i class="bi bi-robot"></i></div>
     <div class="chat-bubble">
