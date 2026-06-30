@@ -455,7 +455,7 @@
 
     .bairro-header {
         position: relative;
-        height: 400px; /* Altura padronizada para todas as capas */
+        min-height: 400px; /* Altura padronizada para todas as capas */
         display: flex;
         align-items: flex-end;
         border-radius: 20px 20px 0 0; /* Acompanha o estilo arredondado se necessário */
@@ -464,7 +464,8 @@
     /* Responsividade para celulares */
     @media (max-width: 768px) {
         .bairro-header {
-            height: 300px;
+            height: auto;
+            min-height: 300px;
         }
     }
 
@@ -489,10 +490,10 @@
     }
 
     .bairro-cover img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        object-position: center !important;
     }
 
     .bairro-info {
@@ -1157,46 +1158,7 @@
         border-radius: 0;
         animation: expandCard 0.3s ease-out;
         transform-origin: top;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
         position: relative;
-    }
-
-    /* Indicador de scroll em mobile */
-    @media (max-width: 768px) {
-        .detalhes-rua::after {
-            content: '→';
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(34, 34, 34, 0.8);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-            pointer-events: none;
-            opacity: 0.7;
-            animation: pulseScroll 2s infinite;
-        }
-
-        @keyframes pulseScroll {
-
-            0%,
-            100% {
-                opacity: 0.7;
-                transform: translateY(-50%) translateX(0);
-            }
-
-            50% {
-                opacity: 1;
-                transform: translateY(-50%) translateX(4px);
-            }
-        }
     }
 
     @keyframes expandCard {
@@ -1211,101 +1173,234 @@
         }
     }
 
-    .detalhes-rua table {
+    /* Nova Ficha Toponímica Responsive & Premium */
+    .ficha-toponimica {
         background-color: var(--white);
-        border-radius: 8px;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid var(--border-color);
+        padding: 24px;
+        margin: 15px 0 25px 0;
+        font-family: inherit;
         overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        min-width: 600px;
-        border-collapse: collapse;
     }
 
-    .detalhes-rua::-webkit-scrollbar {
-        height: 8px;
-    }
-
-    .detalhes-rua::-webkit-scrollbar-track {
-        background: var(--lighter-gray);
-        border-radius: 4px;
-    }
-
-    .detalhes-rua::-webkit-scrollbar-thumb {
-        background: var(--medium-gray);
-        border-radius: 4px;
-    }
-
-    .detalhes-rua::-webkit-scrollbar-thumb:hover {
-        background: var(--dark-gray);
-    }
-
-    .detalhes-rua table th {
-        background: linear-gradient(135deg, var(--dark-gray) 0%, var(--medium-gray) 100%);
-        color: var(--white);
-        font-weight: 600;
-        text-transform: uppercase;
-        font-size: 0.75rem;
-        letter-spacing: 1px;
-        padding: 16px 20px;
-        text-align: left;
-        border-bottom: 3px solid var(--dark-gray);
-    }
-
-    .detalhes-rua table td {
-        padding: 16px 20px;
+    /* Grid de Metadados / Informações Básicas */
+    .ficha-metadados {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 16px;
+        padding-bottom: 20px;
         border-bottom: 1px solid var(--border-color);
-        line-height: 1.7;
+        margin-bottom: 24px;
+    }
+
+    .meta-item {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        padding: 10px 12px;
+        background-color: var(--lighter-gray);
+        border-radius: 8px;
+        border-left: 3px solid var(--dark-gray);
+        min-width: 0; /* evita quebra de grid */
+    }
+
+    .meta-label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--medium-gray);
+        letter-spacing: 0.5px;
+    }
+
+    .meta-value {
         font-size: 0.9rem;
-        vertical-align: top;
-    }
-
-    .detalhes-rua table td:first-child {
         font-weight: 600;
+        color: var(--black);
+        word-break: break-word;
+    }
+
+    /* Estrutura de colunas para conteúdo principal */
+    .ficha-conteudo {
+        display: flex;
+        gap: 24px;
+    }
+
+    .ficha-col-principal {
+        flex: 1.6;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        min-width: 0;
+    }
+
+    .ficha-col-midia {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        min-width: 0;
+    }
+
+    /* Seções Internas */
+    .ficha-secao {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .secao-titulo {
+        font-size: 1.05rem;
+        font-weight: 700;
         color: var(--dark-gray);
-        width: 30%;
-        background-color: rgba(250, 250, 250, 0.5);
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1.5px solid var(--light-gray);
+        padding-bottom: 6px;
     }
 
-    .detalhes-rua table tr:last-child td {
-        border-bottom: none;
+    .secao-titulo i {
+        color: var(--medium-gray);
     }
 
-    .detalhes-rua table tr:hover td {
+    .secao-texto {
+        font-size: 0.95rem;
+        line-height: 1.7;
+        color: var(--medium-gray);
+        margin: 0;
+        text-align: justify;
+    }
+
+    /* Container de Mapas */
+    .ficha-mapa-container {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         background-color: var(--lighter-gray);
     }
 
-    .detalhes-rua table tr:hover td:first-child {
-        background-color: rgba(240, 240, 240, 0.8);
-    }
-
-    /* Estilo para valores especiais na tabela */
-    .detalhes-rua table td strong {
-        color: var(--black);
-        font-weight: 700;
-    }
-
-    .detalhes-rua table td em {
-        color: var(--medium-gray);
-        font-style: italic;
-    }
-
-    .detalhes-rua img {
-        max-width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        margin: 8px 0;
-    }
-
-    .detalhes-rua iframe,
-    .detalhes-rua .mini-map {
-        border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    .ficha-mapa-container .mini-map,
+    .ficha-mapa-container iframe {
         width: 100%;
-        height: 380px;
+        height: 320px;
         border: none;
+        display: block;
         position: relative;
-        overflow: hidden;
         z-index: 1;
+    }
+    
+    .ficha-mapa-container .no-map {
+        padding: 40px;
+        text-align: center;
+        color: var(--medium-gray);
+        font-size: 0.9rem;
+    }
+
+    /* Cards de Imagens */
+    .midia-card {
+        background-color: var(--lighter-gray);
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .midia-titulo {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        color: var(--medium-gray);
+        margin: 0;
+        letter-spacing: 0.5px;
+        border-bottom: 1px solid var(--border-color);
+        padding-bottom: 4px;
+    }
+
+    .midia-img-wrapper {
+        border-radius: 6px;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--white);
+        border: 1px solid rgba(0,0,0,0.05);
+        height: 250px;
+    }
+
+    .midia-img-wrapper img {
+        max-width: 100% !important;
+        max-height: 100% !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        transition: transform 0.3s ease;
+        border-radius: 4px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    
+    .midia-img-wrapper img:hover {
+        transform: scale(1.03);
+    }
+
+    /* Responsividade */
+    @media (max-width: 991px) {
+        .ficha-metadados {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .ficha-toponimica {
+            padding: 16px;
+        }
+
+        .ficha-metadados {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+        }
+
+        .meta-item {
+            padding: 8px 10px;
+        }
+
+        .meta-label {
+            font-size: 0.7rem;
+        }
+
+        .meta-value {
+            font-size: 0.85rem;
+        }
+
+        .meta-item.meta-nome {
+            grid-column: span 2;
+        }
+
+        .ficha-conteudo {
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ficha-col-principal {
+            gap: 20px;
+        }
+
+        .ficha-col-midia {
+            gap: 16px;
+        }
+
+        .ficha-mapa-container .mini-map,
+        .ficha-mapa-container iframe {
+            height: 260px;
+        }
     }
 
     /* ============================================
@@ -2055,7 +2150,7 @@
 
         .rua-card-badge {
             margin-top: 8px;
-            align-self: flex-end;
+            align-self: flex-start;
         }
 
         /* 4. Hero section responsivo */
@@ -2158,6 +2253,7 @@
 
         /* 6. Bairro section responsiva */
         .bairro-header {
+            height: auto;
             min-height: 250px;
         }
 
@@ -2372,20 +2468,25 @@
 
         /* Melhorias nos botões flutuantes */
         .fixed-buttons {
-            bottom: 10px;
-            right: 10px;
+            bottom: 16px;
+            right: 16px;
         }
 
         .fixed-buttons button {
-            width: 40px;
-            height: 40px;
+            width: 44px !important;
+            height: 44px !important;
             font-size: 0.9rem;
         }
 
         /* Chatbot mobile — empilhado acima do botão voltar ao topo */
         #newChatbotContainer {
-            bottom: 80px;
-            right: 20px;
+            bottom: 76px;
+            right: 16px;
+        }
+
+        #newChatbotButton {
+            width: 44px !important;
+            height: 44px !important;
         }
 
         #newChatbotWindow {

@@ -68,46 +68,71 @@ function gerarSecoesAlfabeto() {
 }
 
 
-// Função para criar elementos da tabela de informações da rua
-function criarTabelaRua(rua) {
-    const tabela = document.createElement('table');
-    tabela.innerHTML = `
-        <thead>
-            <tr>
-                <th>Nome Oficial</th>
-                <th>Localização</th>
-                <th>Legislação</th>
-                <th>Código</th>
-                <th>Regional</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>${rua.nome_oficial || ''}</td>
-                <td>${rua.localizacao || ''}</td>
-                <td>${rua.legislacao || ''}</td>
-                <td>${rua.codigo || ''}</td>
-                <td>${rua.regional || ''}</td>
-            </tr>
-            <tr>
-                <td colspan="3">${rua.significado || 'Significado não disponível.'}</td>
-                <td colspan="2">
-                    ${rua.imagemHomenageado ? `<img src="${normalizePath(rua.imagemHomenageado)}" alt="Imagem do Homenageado" style="max-width: 65%; display: block; margin: auto;">` : ''}
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                    ${(rua.lat && rua.lng)
-                        ? `<div id="mini-map-${rua.id}" class="mini-map"></div>`
-                        : (rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="380" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : 'Mapa não disponível.')}
-                </td>
-                <td colspan="2">
-                    ${rua.imagem ? `<img src="${normalizePath(rua.imagem)}" alt="Imagem da rua" style="max-width: 90%;">` : ''}
-                </td>
-            </tr>
-        </tbody>
+// Função para criar elementos da ficha de informações da rua (responsivo)
+function criarFichaRua(rua) {
+    const container = document.createElement('div');
+    container.className = 'ficha-toponimica';
+    container.innerHTML = `
+        <div class="ficha-metadados">
+            <div class="meta-item meta-nome">
+                <span class="meta-label">Nome Oficial</span>
+                <span class="meta-value">${rua.nome_oficial || '---'}</span>
+            </div>
+            <div class="meta-item meta-localizacao">
+                <span class="meta-label">Localização</span>
+                <span class="meta-value">${rua.localizacao || '---'}</span>
+            </div>
+            <div class="meta-item meta-legislacao">
+                <span class="meta-label">Legislação</span>
+                <span class="meta-value">${rua.legislacao || '---'}</span>
+            </div>
+            <div class="meta-item meta-codigo">
+                <span class="meta-label">Código</span>
+                <span class="meta-value">${rua.codigo || '---'}</span>
+            </div>
+            <div class="meta-item meta-regional">
+                <span class="meta-label">Regional</span>
+                <span class="meta-value">${rua.regional || '---'}</span>
+            </div>
+        </div>
+        <div class="ficha-conteudo">
+            <div class="ficha-col-principal">
+                <div class="ficha-secao">
+                    <h4 class="secao-titulo"><i class="bi bi-info-circle" aria-hidden="true"></i> Significado / Histórico</h4>
+                    <p class="secao-texto">${rua.significado || 'Significado não disponível.'}</p>
+                </div>
+                <div class="ficha-secao">
+                    <h4 class="secao-titulo"><i class="bi bi-map" aria-hidden="true"></i> Localização Geográfica</h4>
+                    <div class="ficha-mapa-container">
+                        ${(rua.lat && rua.lng)
+                            ? `<div id="mini-map-${rua.id}" class="mini-map"></div>`
+                            : (rua.mapa ? `<iframe src="${rua.mapa}" width="100%" height="320" style="border:0;" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>` : '<div class="no-map">Mapa não disponível.</div>')}
+                    </div>
+                </div>
+            </div>
+            ${(rua.imagemHomenageado || rua.imagem) ? `
+            <div class="ficha-col-midia">
+                ${rua.imagemHomenageado ? `
+                <div class="midia-card">
+                    <h5 class="midia-titulo">Homenageado(a)</h5>
+                    <div class="midia-img-wrapper">
+                        <img src="${normalizePath(rua.imagemHomenageado)}" alt="Imagem do Homenageado">
+                    </div>
+                </div>
+                ` : ''}
+                ${rua.imagem ? `
+                <div class="midia-card">
+                    <h5 class="midia-titulo">Imagem da Rua</h5>
+                    <div class="midia-img-wrapper">
+                        <img src="${normalizePath(rua.imagem)}" alt="Imagem da rua">
+                    </div>
+                </div>
+                ` : ''}
+            </div>
+            ` : ''}
+        </div>
     `;
-    return tabela;
+    return container;
 }
 
 // Função para exibir uma introdução sobre o bairro selecionado
@@ -197,7 +222,7 @@ function exibirDetalhesRua(rua, card) {
     divDetalhes.id = panelId;
     divDetalhes.setAttribute('role', 'region');
     divDetalhes.setAttribute('aria-label', `Detalhes de ${rua.nome_oficial || card.dataset.ruaNome}`);
-    divDetalhes.appendChild(criarTabelaRua(rua));
+    divDetalhes.appendChild(criarFichaRua(rua));
 
     card.parentNode.insertBefore(divDetalhes, card.nextSibling);
     card.setAttribute('aria-expanded', 'true');
