@@ -859,6 +859,10 @@
         white-space: nowrap;
     }
 
+    .rua-card[aria-expanded="true"] .rua-card-badge {
+        display: none;
+    }
+
     /* ============================================
        SEÇÕES DO ALFABETO (A-Z) - MINIMALISTA
        ============================================ */

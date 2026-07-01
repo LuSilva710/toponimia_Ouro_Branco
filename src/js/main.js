@@ -655,9 +655,9 @@ async function irParaRuaNoBairro(slugBairro, nomeRua) {
 function filtrarRuas(query) {
     const queryLower = removerAcentos(query.trim().toLowerCase());
 
-    // Se a busca estiver vazia, limpa tudo e restaura o estado original
+    // Se a busca estiver vazia ou com menos de 2 caracteres, restaura o estado original sem limpar o input
     if (!queryLower || queryLower.length < 2) {
-        limparBusca(false); // false para não focar o input novamente
+        restaurarEstadoOriginal();
         return;
     }
 
@@ -779,14 +779,8 @@ function mostrarFeedbackBusca(quantidade, termo, resultados) {
     }
 }
 
-// Função para limpar a busca
-window.limparBusca = function (shouldFocus = true) {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.value = '';
-        if (shouldFocus) searchInput.focus();
-    }
-
+// Função para restaurar o estado original da página (remover resultados de busca e mostrar bairro atual)
+function restaurarEstadoOriginal() {
     // Remove feedback
     const feedback = document.querySelector('.search-results-info');
     if (feedback) feedback.remove();
@@ -794,6 +788,7 @@ window.limparBusca = function (shouldFocus = true) {
     const searchStatus = document.getElementById('search-status');
     if (searchStatus) searchStatus.textContent = '';
 
+    const searchInput = document.getElementById('searchInput');
     // Remove loading do input
     searchInput?.classList.remove('search-loading');
 
@@ -801,6 +796,16 @@ window.limparBusca = function (shouldFocus = true) {
     if (_bairroAtualSlug && window.renderBairroAtual) {
         window.renderBairroAtual(_bairroAtualSlug);
     }
+}
+
+// Função para limpar a busca
+window.limparBusca = function (shouldFocus = true) {
+    const searchInput = document.getElementById('searchInput');
+    if (searchInput) {
+        searchInput.value = '';
+        if (shouldFocus) searchInput.focus();
+    }
+    restaurarEstadoOriginal();
 }
 
 async function main() {
