@@ -61,9 +61,3 @@ npm run dev
 - `bash iniciar-ia.sh`: Inicia as ferramentas de desenvolvimento assistidas por IA.
 
 ---
-
-## ✒️ Autoria e Agradecimentos
-
-- **Desenvolvedora:** Ludmila Silva (IFMG)
-- **Orientação:** [Nome do Orientador]
-- **Instituição:** Instituto Federal de Minas Gerais (IFMG) - Campus Ouro Branco
