@@ -4,26 +4,31 @@ dist/
 migracao.js
 update_ruas.js
 iniciar-ia.sh
+
+# Pasta local de SQL one-shot (schema versionado em supabase/migrations/)
 sql/
 
 # ai-provider-kit — compilado e dependências (regenerar com: npm run ai:build)
 ai-provider-kit/dist/
 ai-provider-kit/node_modules/
 
-# Outputs gerados pelo ai-classify.mjs (regeneráveis, podem ser grandes)
-scripts/ai-classify-results.json
-scripts/ai-classify.sql
+# Outputs regeneráveis de scripts (não versionar)
+scripts/ai/ai-classify-results.json
+scripts/ai/ai-classify.sql
+scripts/geo/osm_geometries.json
+scripts/geo/osm_coords_update.sql
+scripts/maintenance/missing_streets.json
 
-# Scripts e Arquivos Temporários de Desenvolvimento
+# Scripts e arquivos temporários de desenvolvimento
 scratch/
 
-# Logs e Arquivos de Sistema
+# Logs e arquivos de sistema
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .DS_Store
 
-# Variáveis de Ambiente Locais
+# Variáveis de ambiente locais
 .env.*.local
 .env.bak
 .env.*.bak

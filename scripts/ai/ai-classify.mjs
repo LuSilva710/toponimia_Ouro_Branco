@@ -5,17 +5,17 @@
  * O modelo analisa o nome e retorna a categoria toponímica mais adequada.
  *
  * Uso:
- *   node scripts/ai-classify.mjs [--dry-run] [--limit=N] [--input=arquivo.json]
+ *   node scripts/ai/ai-classify.mjs [--dry-run] [--limit=N] [--input=arquivo.json]
  *
  * Flags:
  *   --dry-run        Mostra o que seria feito sem chamar a IA/Supabase
  *   --limit=N        Processa apenas os primeiros N registros (padrão: 20)
- *   --input=FILE     Arquivo JSON de entrada (padrão: scripts/missing_streets.json)
+ *   --input=FILE     Arquivo JSON de entrada (padrão: scripts/maintenance/missing_streets.json)
  *   --batch=N        Tamanho do lote enviado à IA por requisição (padrão: 10)
  *
- * Saída:
- *   scripts/ai-classify-results.json  → resultados completos
- *   scripts/ai-classify.sql           → SQL para aplicar no Supabase
+ * Saída (gitignored):
+ *   scripts/ai/ai-classify-results.json  → resultados completos
+ *   scripts/ai/ai-classify.sql           → SQL para aplicar no Supabase
  *
  * Variáveis de ambiente (configurar em ai-provider-kit/.env ou .env raiz):
  *   AI_PROVIDER    = gemini | openai | codex
@@ -35,8 +35,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 // Tenta em ordem: ai-provider-kit/.env → .env raiz
 function _loadEnv() {
   const candidates = [
-    path.join(__dirname, '..', 'ai-provider-kit', '.env'),
-    path.join(__dirname, '..', '.env'),
+    path.join(__dirname, '..', '..', 'ai-provider-kit', '.env'),
+    path.join(__dirname, '..', '..', '.env'),
   ];
   for (const envPath of candidates) {
     if (fs.existsSync(envPath)) {
@@ -61,8 +61,8 @@ _loadEnv();
 
 // Importa o ai-provider-kit (TypeScript via tsx, ou já compilado em dist/)
 // Usa tsx para rodar diretamente o .ts sem precisar compilar antes
-const kitPath = path.join(__dirname, '..', 'ai-provider-kit', 'src', 'index.js');
-const kitDistPath = path.join(__dirname, '..', 'ai-provider-kit', 'dist', 'index.js');
+const kitPath = path.join(__dirname, '..', '..', 'ai-provider-kit', 'src', 'index.js');
+const kitDistPath = path.join(__dirname, '..', '..', 'ai-provider-kit', 'dist', 'index.js');
 
 let validateProviderConfig, generateJson, getProviderLabel;
 
@@ -77,7 +77,7 @@ const DRY_RUN = args.includes('--dry-run');
 const LIMIT   = parseInt(args.find(a => a.startsWith('--limit='))?.split('=')[1] ?? '20', 10);
 const BATCH   = parseInt(args.find(a => a.startsWith('--batch='))?.split('=')[1] ?? '10', 10);
 const INPUT   = args.find(a => a.startsWith('--input='))?.split('=')[1]
-                ?? path.join(__dirname, 'missing_streets.json');
+                ?? path.join(__dirname, '..', 'maintenance', 'missing_streets.json');
 
 // ─── Categorias válidas ───────────────────────────────────────────────────────
 
@@ -143,7 +143,7 @@ async function main() {
   // 2. Carrega dados de entrada
   if (!fs.existsSync(INPUT)) {
     console.error(`❌ Arquivo de entrada não encontrado: ${INPUT}`);
-    console.error('   Gere-o com: node scripts/missing_streets.js');
+    console.error('   Gere-o com: node scripts/maintenance/missing_streets.js');
     process.exit(1);
   }
 

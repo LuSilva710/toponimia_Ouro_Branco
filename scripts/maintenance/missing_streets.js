@@ -22,8 +22,8 @@ async function run() {
   const faltantes = nomesBanco.filter(nome => !nomesGeo.includes(nome));
 
   // 4. Salva a lista em JSON para uso posterior
-  fs.writeFileSync('scripts/missing_streets.json', JSON.stringify(faltantes, null, 2), 'utf8');
-  console.log(`Encontradas ${faltantes.length} ruas sem geometria. Lista salva em scripts/missing_streets.json`);
+  fs.writeFileSync('scripts/maintenance/missing_streets.json', JSON.stringify(faltantes, null, 2), 'utf8');
+  console.log(`Encontradas ${faltantes.length} ruas sem geometria. Lista salva em scripts/maintenance/missing_streets.json`);
 }
 
 run();

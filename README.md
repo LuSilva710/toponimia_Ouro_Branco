@@ -56,8 +56,10 @@ npm run dev
 
 ## 📊 Scripts de IA
 
-- `npm run ai:classify`: Executa a classificação automática das ruas pendentes.
-- `npm run ai:build`: Compila o kit de integração de IA.
-- `bash iniciar-ia.sh`: Inicia as ferramentas de desenvolvimento assistidas por IA.
+- `npm run ai:classify`: classifica ruas pendentes via IA (`scripts/ai/ai-classify.mjs`)
+- `npm run ai:build`: compila o `ai-provider-kit`
+- Schema do banco: `supabase/migrations/`
+
+Ferramentas auxiliares (georref / manutenção): `scripts/geo/` e `scripts/maintenance/`.
 
 ---

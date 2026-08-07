@@ -66,7 +66,7 @@ async function run() {
                 });
                 
                 // Salvar progresso incrementalmente
-                fs.writeFileSync('sql/19_update_mass_coordinates_osm.sql', sqlUpdates);
+                fs.writeFileSync('scripts/geo/osm_coords_update.sql', sqlUpdates);
             }
         } catch (err) {
             console.error('Erro no lote:', err.message);
@@ -75,7 +75,7 @@ async function run() {
         await new Promise(resolve => setTimeout(resolve, 7000)); // Delay longo entre lotes (1 em 1)
     }
 
-    console.log('\nFinalizado! Script SQL final gerado em: sql/19_update_mass_coordinates_osm.sql');
+    console.log('\nFinalizado! Script SQL gerado em: scripts/geo/osm_coords_update.sql');
 }
 
 run();

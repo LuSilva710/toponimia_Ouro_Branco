@@ -55,9 +55,9 @@ async function fetchGeometry(streetName) {
 }
 
 async function run() {
-  const missingPath = 'scripts/missing_streets.json';
+  const missingPath = 'scripts/maintenance/missing_streets.json';
   if (!fs.existsSync(missingPath)) {
-    console.error('missing_streets.json not found. Run missing_streets.js first.');
+    console.error('missing_streets.json not found. Run: node scripts/maintenance/missing_streets.js');
     return;
   }
   const missing = JSON.parse(fs.readFileSync(missingPath, 'utf8'));
@@ -78,8 +78,8 @@ async function run() {
     // pause between batches
     await new Promise(r => setTimeout(r, DELAY_MS));
   }
-  fs.writeFileSync('scripts/osm_geometries.json', JSON.stringify(results, null, 2), 'utf8');
-  console.log(`Finished. ${Object.keys(results).length} geometries saved to scripts/osm_geometries.json`);
+  fs.writeFileSync('scripts/geo/osm_geometries.json', JSON.stringify(results, null, 2), 'utf8');
+  console.log(`Finished. ${Object.keys(results).length} geometries saved to scripts/geo/osm_geometries.json`);
 }
 
 run();

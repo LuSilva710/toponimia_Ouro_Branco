@@ -1,7 +1,7 @@
 import fs from 'fs';
 
 const geojsonPath = 'data/ouro_branco_streets.json';
-const geometriesPath = 'scripts/osm_geometries.json';
+const geometriesPath = 'scripts/geo/osm_geometries.json';
 
 if (!fs.existsSync(geojsonPath)) {
   console.error('GeoJSON file not found:', geojsonPath);

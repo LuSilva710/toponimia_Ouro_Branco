@@ -8,9 +8,9 @@
     "build": "vite build",
     "preview": "vite preview",
     "ai:build": "npm run build --prefix ai-provider-kit",
-    "ai:classify:dry": "node scripts/ai-classify.mjs --dry-run",
-    "ai:classify": "node scripts/ai-classify.mjs --limit=20",
-    "ai:classify:all": "node scripts/ai-classify.mjs --limit=9999"
+    "ai:classify:dry": "node scripts/ai/ai-classify.mjs --dry-run",
+    "ai:classify": "node scripts/ai/ai-classify.mjs --limit=20",
+    "ai:classify:all": "node scripts/ai/ai-classify.mjs --limit=9999"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
