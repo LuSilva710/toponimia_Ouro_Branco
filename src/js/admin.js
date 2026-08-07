@@ -1,6 +1,3 @@
-// ============================================
-// ADMIN DASHBOARD - admin.js
-// ============================================
 import { supabase } from './supabase-client.js'
 
 // ============================================
@@ -8,6 +5,76 @@ import { supabase } from './supabase-client.js'
 // ============================================
 let currentUser = null
 let bairrosCache = []
+let ruasCache = []
+
+// ============================================
+// HELPERS
+// ============================================
+function gerarSlug(texto) {
+  return String(texto || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 80)
+}
+
+function debounce(func, wait = 250) {
+  let timeout
+  return (...args) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => func(...args), wait)
+  }
+}
+
+function bindAutoSlug(nomeInputId, slugInputId) {
+  const nomeEl = document.getElementById(nomeInputId)
+  const slugEl = document.getElementById(slugInputId)
+  if (!nomeEl || !slugEl) return
+
+  slugEl.addEventListener('input', () => {
+    slugEl.dataset.autoSlug = 'false'
+  })
+
+  nomeEl.addEventListener('input', () => {
+    if (slugEl.dataset.autoSlug === 'false' && slugEl.value.trim()) return
+    slugEl.dataset.autoSlug = 'true'
+    slugEl.value = gerarSlug(nomeEl.value)
+  })
+}
+
+function resetAutoSlug(slugInputId, valor = '') {
+  const slugEl = document.getElementById(slugInputId)
+  if (!slugEl) return
+  slugEl.value = valor
+  slugEl.dataset.autoSlug = valor ? 'false' : 'true'
+}
+
+function toast(mensagem, tipo = 'success') {
+  let el = document.getElementById('admin-toast')
+  if (!el) {
+    el = document.createElement('div')
+    el.id = 'admin-toast'
+    el.className = 'admin-toast'
+    el.setAttribute('role', 'status')
+    el.setAttribute('aria-live', 'polite')
+    document.body.appendChild(el)
+  }
+  el.textContent = mensagem
+  el.className = `admin-toast show ${tipo}`
+  clearTimeout(el._timer)
+  el._timer = setTimeout(() => el.classList.remove('show'), 3200)
+}
+
+function escapeHtml(str) {
+  return String(str || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
 
 // ============================================
 // DOM REFERENCES
@@ -17,6 +84,9 @@ const dashboard = document.getElementById('admin-dashboard')
 const formLogin = document.getElementById('form-login')
 const loginError = document.getElementById('login-error')
 const userEmailEl = document.getElementById('user-email')
+
+bindAutoSlug('b_nome', 'b_slug')
+bindAutoSlug('r_nome', 'r_slug')
 
 // ============================================
 // AUTH
@@ -56,7 +126,6 @@ document.getElementById('btn-logout').addEventListener('click', async () => {
   loginScreen.style.display = 'flex'
 })
 
-// Check existing session
 supabase.auth.getSession().then(({ data: { session } }) => {
   if (session) {
     currentUser = session.user
@@ -80,15 +149,12 @@ document.querySelectorAll('.sidebar-link[data-tab]').forEach(link => {
     e.preventDefault()
     const tab = link.dataset.tab
 
-    // Update active state
     document.querySelectorAll('.sidebar-link[data-tab]').forEach(l => l.classList.remove('active'))
     link.classList.add('active')
 
-    // Show corresponding tab
     document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'))
     document.getElementById(`tab-${tab}`).classList.add('active')
 
-    // Load data for tab
     if (tab === 'bairros') loadBairros()
     if (tab === 'ruas') loadRuas()
     if (tab === 'contribuicoes') loadContribuicoes('pendente')
@@ -110,7 +176,6 @@ async function loadDashboardStats() {
     document.getElementById('stat-ruas').textContent = ruasRes.count ?? '--'
     document.getElementById('stat-bairros').textContent = bairrosRes.count ?? '--'
 
-    // Contribuições - may not exist yet
     try {
       const contribRes = await supabase.from('contribuicoes_chatbot')
         .select('id', { count: 'exact', head: true })
@@ -118,7 +183,6 @@ async function loadDashboardStats() {
       document.getElementById('stat-contribuicoes').textContent = contribRes.count ?? '0'
     } catch { document.getElementById('stat-contribuicoes').textContent = '0' }
 
-    // Usuarios - may not exist yet
     try {
       const usersRes = await supabase.from('perfis').select('id', { count: 'exact', head: true })
       document.getElementById('stat-usuarios').textContent = usersRes.count ?? '0'
@@ -143,42 +207,50 @@ async function loadBairros() {
   const tbody = document.querySelector('#tabela-bairros tbody')
   tbody.innerHTML = data.map(b => `
     <tr>
-      <td>${b.nome}</td>
-      <td><code>${b.slug}</code></td>
-      <td>${(b.descricao || '').substring(0, 60)}${(b.descricao || '').length > 60 ? '...' : ''}</td>
+      <td>${escapeHtml(b.nome)}</td>
+      <td><code>${escapeHtml(b.slug)}</code></td>
+      <td>${escapeHtml((b.descricao || '').substring(0, 60))}${(b.descricao || '').length > 60 ? '...' : ''}</td>
       <td>
         <button class="btn-action edit" onclick="editarBairro('${b.id}')"><i class="bi bi-pencil"></i></button>
-        <button class="btn-action delete" onclick="deletarBairro('${b.id}', '${b.nome}')"><i class="bi bi-trash"></i></button>
+        <button class="btn-action delete" onclick="deletarBairro('${b.id}', '${String(b.nome || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
       </td>
     </tr>
   `).join('')
 
-  // Populate rua form bairro select
   const select = document.getElementById('r_bairro_id')
-  select.innerHTML = '<option value="">Selecione...</option>' + data.map(b =>
-    `<option value="${b.id}">${b.nome}</option>`
-  ).join('')
+  const filtroBairro = document.getElementById('filtro-ruas-bairro')
+  const optionsHtml = data.map(b => `<option value="${b.id}">${escapeHtml(b.nome)}</option>`).join('')
+  select.innerHTML = '<option value="">Selecione...</option>' + optionsHtml
+  if (filtroBairro) {
+    const current = filtroBairro.value
+    filtroBairro.innerHTML = '<option value="">Todos os bairros</option>' + optionsHtml
+    filtroBairro.value = current
+  }
 }
 
 document.getElementById('btn-novo-bairro').addEventListener('click', () => {
   document.getElementById('modal-bairro-titulo').textContent = 'Novo Bairro'
   document.getElementById('form-bairro').reset()
   document.getElementById('b_id').value = ''
+  resetAutoSlug('b_slug')
   new bootstrap.Modal(document.getElementById('modal-bairro')).show()
 })
 
 document.getElementById('form-bairro').addEventListener('submit', async (e) => {
   e.preventDefault()
   const id = document.getElementById('b_id').value
+  const nome = document.getElementById('b_nome').value
+  let slug = document.getElementById('b_slug').value.trim() || gerarSlug(nome)
+  document.getElementById('b_slug').value = slug
+
   const payload = {
-    slug: document.getElementById('b_slug').value,
-    nome: document.getElementById('b_nome').value,
+    slug,
+    nome,
     titulo: document.getElementById('b_titulo').value,
     imagem_capa: document.getElementById('b_capa').value,
     descricao: document.getElementById('b_desc').value,
   }
 
-  // Handle image upload
   const file = document.getElementById('b_capa_file').files[0]
   if (file) {
     const url = await uploadImage(file, 'bairros')
@@ -199,6 +271,7 @@ document.getElementById('form-bairro').addEventListener('submit', async (e) => {
   await registrarAuditoria(id ? 'UPDATE' : 'INSERT', 'bairros', id, dadosAntes, payload)
 
   bootstrap.Modal.getInstance(document.getElementById('modal-bairro')).hide()
+  toast(id ? 'Bairro atualizado.' : 'Bairro cadastrado.')
   await loadBairros()
   await loadDashboardStats()
 })
@@ -209,11 +282,11 @@ window.editarBairro = async (id) => {
 
   document.getElementById('modal-bairro-titulo').textContent = 'Editar Bairro'
   document.getElementById('b_id').value = b.id
-  document.getElementById('b_slug').value = b.slug || ''
   document.getElementById('b_nome').value = b.nome || ''
   document.getElementById('b_titulo').value = b.titulo || ''
   document.getElementById('b_capa').value = b.imagem_capa || ''
   document.getElementById('b_desc').value = b.descricao || ''
+  resetAutoSlug('b_slug', b.slug || '')
 
   new bootstrap.Modal(document.getElementById('modal-bairro')).show()
 }
@@ -226,15 +299,14 @@ window.deletarBairro = async (id, nome) => {
   if (error) return alert('Erro: ' + error.message)
 
   await registrarAuditoria('DELETE', 'bairros', id, dadosAntes, null)
+  toast('Bairro excluído.')
   await loadBairros()
   await loadDashboardStats()
 }
 
 // ============================================
-// RUAS CRUD
+// RUAS CRUD + FILTRO
 // ============================================
-let ruasCache = []
-
 async function loadRuas() {
   const { data, error } = await supabase
     .from('ruas')
@@ -243,36 +315,76 @@ async function loadRuas() {
 
   if (error) return console.error(error)
   ruasCache = data || []
+  renderRuasFiltradas()
+}
+
+function renderRuasFiltradas() {
+  const busca = (document.getElementById('filtro-ruas-busca')?.value || '').trim().toLowerCase()
+  const bairroId = document.getElementById('filtro-ruas-bairro')?.value || ''
+  const buscaNorm = busca.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+  const filtradas = ruasCache.filter(r => {
+    if (bairroId && String(r.bairro_id) !== String(bairroId)) return false
+    if (!buscaNorm) return true
+
+    const nome = (r.nome_oficial || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const loc = (r.localizacao || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const sig = (r.significado || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const bairro = (r.bairros?.nome || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    const cat = (r.categoria_toponimica || '').toLowerCase()
+
+    return nome.includes(buscaNorm) || loc.includes(buscaNorm) || sig.includes(buscaNorm) || bairro.includes(buscaNorm) || cat.includes(buscaNorm)
+  })
+
+  const contagem = document.getElementById('filtro-ruas-contagem')
+  if (contagem) {
+    contagem.textContent = busca || bairroId
+      ? `${filtradas.length} de ${ruasCache.length} ruas`
+      : `${ruasCache.length} ruas`
+  }
 
   const tbody = document.querySelector('#tabela-ruas tbody')
-  tbody.innerHTML = data.map(r => `
+  if (!filtradas.length) {
+    tbody.innerHTML = '<tr><td colspan="5" class="text-muted">Nenhuma rua encontrada com esses filtros.</td></tr>'
+    return
+  }
+
+  tbody.innerHTML = filtradas.map(r => `
     <tr>
-      <td>${r.nome_oficial}</td>
-      <td>${r.bairros?.nome || '--'}</td>
-      <td>${r.categoria_toponimica || '--'}</td>
-      <td>${r.genero_homenageado || '--'}</td>
+      <td>${escapeHtml(r.nome_oficial)}</td>
+      <td>${escapeHtml(r.bairros?.nome || '--')}</td>
+      <td>${escapeHtml(r.categoria_toponimica || '--')}</td>
+      <td>${escapeHtml(r.genero_homenageado || '--')}</td>
       <td>
         <button class="btn-action edit" onclick="editarRua('${r.id}')"><i class="bi bi-pencil"></i></button>
-        <button class="btn-action delete" onclick="deletarRua('${r.id}', '${r.nome_oficial}')"><i class="bi bi-trash"></i></button>
+        <button class="btn-action delete" onclick="deletarRua('${r.id}', '${String(r.nome_oficial || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
       </td>
     </tr>
   `).join('')
 }
 
+document.getElementById('filtro-ruas-busca')?.addEventListener('input', debounce(renderRuasFiltradas, 200))
+document.getElementById('filtro-ruas-bairro')?.addEventListener('change', renderRuasFiltradas)
+
 document.getElementById('btn-nova-rua').addEventListener('click', () => {
   document.getElementById('modal-rua-titulo').textContent = 'Nova Rua'
   document.getElementById('form-rua').reset()
   document.getElementById('r_id').value = ''
+  resetAutoSlug('r_slug')
   new bootstrap.Modal(document.getElementById('modal-rua')).show()
 })
 
 document.getElementById('form-rua').addEventListener('submit', async (e) => {
   e.preventDefault()
   const id = document.getElementById('r_id').value
+  const nomeOficial = document.getElementById('r_nome').value
+  let slug = document.getElementById('r_slug').value.trim() || gerarSlug(nomeOficial)
+  document.getElementById('r_slug').value = slug
+
   const payload = {
     bairro_id: document.getElementById('r_bairro_id').value,
-    slug: document.getElementById('r_slug').value,
-    nome_oficial: document.getElementById('r_nome').value,
+    slug,
+    nome_oficial: nomeOficial,
     significado: document.getElementById('r_sig').value,
     localizacao: document.getElementById('r_loc').value,
     legislacao: document.getElementById('r_leg').value,
@@ -286,7 +398,6 @@ document.getElementById('form-rua').addEventListener('submit', async (e) => {
     lng: document.getElementById('r_lng').value ? parseFloat(document.getElementById('r_lng').value) : null,
   }
 
-  // Handle image uploads
   const imgHom = document.getElementById('r_img_hom_file').files[0]
   if (imgHom) {
     const url = await uploadImage(imgHom, 'homenageados')
@@ -317,6 +428,7 @@ document.getElementById('form-rua').addEventListener('submit', async (e) => {
   await registrarAuditoria(id ? 'UPDATE' : 'INSERT', 'ruas', id, dadosAntes, payload)
 
   bootstrap.Modal.getInstance(document.getElementById('modal-rua')).hide()
+  toast(id ? 'Rua atualizada.' : 'Rua cadastrada.')
   await loadRuas()
   await loadDashboardStats()
 })
@@ -328,7 +440,6 @@ window.editarRua = async (id) => {
   document.getElementById('modal-rua-titulo').textContent = 'Editar Rua'
   document.getElementById('r_id').value = r.id
   document.getElementById('r_bairro_id').value = r.bairro_id || ''
-  document.getElementById('r_slug').value = r.slug || ''
   document.getElementById('r_nome').value = r.nome_oficial || ''
   document.getElementById('r_sig').value = r.significado || ''
   document.getElementById('r_loc').value = r.localizacao || ''
@@ -343,6 +454,7 @@ window.editarRua = async (id) => {
   document.getElementById('r_decada').value = r.decada_nomeacao || ''
   document.getElementById('r_lat').value = r.lat || ''
   document.getElementById('r_lng').value = r.lng || ''
+  resetAutoSlug('r_slug', r.slug || '')
 
   new bootstrap.Modal(document.getElementById('modal-rua')).show()
 }
@@ -355,6 +467,7 @@ window.deletarRua = async (id, nome) => {
   if (error) return alert('Erro: ' + error.message)
 
   await registrarAuditoria('DELETE', 'ruas', id, dadosAntes, null)
+  toast('Rua excluída.')
   await loadRuas()
   await loadDashboardStats()
 }
@@ -362,6 +475,37 @@ window.deletarRua = async (id, nome) => {
 // ============================================
 // CONTRIBUIÇÕES
 // ============================================
+function normalizarNomeRua(nome) {
+  return String(nome || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
+async function garantirRuasCache() {
+  if (ruasCache.length) return
+  const { data } = await supabase
+    .from('ruas')
+    .select('id, nome_oficial, significado, bairro_id, bairros(nome)')
+    .order('nome_oficial', { ascending: true })
+  ruasCache = data || []
+}
+
+function encontrarRuaPorNome(nomeRua) {
+  const alvo = normalizarNomeRua(nomeRua)
+  if (!alvo) return null
+
+  const exact = ruasCache.find(r => normalizarNomeRua(r.nome_oficial) === alvo)
+  if (exact) return exact
+
+  return ruasCache.find(r => {
+    const n = normalizarNomeRua(r.nome_oficial)
+    return n.includes(alvo) || alvo.includes(n)
+  }) || null
+}
+
 async function loadContribuicoes(status) {
   try {
     const { data, error } = await supabase
@@ -382,46 +526,101 @@ async function loadContribuicoes(status) {
       return
     }
 
-    container.innerHTML = data.map(c => `
+    await garantirRuasCache()
+
+    container.innerHTML = data.map(c => {
+      const ruaMatch = encontrarRuaPorNome(c.nome_rua)
+      const matchHint = ruaMatch
+        ? `<span class="contrib-match text-success"><i class="bi bi-link-45deg"></i> Vinculada a: ${escapeHtml(ruaMatch.nome_oficial)}</span>`
+        : `<span class="contrib-match text-warning"><i class="bi bi-exclamation-triangle"></i> Rua não encontrada no cadastro</span>`
+
+      return `
       <div class="contrib-card">
         <div class="contrib-header">
-          <span class="contrib-rua"><i class="bi bi-signpost-2 me-1"></i>${c.nome_rua}</span>
+          <span class="contrib-rua"><i class="bi bi-signpost-2 me-1"></i>${escapeHtml(c.nome_rua)}</span>
           <span class="contrib-status ${c.status}">${c.status}</span>
         </div>
-        <div class="contrib-text">${c.contribuicao}</div>
+        <div class="contrib-text">${escapeHtml(c.contribuicao)}</div>
         <div class="contrib-meta">
-          <i class="bi bi-person me-1"></i>${c.autor_nome || 'Anônimo'} · ${new Date(c.created_at).toLocaleDateString('pt-BR')}
+          <i class="bi bi-person me-1"></i>${escapeHtml(c.autor_nome || 'Anônimo')} · ${new Date(c.created_at).toLocaleDateString('pt-BR')}
+          ${matchHint}
         </div>
         ${c.status === 'pendente' ? `
           <div class="contrib-actions">
-            <button class="btn btn-sm btn-outline-success" onclick="moderarContribuicao('${c.id}', 'aprovado')">
-              <i class="bi bi-check-lg"></i> Aprovar
+            <button class="btn btn-sm btn-success" onclick="moderarContribuicao('${c.id}', 'aprovado', true)" ${ruaMatch ? '' : 'disabled title="Cadastre a rua antes de aplicar"'}>
+              <i class="bi bi-check2-all"></i> Aprovar e aplicar no significado
             </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="moderarContribuicao('${c.id}', 'rejeitado')">
+            <button class="btn btn-sm btn-outline-success" onclick="moderarContribuicao('${c.id}', 'aprovado', false)">
+              <i class="bi bi-check-lg"></i> Só aprovar
+            </button>
+            <button class="btn btn-sm btn-outline-danger" onclick="moderarContribuicao('${c.id}', 'rejeitado', false)">
               <i class="bi bi-x-lg"></i> Rejeitar
             </button>
           </div>
         ` : ''}
       </div>
-    `).join('')
+    `}).join('')
   } catch {
     document.getElementById('lista-contribuicoes').innerHTML =
       '<p class="text-muted">Tabela de contribuições ainda não criada.</p>'
   }
 }
 
-window.moderarContribuicao = async (id, novoStatus) => {
+window.moderarContribuicao = async (id, novoStatus, aplicarNoSignificado = false) => {
+  const { data: contribs, error: fetchErr } = await supabase
+    .from('contribuicoes_chatbot')
+    .select('*')
+    .eq('id', id)
+    .limit(1)
+
+  if (fetchErr || !contribs?.length) return alert('Erro ao carregar contribuição.')
+  const contrib = contribs[0]
+
+  if (novoStatus === 'aprovado' && aplicarNoSignificado) {
+    await garantirRuasCache()
+    const rua = encontrarRuaPorNome(contrib.nome_rua)
+    if (!rua) {
+      alert('Não foi possível localizar a rua no cadastro. Use "Só aprovar" ou cadastre a rua primeiro.')
+      return
+    }
+
+    const trecho = String(contrib.contribuicao || '').trim()
+    const atual = String(rua.significado || '').trim()
+    if (atual.includes(trecho)) {
+      if (!confirm('Esse texto já parece estar no significado. Deseja só marcar a contribuição como aprovada?')) return
+    } else {
+      const preview = trecho.length > 180 ? trecho.slice(0, 180) + '…' : trecho
+      if (!confirm(`Acrescentar esta contribuição ao significado de "${rua.nome_oficial}"?\n\n"${preview}"`)) return
+
+      const novoSignificado = atual ? `${atual}\n\n[Contribuição da comunidade] ${trecho}` : trecho
+      const { error: updateErr } = await supabase
+        .from('ruas')
+        .update({ significado: novoSignificado })
+        .eq('id', rua.id)
+
+      if (updateErr) return alert('Erro ao atualizar significado: ' + updateErr.message)
+
+      await registrarAuditoria('UPDATE', 'ruas', rua.id, { significado: atual }, { significado: novoSignificado })
+      const idx = ruasCache.findIndex(r => r.id === rua.id)
+      if (idx >= 0) ruasCache[idx] = { ...ruasCache[idx], significado: novoSignificado }
+    }
+  }
+
   const { error } = await supabase
     .from('contribuicoes_chatbot')
     .update({ status: novoStatus })
     .eq('id', id)
 
   if (error) return alert('Erro: ' + error.message)
+
+  if (novoStatus === 'aprovado' && aplicarNoSignificado) toast('Contribuição aprovada e aplicada no significado.')
+  else if (novoStatus === 'aprovado') toast('Contribuição aprovada.')
+  else toast('Contribuição rejeitada.')
+
   await loadContribuicoes('pendente')
   await loadDashboardStats()
 }
 
-// Contribution filter buttons
 document.querySelectorAll('[data-filter]').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'))
@@ -459,9 +658,9 @@ async function loadAuditoria() {
     tbody.innerHTML = (data || []).map(a => `
       <tr>
         <td>${new Date(a.created_at).toLocaleString('pt-BR')}</td>
-        <td>${a.user_email || '--'}</td>
+        <td>${escapeHtml(a.user_email || '--')}</td>
         <td><span class="badge bg-${a.acao === 'INSERT' ? 'success' : a.acao === 'DELETE' ? 'danger' : 'primary'}">${a.acao}</span></td>
-        <td>${a.tabela}</td>
+        <td>${escapeHtml(a.tabela)}</td>
         <td><button class="btn btn-sm btn-outline-secondary" onclick="alert(JSON.stringify(${JSON.stringify(a.dados_depois || a.dados_antes || {})}, null, 2))">Ver</button></td>
       </tr>
     `).join('')
@@ -493,10 +692,10 @@ async function loadUsuarios() {
     const tbody = document.querySelector('#tabela-usuarios tbody')
     tbody.innerHTML = (data || []).map(u => `
       <tr>
-        <td>${u.id}</td>
+        <td>${escapeHtml(u.email || u.id)}</td>
         <td>
-          <select class="form-select form-select-sm" style="width:120px;display:inline-block;background:var(--admin-bg);color:var(--admin-text);border-color:var(--admin-border)" onchange="alterarRole('${u.id}', this.value)">
-            <option value="viewer" ${u.role === 'viewer' ? 'selected' : ''}>Viewer</option>
+          <select class="form-select form-select-sm" style="width:140px;display:inline-block;background:var(--admin-bg);color:var(--admin-text);border-color:var(--admin-border)" onchange="alterarRole('${u.id}', this.value)">
+            <option value="viewer" ${u.role === 'viewer' ? 'selected' : ''}>Leitor</option>
             <option value="editor" ${u.role === 'editor' ? 'selected' : ''}>Editor</option>
             <option value="admin" ${u.role === 'admin' ? 'selected' : ''}>Admin</option>
           </select>
@@ -514,7 +713,7 @@ async function loadUsuarios() {
 window.alterarRole = async (id, role) => {
   const { error } = await supabase.from('perfis').update({ role }).eq('id', id)
   if (error) return alert('Erro: ' + error.message)
-  alert('Role atualizado!')
+  toast('Permissão atualizada.')
 }
 
 // ============================================

@@ -158,6 +158,16 @@
               <i class="bi bi-plus-lg"></i> Nova Rua
             </button>
           </div>
+          <div class="admin-toolbar mb-3">
+            <div class="admin-search-wrap">
+              <i class="bi bi-search" aria-hidden="true"></i>
+              <input type="search" id="filtro-ruas-busca" class="form-control" placeholder="Buscar por nome, localização ou significado..." aria-label="Buscar ruas">
+            </div>
+            <select id="filtro-ruas-bairro" class="form-select" aria-label="Filtrar por bairro">
+              <option value="">Todos os bairros</option>
+            </select>
+            <span id="filtro-ruas-contagem" class="admin-filter-count text-muted" aria-live="polite"></span>
+          </div>
           <div class="table-responsive">
             <table class="table table-hover" id="tabela-ruas">
               <thead>
@@ -252,12 +262,13 @@
           <div class="modal-body">
             <input type="hidden" id="b_id">
             <div class="mb-3">
-              <label class="form-label">Slug</label>
-              <input id="b_slug" class="form-control" placeholder="ex: bairro_centro" required>
-            </div>
-            <div class="mb-3">
               <label class="form-label">Nome</label>
               <input id="b_nome" class="form-control" placeholder="Centro" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Identificador (slug) <span class="text-muted fw-normal">— gerado automaticamente</span></label>
+              <input id="b_slug" class="form-control" placeholder="centro" required data-auto-slug="true">
+              <div class="form-text">Só altere se souber o que está fazendo. Usado na URL interna do site.</div>
             </div>
             <div class="mb-3">
               <label class="form-label">Título</label>
@@ -301,18 +312,18 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="form-label">Slug</label>
-                <input id="r_slug" class="form-control" placeholder="slug_da_rua" required>
+                <label class="form-label">Nome Oficial</label>
+                <input id="r_nome" class="form-control" placeholder="Rua Amaro Lanari" required>
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label class="form-label">Nome Oficial</label>
-                <input id="r_nome" class="form-control" placeholder="Rua Amaro Lanari" required>
-              </div>
-              <div class="col-md-6 mb-3">
                 <label class="form-label">Localização</label>
                 <input id="r_loc" class="form-control" placeholder="Centro">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Identificador (slug) <span class="text-muted fw-normal">— automático</span></label>
+                <input id="r_slug" class="form-control" placeholder="rua-amaro-lanari" required data-auto-slug="true">
               </div>
             </div>
             <div class="mb-3">

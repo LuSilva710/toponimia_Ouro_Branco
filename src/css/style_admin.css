@@ -523,3 +523,87 @@ body {
       white-space: nowrap !important;
   }
 }
+
+/* ============================================
+   TOOLBAR / BUSCA / TOAST
+   ============================================ */
+
+.admin-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.admin-search-wrap {
+  position: relative;
+  flex: 1 1 220px;
+  min-width: 180px;
+}
+
+.admin-search-wrap i {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--admin-text-muted);
+  pointer-events: none;
+}
+
+.admin-search-wrap .form-control {
+  padding-left: 2.25rem;
+}
+
+.admin-toolbar .form-select {
+  flex: 0 1 220px;
+  max-width: 260px;
+}
+
+.admin-filter-count {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.contrib-match {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.contrib-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.admin-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 1080;
+  max-width: min(360px, calc(100vw - 2rem));
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  background: #1a1a1a;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.admin-toast.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.admin-toast.success {
+  border-left: 4px solid var(--admin-success);
+}
+
+.admin-toast.danger {
+  border-left: 4px solid var(--admin-danger);
+}
