@@ -1,5 +1,5 @@
-import { supabase } from './supabase-client.js'
-import { PdfGeneratorService } from './PdfGeneratorService.js'
+import { supabase } from '../../lib/supabase.js'
+import { PdfGeneratorService } from '../services/PdfGeneratorService.js'
 
 // Chart.js v4: o plugin "colors" aplica paleta padrão e pode ignorar backgroundColor customizado
 if (globalThis.Chart?.defaults?.plugins) {

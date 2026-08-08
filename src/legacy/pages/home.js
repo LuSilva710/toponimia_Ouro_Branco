@@ -1,5 +1,5 @@
 // Importa o client Supabase do módulo compartilhado
-import { supabase } from './supabase-client.js'
+import { supabase } from '../../lib/supabase.js'
 
 // Cache para as instâncias de mini-mapas do Leaflet ativos na página
 const activeMiniMaps = {};

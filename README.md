@@ -54,6 +54,17 @@ cp .env.example .env
 npm run dev
 ```
 
+## ⚛️ Migração React (em andamento)
+
+O app ainda é **multi-page Vite**; a pasta `src/` já segue layout preparado para React:
+
+- `src/pages/` + `src/components/` — UI React
+- `src/lib/` / `src/features/` — infra e domínio
+- `src/legacy/` — páginas ainda em HTML+JS
+- Página **Sobre** (`about.html`) já roda em React
+
+Ver detalhes em `src/README.md`.
+
 ## 📊 Scripts de IA
 
 - `npm run ai:classify`: classifica ruas pendentes via IA (`scripts/ai/ai-classify.mjs`)

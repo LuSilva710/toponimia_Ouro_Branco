@@ -1,6 +1,6 @@
 import { DynamicStructuredTool } from "@langchain/core/tools";
 import { z } from "zod";
-import { supabase } from './supabase-client.js';
+import { supabase } from '../../lib/supabase.js';
 
 /** Mesmo modelo das ruas indexadas em scripts/generate-embeddings.mjs (1536 dims) */
 const GEMINI_EMBEDDING_MODEL = 'models/gemini-embedding-2';

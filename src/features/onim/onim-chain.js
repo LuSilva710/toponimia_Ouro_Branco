@@ -12,7 +12,7 @@ import {
   isRateLimitLikeError,
   markLangChainPrimarySuccess,
   markLangChainGeminiFallbackSuccess,
-} from './ai-client.js';
+} from '../../lib/ai-client.js';
 import { SYSTEM_PROMPT } from './systemPrompt.js';
 import { historicalSearchTool, statsTool, neighborhoodContextTool } from './onim-tools.js';
 

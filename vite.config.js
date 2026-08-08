@@ -1,8 +1,25 @@
 import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import path from 'path'
+import { fileURLToPath } from 'url'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/toponimia_Ouro_Branco/' : '/',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, 'src'),
+      '@lib': path.resolve(__dirname, 'src/lib'),
+      '@features': path.resolve(__dirname, 'src/features'),
+      '@components': path.resolve(__dirname, 'src/components'),
+      '@pages': path.resolve(__dirname, 'src/pages'),
+      '@styles': path.resolve(__dirname, 'src/styles'),
+      '@legacy': path.resolve(__dirname, 'src/legacy'),
+      'langchain/agents': 'langchain/agents',
+    },
+  },
   build: {
     rollupOptions: {
       input: {
@@ -16,18 +33,14 @@ export default defineConfig({
         associacao: 'games/associacao.html',
         cruzadinha: 'games/cruzadinha.html',
         ranking: 'games/ranking.html',
-      }
-    }
-  },
-  resolve: {
-    alias: {
-      'langchain/agents': 'langchain/agents',
-    }
+      },
+    },
   },
   optimizeDeps: {
     include: ['langchain/agents', '@langchain/openai', '@langchain/core'],
   },
   plugins: [
+    react(),
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'icons/*.png'],
@@ -44,15 +57,15 @@ export default defineConfig({
           {
             src: 'favicon.ico',
             sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon'
+            type: 'image/x-icon',
           },
           {
             src: 'toponimia.png',
             sizes: '192x192 512x512',
             type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
+            purpose: 'any maskable',
+          },
+        ],
       },
       workbox: {
         runtimeCaching: [
@@ -61,8 +74,8 @@ export default defineConfig({
             handler: 'CacheFirst',
             options: {
               cacheName: 'static-assets',
-              expiration: { maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 }
-            }
+              expiration: { maxEntries: 100, maxAgeSeconds: 30 * 24 * 60 * 60 },
+            },
           },
           {
             urlPattern: /^https:\/\/.*\.supabase\.co\/.*/,
@@ -70,19 +83,19 @@ export default defineConfig({
             options: {
               cacheName: 'supabase-api',
               expiration: { maxEntries: 50, maxAgeSeconds: 24 * 60 * 60 },
-              networkTimeoutSeconds: 10
-            }
+              networkTimeoutSeconds: 10,
+            },
           },
           {
             urlPattern: /^https:\/\/(cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com|unpkg\.com)\/.*/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'cdn-cache',
-              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 24 * 60 * 60 }
-            }
-          }
-        ]
-      }
-    })
-  ]
+              expiration: { maxEntries: 30, maxAgeSeconds: 60 * 24 * 60 * 60 },
+            },
+          },
+        ],
+      },
+    }),
+  ],
 })

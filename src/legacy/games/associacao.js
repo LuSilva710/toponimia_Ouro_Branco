@@ -1,7 +1,7 @@
 // ============================================
 // JOGO DE ASSOCIAÇÃO - associacao.js
 // ============================================
-import { supabase } from './supabase-client.js'
+import { supabase } from '../../lib/supabase.js'
 
 let pares = []
 let acertos = 0

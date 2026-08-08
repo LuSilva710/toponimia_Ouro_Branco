@@ -4,7 +4,7 @@
  * Referência Visual: AHM-SP (2021_AHM_Jogo Arquivo Nômade)
  */
 
-import { supabase } from './supabase-client.js'
+import { supabase } from '../../lib/supabase.js'
 
 // ============================================
 // CONSTANTES E CONFIGURAÇÕES (ESTILO ARQUIVO)

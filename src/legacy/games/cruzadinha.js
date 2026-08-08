@@ -1,5 +1,5 @@
 // Configuração inicial do jogo de palavras cruzadas
-import { supabase } from './supabase-client.js'
+import { supabase } from '../../lib/supabase.js'
 
         // Elementos da interface
         const crosswordContainer = document.getElementById('crossword');

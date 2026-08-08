@@ -4,8 +4,8 @@
 // Implementa: Chain-of-Thought · Toolset · Ambiguity Detection
 // Taxonomia: Dick (1990)
 // ============================================
-import { supabase } from './supabase-client.js'
-import { validateConfig, getProviderLabel } from './ai-client.js'
+import { supabase } from '../../lib/supabase.js'
+import { validateConfig, getProviderLabel } from '../../lib/ai-client.js'
 import { executarAgenteONIM } from './onim-chain.js'
 import { HumanMessage, AIMessage } from "@langchain/core/messages"
 
