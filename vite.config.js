@@ -9,16 +9,16 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/toponimia_Ouro_Branco/' : '/',
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, 'src'),
-      '@lib': path.resolve(__dirname, 'src/lib'),
-      '@features': path.resolve(__dirname, 'src/features'),
-      '@components': path.resolve(__dirname, 'src/components'),
-      '@pages': path.resolve(__dirname, 'src/pages'),
-      '@styles': path.resolve(__dirname, 'src/styles'),
-      '@legacy': path.resolve(__dirname, 'src/legacy'),
-      'langchain/agents': 'langchain/agents',
-    },
+    alias: [
+      { find: '@lib', replacement: path.resolve(__dirname, 'src/lib') },
+      { find: '@features', replacement: path.resolve(__dirname, 'src/features') },
+      { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
+      { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
+      { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
+      { find: '@legacy', replacement: path.resolve(__dirname, 'src/legacy') },
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      { find: 'langchain/agents', replacement: 'langchain/agents' },
+    ],
   },
   build: {
     rollupOptions: {
