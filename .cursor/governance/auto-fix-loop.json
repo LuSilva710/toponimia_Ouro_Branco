@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "description": "Politica de auto-correcao quando QA ou validacoes falham. Bloqueia loops infinitos e escala humano.",
+  "enabled": true,
+  "maxAttempts": 3,
+  "timeoutMinutesPerAttempt": 10,
+  "totalTimeoutMinutes": 30,
+  "triggers": {
+    "onQaFailure": true,
+    "onLintError": true,
+    "onContractBreakingChange": false,
+    "onMigrationUnsafe": false,
+    "onBudgetExceeded": false
+  },
+  "loop": {
+    "step1_diagnose": {
+      "agent": "AI_TESTING",
+      "input": "ai-final-report.json + arquivo alterado",
+      "output": "diagnose.json com root cause e patch sugerido"
+    },
+    "step2_apply": {
+      "agentByDomain": {
+        "frontend": "FRONTEND",
+        "backend": "BACKEND",
+        "contract": "ARCH"
+      },
+      "input": "diagnose.json",
+      "output": "patch aplicado + commit local"
+    },
+    "step3_validate": {
+      "agent": "AI_TESTING",
+      "input": "novo run",
+      "successWhen": "qualityScore >= previous OR all newly failed cases pass"
+    }
+  },
+  "stopConditions": {
+    "scoreImproved": true,
+    "samePatchTwice": true,
+    "exceededAttempts": true,
+    "exceededTimeout": true,
+    "userAborted": true
+  },
+  "onStop": {
+    "saveLearning": ".cursor/memory/14-fix-patterns.md",
+    "escalateToHuman": true,
+    "summaryReport": ".cursor/testing-module/reports/auto-fix-report.json"
+  },
+  "rules": {
+    "requireApprovalBeforeStart": false,
+    "requireApprovalForApply": true,
+    "requireApprovalForCommit": true,
+    "neverAutoFixContracts": true,
+    "neverAutoFixMigrations": true,
+    "neverAutoFixSecrets": true
+  }
+}

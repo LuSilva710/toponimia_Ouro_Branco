@@ -1,0 +1,4 @@
+﻿# Testing log
+
+(vazio)
+

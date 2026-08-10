@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "environmentConfigPath": ".cursor/qa-reports/config/environment.json",
+  "resolvedTargetsPath": ".cursor/testing-module/config/runtime-targets.resolved.json",
+  "workspaceRootRelativeToCursor": "..",
+  "excludedRootNames": [
+    ".cursor",
+    ".git",
+    "node_modules",
+    "bin",
+    "obj",
+    "dist",
+    "build"
+  ],
+  "backend": {
+    "launchSettingsFileName": "launchSettings.json",
+    "programFileNames": [
+      "Program.cs",
+      "Startup.cs"
+    ],
+    "swaggerMarkers": [
+      "UseSwagger",
+      "UseSwaggerUI",
+      "MapOpenApi",
+      "AddSwaggerGen"
+    ],
+    "envVarNames": [
+      "ASPNETCORE_URLS",
+      "BACKEND_URL"
+    ]
+  },
+  "frontend": {
+    "packageFileName": "package.json",
+    "viteConfigFileNames": [
+      "vite.config.ts",
+      "vite.config.js",
+      "vite.config.mjs"
+    ],
+    "defaultPortsByTool": {
+      "vite": 5173,
+      "next": 3000,
+      "react-scripts": 3000,
+      "angular": 4200
+    }
+  },
+  "swagger": {
+    "candidatePaths": [
+      "/swagger/v1/swagger.json",
+      "/swagger/index.html",
+      "/swagger",
+      "/openapi/v1.json",
+      "/openapi.json"
+    ],
+    "requestTimeoutSeconds": 4
+  }
+}

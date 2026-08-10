@@ -1,0 +1,40 @@
+{
+  "version": "1.0.0",
+  "description": "Performance, acessibilidade e bundle budgets para o FE_EXECUTOR.",
+  "enabled": true,
+  "vitals": {
+    "lcp":  { "good": 2500, "max": 4000, "unit": "ms" },
+    "cls":  { "good": 0.1,  "max": 0.25, "unit": "score" },
+    "inp":  { "good": 200,  "max": 500,  "unit": "ms" },
+    "tbt":  { "good": 200,  "max": 600,  "unit": "ms" },
+    "fcp":  { "good": 1800, "max": 3000, "unit": "ms" }
+  },
+  "bundle": {
+    "totalKb":      { "warn": 250,  "max": 500 },
+    "jsKb":         { "warn": 200,  "max": 400 },
+    "cssKb":        { "warn":  50,  "max": 100 },
+    "imagesKb":     { "warn": 500,  "max": 1500 },
+    "totalRequests":{ "warn":  50,  "max": 100 }
+  },
+  "a11y": {
+    "maxCritical": 0,
+    "maxSerious":  0,
+    "maxModerate": 5,
+    "maxMinor":    20,
+    "wcagLevel":   "AA"
+  },
+  "visualDiff": {
+    "maxPercent":  1.0,
+    "ignoreAreas": []
+  },
+  "viewports": [
+    { "name": "mobile",  "width": 375,  "height": 812  },
+    { "name": "tablet",  "width": 768,  "height": 1024 },
+    { "name": "desktop", "width": 1440, "height": 900  }
+  ],
+  "actionsOnExceed": {
+    "good": "log",
+    "warn": "alert + dashboard",
+    "max":  "block handoff"
+  }
+}

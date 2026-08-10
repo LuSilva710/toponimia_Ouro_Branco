@@ -1,0 +1,44 @@
+---
+description: Injeta automaticamente o contexto de governanca do ROVIS ao trabalhar em arquivos .cursor/. Elimina a necessidade de digitar "modo ROVIS" a cada nova sessao quando o foco ja esta nos arquivos operacionais do sistema.
+globs:
+  - ".cursor/**"
+alwaysApply: false
+---
+
+# Contexto ROVIS — Injecao Automatica
+
+Ao abrir ou editar qualquer arquivo dentro de `.cursor/`, o seguinte contexto esta ativo:
+
+## Fonte de verdade principal
+
+- `.cursor/bootstrap.md` — regra-mestra e ordem de precedencia
+- `.cursor/governance/state-machine.md` — estados e transicoes canonicas
+- `.cursor/governance/memory-contract.md` — quando e o que atualizar em memoria
+- `.cursor/governance/mode-manifest.json` — manifesto de modos e agentes
+
+## Memoria quente obrigatoria
+
+Leia sempre antes de qualquer acao operacional:
+
+1. `.cursor/memory/index.md`
+2. `.cursor/memory/11-session-summary.md`
+3. `.cursor/memory/12-active-workset.md`
+4. `.cursor/memory/10-checkpoint.md`
+
+## Regras ativas
+
+- PM-first: nenhuma execucao tecnica sem plano e aprovacao.
+- Contrato antes de endpoint.
+- Estados canonicos: INTAKE → PLANNING → AWAITING_APPROVAL → ARCHITECTING → CONTRACT_READY → IMPLEMENTING → VALIDATING → REVIEWING → DONE.
+- AI-TESTING apenas por pedido explicito, modo QA ou pos-implementacao.
+- Dashboard obrigatorio em toda resposta operacional.
+
+## Agente padrao ao ativar este contexto
+
+Se o usuario nao especificou modo: assumir `ROVIS` (orquestracao geral).
+
+Para forcar um modo especifico, o usuario pode digitar:
+- `modo ROVIS`
+- `modo ROVIS-FE`
+- `modo ROVIS-BE`
+- `modo QA_ONLY`

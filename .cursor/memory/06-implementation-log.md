@@ -1,0 +1,4 @@
+﻿# Implementation log
+
+(vazio)
+

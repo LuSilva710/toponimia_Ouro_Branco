@@ -1,0 +1,19 @@
+{
+  "version": "1.0.0",
+  "checkpointPath": ".cursor/memory/10-checkpoint.md",
+  "donePath": ".cursor/memory/09-done.md",
+  "testingPath": ".cursor/memory/07-testing-log.md",
+  "statesRequiringDone": ["DONE"],
+  "statesRequiringTesting": ["VALIDATING", "REVIEWING", "DONE", "QA_ONLY"],
+  "requiredCheckpointFields": [
+    "Plano atual:",
+    "Etapa:",
+    "Agente ativo:",
+    "Proxima acao:"
+  ],
+  "rules": {
+    "latestCheckpointMustExist": true,
+    "latestDoneMustMatchCheckpointDateWhenRequired": true,
+    "latestTestingMustMatchCheckpointDateWhenRequired": true
+  }
+}

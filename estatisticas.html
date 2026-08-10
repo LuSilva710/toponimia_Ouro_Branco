@@ -20,113 +20,11 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
-  <link rel="stylesheet" href="./src/styles/style_stats.css?v=20260411">
 </head>
 
 <body>
-  <a href="#main" class="skip-link">Pular para conteúdo</a>
-
-  <header>
-    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-top" aria-label="Navegação principal">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="./index.html"><strong>Toponímia Urbana de Ouro Branco</strong></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
-          aria-controls="navbarScroll" aria-expanded="false" aria-label="Abrir menu de navegação">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarScroll">
-          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 180px;">
-            <li class="nav-item">
-              <a class="nav-link" href="./index.html">Dicionário de Ruas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./mapa.html">Mapa</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="./estatisticas.html">Estatísticas</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./portaleducativo.html">Jogos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./about.html">Sobre nós</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <main id="main" class="stats-main">
-    <div class="container-fluid px-4">
-      <div class="stats-header">
-        <h1>Análise da Toponímia Urbana</h1>
-        <button class="btn btn-primary" id="btn-exportar-pdf">
-          <i class="bi bi-file-earmark-pdf me-1"></i>Exportar PDF
-        </button>
-      </div>
-
-      <div class="summary-cards" id="summary-cards">
-        <div class="summary-card">
-          <div class="summary-icon"><i class="bi bi-signpost-2"></i></div>
-          <div class="summary-value" id="total-ruas">--</div>
-          <div class="summary-label">Total de Ruas</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-icon"><i class="bi bi-geo-alt"></i></div>
-          <div class="summary-value" id="total-bairros">--</div>
-          <div class="summary-label">Bairros</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-icon"><i class="bi bi-people"></i></div>
-          <div class="summary-value" id="total-homenageados">--</div>
-          <div class="summary-label">Homenageados</div>
-        </div>
-        <div class="summary-card">
-          <div class="summary-icon"><i class="bi bi-exclamation-triangle"></i></div>
-          <div class="summary-value" id="total-incompletas">--</div>
-          <div class="summary-label">Sem Dados Completos</div>
-        </div>
-      </div>
-
-      <div class="alert alert-info d-none" id="alerta-cobertura" role="alert">
-        <i class="bi bi-info-circle me-1"></i>
-        <span id="texto-cobertura"></span>
-      </div>
-
-      <div class="charts-grid" id="charts-container">
-        <div class="chart-card">
-          <h3><i class="bi bi-pie-chart me-2"></i>Distribuição por Categoria Toponímica</h3>
-          <canvas id="chart-categorias"></canvas>
-          <div id="legend-html-categorias" class="custom-legend mt-3"></div>
-        </div>
-        <div class="chart-card">
-          <h3><i class="bi bi-bar-chart me-2"></i>Homenagens por Gênero</h3>
-          <canvas id="chart-genero"></canvas>
-        </div>
-        <div class="chart-card chart-card-full" id="waffle-section">
-          <h3><i class="bi bi-distribute-vertical me-2"></i>Panorama Toponímico de Ouro Branco</h3>
-          <div id="waffle-container" class="waffle-panorama-container"></div>
-        </div>
-        <div class="chart-card chart-card-full">
-          <h3><i class="bi bi-clock-history me-2"></i>Ruas por Década de Nomeação</h3>
-          <p class="chart-card-desc">Cada coluna é uma década: a altura total é o número de ruas com data; as faixas coloridas mostram <strong>quantas ruas</strong> de cada <strong>categoria toponímica</strong> entraram nessa década — dá para ver a “assinatura” temporal do vocabulário urbano.</p>
-          <p id="timeline-insight" class="chart-timeline-insight" hidden></p>
-          <div class="chart-timeline-wrap">
-            <canvas id="chart-timeline"></canvas>
-            <p id="timeline-empty" class="timeline-empty-msg" hidden role="status">Dados de década ainda não preenchidos (campo <em>década de nomeação</em> ou ano na legislação).</p>
-          </div>
-        </div>
-        <div class="chart-card chart-card-full">
-          <h3><i class="bi bi-chat-text me-2"></i>Destaques Semânticos das Biografias</h3>
-          <div id="html-wordcloud" class="modern-wordcloud"></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <script type="module" src="./src/legacy/pages/estatisticas.js?v=20260411"></script>
+  <div id="root"></div>
+  <script type="module" src="./src/estatisticas.jsx"></script>
 </body>
 
 </html>

@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+  "description": "Seed e mocks para testes deterministicos sem backend real.",
+  "enabled": false,
+  "seed": {
+    "users": [
+      {
+        "id": "user-test-1",
+        "email": "test@rovis.local",
+        "password": "Test@123",
+        "role": "admin"
+      },
+      {
+        "id": "user-test-2",
+        "email": "viewer@rovis.local",
+        "password": "Test@123",
+        "role": "viewer"
+      }
+    ],
+    "tokens": {
+      "valid":   "rovis-mock-token-valid",
+      "expired": "rovis-mock-token-expired"
+    }
+  },
+  "mocks": {
+    "GET /api/health": {
+      "status": 200,
+      "body": { "status": "ok", "version": "mock" }
+    },
+    "POST /api/auth/login": {
+      "status": 200,
+      "body": { "token": "rovis-mock-token-valid", "user": { "id": "user-test-1" } }
+    },
+    "GET /api/users": {
+      "status": 200,
+      "body": { "items": [], "total": 0 }
+    }
+  },
+  "rules": {
+    "useMocksWhenBackendUnreachable": true,
+    "useSeedForLogin": true,
+    "deterministicTimestamps": true,
+    "frozenDate": "2026-01-01T00:00:00Z"
+  }
+}

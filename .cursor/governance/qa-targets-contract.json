@@ -1,0 +1,31 @@
+{
+  "version": "1.1.0",
+  "environmentConfigPath": ".cursor/qa-reports/config/environment.json",
+  "preferredTargetsPath": ".cursor/testing-module/config/testing-targets.real.json",
+  "fallbackTargetsPath": ".cursor/testing-module/config/testing-targets.json",
+  "resolvedTargetsPath": ".cursor/testing-module/config/testing-targets.resolved.json",
+  "resolvedFeaturesPath": ".cursor/testing-module/config/ai-features.resolved.json",
+  "qualityGatesPath": ".cursor/testing-module/config/quality-gates.json",
+  "defaultContractsPath": ".cursor/contracts",
+  "smartFeaturesPath": ".cursor/testing-module/config/smart-features.json",
+  "offlineCasesPath": ".cursor/testing-module/config/offline-cases.json",
+  "seedConfigPath": ".cursor/testing-module/config/seed-mock.json",
+  "rules": {
+    "preferRealTargets": true,
+    "injectEnvironmentUrlsWhenMissing": true,
+    "generateFeaturesFromTargets": true,
+    "failWhenNoTargetConfigExists": true,
+    "enableSmartMode": true,
+    "enableRegressionDetection": true,
+    "enableFlakeDetection": true,
+    "providerFallbackChain": ["codex", "gemini", "offline"]
+  },
+  "testsByContract": {
+    ".cursor/contracts/auth/**": ["auth.login", "auth.session", "auth.logout"],
+    ".cursor/contracts/users/**": ["users.list", "users.create", "users.update"],
+    "src/api/**": ["contract_smoke.api"],
+    "src/components/**": ["browser_flow.ui"],
+    "src/pages/**": ["browser_flow.pages"],
+    "src/forms/**": ["field_validation", "mask_validation"]
+  }
+}

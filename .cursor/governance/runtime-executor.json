@@ -1,0 +1,145 @@
+{
+  "version": "1.1.0",
+  "defaultMode": "ROVIS",
+  "checkpointPath": ".cursor/memory/10-checkpoint.md",
+  "transitionLogPath": ".cursor/memory/06-implementation-log.md",
+  "qaEvidenceLogPath": ".cursor/memory/07-testing-log.md",
+  "defaultAgent": "ROVIS",
+  "defaultCheckpointTitle": "Checkpoint runtime transition",
+  "defaultQaRunnerPath": ".cursor/testing-module/scripts/Run-AIEngine.ps1",
+  "defaultQaGenerateMode": "generate",
+  "maxAutoTransitions": 4,
+  "states": {
+    "INTAKE": {
+      "nextAction": "start_planning",
+      "nextState": "PLANNING",
+      "requiredChecks": [],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "PLANNING": {
+      "nextAction": "await_approval",
+      "nextState": "AWAITING_APPROVAL",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "AWAITING_APPROVAL": {
+      "nextAction": "enter_architecting",
+      "nextState": "ARCHITECTING",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "ARCHITECTING": {
+      "nextAction": "confirm_contract_ready",
+      "nextState": "CONTRACT_READY",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisHandoff.ps1",
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "CONTRACT_READY": {
+      "nextAction": "start_implementation",
+      "nextStateByMode": {
+        "ROVIS": "BACKEND_IMPLEMENTING",
+        "ROVIS-BE": "BACKEND_IMPLEMENTING",
+        "ROVIS-FE": "FRONTEND_IMPLEMENTING",
+        "QA_ONLY": "QA_ONLY"
+      },
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisHandoff.ps1",
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "BACKEND_IMPLEMENTING": {
+      "nextAction": "validate_delivery",
+      "nextState": "VALIDATING",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": true,
+      "qaHook": {
+        "enabled": true,
+        "runnerMode": "api",
+        "blockOnFailure": true,
+        "skipBrowserInstall": true
+      }
+    },
+    "FRONTEND_IMPLEMENTING": {
+      "nextAction": "validate_delivery",
+      "nextState": "VALIDATING",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": true,
+      "qaHook": {
+        "enabled": true,
+        "runnerMode": "browser",
+        "blockOnFailure": true,
+        "skipBrowserInstall": false
+      }
+    },
+    "VALIDATING": {
+      "nextAction": "review_delivery",
+      "nextState": "REVIEWING",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1",
+        ".cursor/scripts/Check-RovisCloseout.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": true
+    },
+    "REVIEWING": {
+      "nextAction": "close_delivery",
+      "nextState": "DONE",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1",
+        ".cursor/scripts/Check-RovisCloseout.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": true
+    },
+    "DONE": {
+      "nextAction": "optionally_run_qa_only",
+      "nextStateByMode": {
+        "QA_ONLY": "QA_ONLY",
+        "ROVIS": "QA_ONLY",
+        "ROVIS-FE": "QA_ONLY",
+        "ROVIS-BE": "QA_ONLY"
+      },
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisCloseout.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "QA_ONLY": {
+      "nextAction": "qa_complete",
+      "nextState": "DONE",
+      "requiredChecks": [
+        ".cursor/scripts/Check-RovisStageScore.ps1",
+        ".cursor/scripts/Check-RovisCloseout.ps1"
+      ],
+      "applyTransition": true,
+      "deepPromotionEligible": false
+    },
+    "BLOCKED": {
+      "nextAction": "resolve_blocker",
+      "nextState": "BLOCKED",
+      "requiredChecks": [],
+      "applyTransition": false,
+      "deepPromotionEligible": false
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "activeEnvironment": "local-vite",
+  "environments": {
+    "local-vite": {
+      "frontendUrl": "http://localhost:5173",
+      "backendUrl": "https://placeholder.supabase.co",
+      "notes": "Vite dev. Backend = Supabase (URL real em VITE_SUPABASE_URL). Páginas: / , /estatisticas.html , /admin.html , /about.html , /mapa.html , /portaleducativo.html . Produção Pages: base /toponimia_Ouro_Branco/"
+    }
+  },
+  "rules": {
+    "confirmAtStartOfTest": true,
+    "confirmationPrompt": "Confirmar antes de iniciar cada bateria: frontendUrl continua correta?",
+    "qaReportRoot": ".cursor/qa-reports",
+    "scopeFolderPattern": ".cursor/qa-reports/<YYYY-MM-DD>-<escopo>/",
+    "plansFolderRule": "Os planejamentos ficam dentro de <scope>/plans/. HTML, JSON e screenshots ficam na raiz do escopo em <scope>/html, <scope>/json e <scope>/screenshots."
+  }
+}

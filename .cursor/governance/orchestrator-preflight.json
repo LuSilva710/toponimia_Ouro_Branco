@@ -1,0 +1,81 @@
+{
+  "version": "1.0.0",
+  "description": "Checklist enxuto do orquestrador. 5 itens prioritarios antes de qualquer acao tecnica. Itens secundarios movidos para closeout.",
+  "preActionChecks": [
+    {
+      "id": "P1",
+      "label": "Estado e agente corretos",
+      "blocking": true,
+      "source": ".cursor/governance/state-machine.md"
+    },
+    {
+      "id": "P2",
+      "label": "Memoria quente lida (session, workset, checkpoint)",
+      "blocking": true,
+      "source": ".cursor/memory/index.md"
+    },
+    {
+      "id": "P3",
+      "label": "Modo e agente permitidos pela matriz de capacidades",
+      "blocking": true,
+      "source": ".cursor/governance/agent-capabilities.json"
+    },
+    {
+      "id": "P4",
+      "label": "Contrato existe quando houver endpoint",
+      "blocking": true,
+      "source": ".cursor/contracts/"
+    },
+    {
+      "id": "P5",
+      "label": "Loop nao detectado (mesma demanda repetida)",
+      "blocking": false,
+      "source": ".cursor/scripts/Get-RovisLoopDetect.ps1"
+    }
+  ],
+  "closeoutChecks": [
+    {
+      "id": "C1",
+      "label": "Encoding UTF-8 nos arquivos alterados",
+      "blocking": true
+    },
+    {
+      "id": "C2",
+      "label": "Handoff valido quando trocou de modo",
+      "blocking": true,
+      "source": ".cursor/governance/handoff-contract.json"
+    },
+    {
+      "id": "C3",
+      "label": "Scorecard da etapa preenchido",
+      "blocking": true,
+      "source": ".cursor/governance/stage-score-rules.json"
+    },
+    {
+      "id": "C4",
+      "label": "Closeout coerente para DONE/REVIEWING/VALIDATING",
+      "blocking": true,
+      "source": ".cursor/governance/closeout-contract.json"
+    },
+    {
+      "id": "C5",
+      "label": "Memoria atualizada (implementation/checkpoint/done)",
+      "blocking": true,
+      "source": ".cursor/governance/memory-contract.md"
+    },
+    {
+      "id": "C6",
+      "label": "Session metrics atualizado",
+      "blocking": false,
+      "source": ".cursor/memory/13-session-metrics.md"
+    }
+  ],
+  "principlesOfPrecedence": [
+    "Seguranca e integridade do workspace",
+    "Estado canonico do fluxo",
+    "PM-first com gate de aprovacao",
+    "Contrato antes de endpoint",
+    "Atualizacao de memoria",
+    "Em empate: menor risco vence"
+  ]
+}

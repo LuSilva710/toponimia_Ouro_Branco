@@ -1,0 +1,30 @@
+{
+  "version": "1.0.0",
+  "description": "Orcamento de tokens por sessao e por agente. Usado pelo orchestrator para alertar e bloquear.",
+  "enabled": true,
+  "session": {
+    "maxTokensTotal": 500000,
+    "warnAtPercent": 70,
+    "blockAtPercent": 95,
+    "estimatedCostUsdPer1kTokens": {
+      "input":  0.0025,
+      "output": 0.01
+    }
+  },
+  "perAgent": {
+    "PM":         { "maxTokens":  20000 },
+    "ROVIS":      { "maxTokens":  40000 },
+    "ARCH":       { "maxTokens":  50000 },
+    "BACKEND":    { "maxTokens": 100000 },
+    "FRONTEND":   { "maxTokens": 100000 },
+    "AI_TESTING": { "maxTokens":  80000 },
+    "QA":         { "maxTokens":  40000 },
+    "REVIEWER":   { "maxTokens":  30000 },
+    "DESIGNER":   { "maxTokens":  40000 }
+  },
+  "actionsOnBudget": {
+    "onWarn":  "log + dashboard alert",
+    "onBlock": "stop delegation + ask user"
+  },
+  "trackingFile": ".cursor/memory/13-session-metrics.md"
+}

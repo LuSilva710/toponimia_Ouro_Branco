@@ -67,6 +67,8 @@ let chatbotContainer, chatbotWindow, chatbotMessages, userInput, sendBtn, chatbo
 // INIT
 // ============================================
 export function initChatbot() {
+  if (document.getElementById('newChatbotContainer')) return
+
   injectHTML()
   bindElements()
   setupEventListeners()

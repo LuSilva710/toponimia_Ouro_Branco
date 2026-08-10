@@ -1,0 +1,78 @@
+﻿{
+    "pipelineContext": {
+        "buildId": "autodetect",
+        "commitSha": "dev",
+        "environment": "local"
+    },
+    "scope": {
+        "backend": true,
+        "frontend": true,
+        "masks": true,
+        "validations": true
+    },
+    "targets": {
+        "backendMethods": [
+            {
+                "name": "real-check:runner-script-exists",
+                "invoke": {
+                    "type": "command",
+                    "command": "Test-Path .cursor/testing-module/scripts/Run-TestModule.ps1"
+                },
+                "expectedContains": "True"
+            },
+            {
+                "name": "real-check:init-file-exists",
+                "invoke": {
+                    "type": "command",
+                    "command": "Test-Path .cursor/init.md"
+                },
+                "expectedContains": "True"
+            },
+            {
+                "name": "real-check:agent-scorecard",
+                "invoke": {
+                    "type": "command",
+                    "command": "powershell -ExecutionPolicy Bypass -File .cursor/testing-module/scripts/Check-AgentScorecard.ps1"
+                },
+                "expectedContains": "AGENT_SCORECARD_OK"
+            }
+        ],
+        "frontendFlows": [],
+        "fieldValidations": [
+            {
+                "field": "email",
+                "rule": "required",
+                "validValue": "qa@empresa.com",
+                "invalidValue": ""
+            }
+        ],
+        "maskValidations": [
+            {
+                "field": "cpf",
+                "maskPattern": "^\\\\d{3}\\\\.\\\\d{3}\\\\.\\\\d{3}-\\\\d{2}$",
+                "validSamples": [
+                    "123.456.789-10"
+                ],
+                "invalidSamples": [
+                    "12345678910"
+                ]
+            }
+        ]
+    },
+    "generation": {
+        "strategy": "hybrid",
+        "maxCasesPerTarget": 150,
+        "contractsPath": ".cursor/contracts",
+        "fuzz": {
+            "enabled": true,
+            "iterations": 5
+        },
+        "contractBindings": []
+    },
+    "metadata": {
+        "generatedAt": "2026-03-24T15:59:15.2713509-03:00",
+        "notes": [
+            "No real test projects/scripts detected in current repository."
+        ]
+    }
+}

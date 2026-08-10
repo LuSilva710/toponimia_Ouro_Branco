@@ -1,0 +1,58 @@
+{
+  "version": "1.0.0",
+  "defaultMode": "ROVIS",
+  "modes": [
+    {
+      "id": "ROVIS",
+      "description": "Governanca geral e orquestracao de ponta a ponta.",
+      "agentFile": ".cursor/agents/01-orchestrator.md",
+      "allowedScopes": ["planning", "architecture", "backend", "frontend", "qa", "review"],
+      "activationCommands": ["modo ROVIS", "Ative o modo ROVIS"],
+      "requiresContractsForEndpoints": true,
+      "allowsImplementation": true,
+      "autoTesting": "after_implementation_or_explicit_request"
+    },
+    {
+      "id": "ROVIS-FE",
+      "description": "Orquestracao dedicada de front-end.",
+      "agentFile": ".cursor/agents/08-rovis-fe.md",
+      "allowedScopes": ["frontend", "qa"],
+      "activationCommands": ["modo ROVIS-FE", "Ative o modo ROVIS-FE"],
+      "requiresContractsForEndpoints": true,
+      "allowsImplementation": true,
+      "autoTesting": "after_frontend_implementation_or_explicit_request"
+    },
+    {
+      "id": "ROVIS-BE",
+      "description": "Orquestracao dedicada de back-end.",
+      "agentFile": ".cursor/agents/09-rovis-be.md",
+      "allowedScopes": ["backend", "architecture", "qa"],
+      "activationCommands": ["modo ROVIS-BE", "Ative o modo ROVIS-BE"],
+      "requiresContractsForEndpoints": true,
+      "allowsImplementation": true,
+      "autoTesting": "after_backend_implementation_or_explicit_request"
+    },
+    {
+      "id": "QA_ONLY",
+      "description": "Somente QA, relatorios e validacao.",
+      "agentFile": ".cursor/agents/11-ai-testing.md",
+      "allowedScopes": ["qa"],
+      "activationCommands": ["modo QA_ONLY", "Ative o modo QA_ONLY"],
+      "requiresContractsForEndpoints": false,
+      "allowsImplementation": false,
+      "autoTesting": "always"
+    }
+  ],
+  "specialistAgents": [
+    {
+      "id": "DESIGNER",
+      "description": "Especialista em UI/UX, design system e acessibilidade.",
+      "agentFile": ".cursor/agents/08b-designer.md",
+      "allowedScopes": ["ui_ux", "design_system", "accessibility", "visual_review"],
+      "activationCommands": ["modo DESIGNER", "Ative o agente DESIGNER"],
+      "requiresContractsForEndpoints": false,
+      "allowsImplementation": false,
+      "autoTesting": "never"
+    }
+  ]
+}

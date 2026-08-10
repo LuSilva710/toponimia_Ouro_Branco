@@ -1,0 +1,29 @@
+{
+  "name": "rovis-ai-testing-engine",
+  "version": "1.1.0",
+  "description": "AI-powered test generation and execution engine — supports Google Gemini and OpenAI/Codex",
+  "main": "src/index.ts",
+  "scripts": {
+    "run": "tsx src/index.ts",
+    "run:api-only": "tsx src/index.ts --mode=api",
+    "run:browser-only": "tsx src/index.ts --mode=browser",
+    "run:generate-only": "tsx src/index.ts --mode=generate",
+    "run:gemini": "cross-env AI_PROVIDER=gemini tsx src/index.ts",
+    "run:openai": "cross-env AI_PROVIDER=openai tsx src/index.ts",
+    "run:codex": "cross-env AI_PROVIDER=codex tsx src/index.ts",
+    "install:browsers": "playwright install chromium"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "@playwright/test": "^1.50.0",
+    "dotenv": "^16.4.7",
+    "glob": "^11.0.1",
+    "openai": "^4.86.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.5",
+    "cross-env": "^7.0.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

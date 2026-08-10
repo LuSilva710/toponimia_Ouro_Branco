@@ -1,0 +1,191 @@
+:root {
+  --black: #000000;
+  --dark-gray: #222222;
+  --medium-gray: #444444;
+  --light-gray: #f5f5f5;
+  --lighter-gray: #fafafa;
+  --white: #ffffff;
+  --border-color: #e0e0e0;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--lighter-gray);
+  color: var(--medium-gray);
+  margin: 0;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.skip-link {
+  position: absolute; top: -40px; left: 0;
+  background: var(--dark-gray); color: var(--white);
+  padding: 8px 16px; z-index: 10000; text-decoration: none;
+}
+.skip-link:focus { top: 0; }
+
+.navbar {
+  background: rgb(15, 15, 15) !important;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, #ffffff 0%, #bbbbbb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.2rem;
+  margin-right: 15px;
+  padding-right: 15px;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.nav-link {
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.5rem 1rem !important;
+  opacity: 0.85;
+}
+
+.navbar-nav .nav-item:hover .nav-link {
+  color: var(--white) !important;
+  opacity: 1;
+}
+
+.hub-main { margin-top: 60px; padding: 30px 20px; min-height: calc(100vh - 60px); }
+
+.hub-hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, rgba(26,26,26,0.92) 0%, rgba(45,45,45,0.88) 50%, rgba(10,10,10,0.95) 100%);
+  color: var(--white);
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.hub-hero h1 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 800;
+  margin: 0 0 8px;
+}
+
+.hub-hero p {
+  opacity: 0.9;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto 40px;
+}
+
+.game-card {
+  background: var(--white);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 24px 20px;
+  text-align: center;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--medium-gray);
+  display: block;
+  position: relative;
+  overflow: hidden;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--dark-gray), var(--medium-gray));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  border-color: var(--dark-gray);
+  color: var(--medium-gray);
+}
+
+.game-card:hover::before { transform: scaleX(1); }
+
+.game-icon {
+  width: 56px; height: 56px;
+  margin: 0 auto 14px;
+  background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  color: var(--white);
+  transition: all 0.3s ease;
+}
+
+.game-card:hover .game-icon {
+  transform: scale(1.06) rotate(5deg);
+}
+
+.game-card h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--black);
+  margin: 0 0 8px;
+}
+
+.game-card p {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.game-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--light-gray);
+  color: var(--dark-gray);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin-top: 12px;
+  white-space: nowrap;
+}
+
+.hub-footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  color: var(--medium-gray);
+  font-size: 0.85rem;
+  background: var(--white);
+}
+
+@media (max-width: 575.98px) {
+  .navbar-brand {
+    font-size: 0.8rem !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .game-card,
+  .game-card::before,
+  .game-icon {
+    transition: none;
+  }
+  .game-card:hover,
+  .game-card:hover .game-icon {
+    transform: none;
+  }
+}

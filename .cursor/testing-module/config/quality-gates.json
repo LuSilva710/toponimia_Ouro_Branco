@@ -1,0 +1,9 @@
+﻿{
+    "failOnFailed": true,
+    "maxFailed": 0,
+    "maxSkipped": 0,
+    "minPassRate": 1.0,
+    "minTotalCases": 4,
+    "minRealCommandCases": 2,
+    "requireRealTargetsInCi": true
+}

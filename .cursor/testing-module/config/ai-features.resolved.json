@@ -1,0 +1,47 @@
+﻿[
+    {
+        "title":  "Backend target: real-check:runner-script-exists",
+        "description":  "Executar o target backend \u0027real-check:runner-script-exists\u0027 no ambiente local-secondacademy usando https://apipris.secondmind.com.br.",
+        "acceptanceCriteria":  [
+                                   "O comando configurado deve executar sem erro fatal.",
+                                   "A saida deve conter \u0027True\u0027.",
+                                   "O target deve refletir um fluxo verificavel do repositorio."
+                               ]
+    },
+    {
+        "title":  "Backend target: real-check:init-file-exists",
+        "description":  "Executar o target backend \u0027real-check:init-file-exists\u0027 no ambiente local-secondacademy usando https://apipris.secondmind.com.br.",
+        "acceptanceCriteria":  [
+                                   "O comando configurado deve executar sem erro fatal.",
+                                   "A saida deve conter \u0027True\u0027.",
+                                   "O target deve refletir um fluxo verificavel do repositorio."
+                               ]
+    },
+    {
+        "title":  "Backend target: real-check:agent-scorecard",
+        "description":  "Executar o target backend \u0027real-check:agent-scorecard\u0027 no ambiente local-secondacademy usando https://apipris.secondmind.com.br.",
+        "acceptanceCriteria":  [
+                                   "O comando configurado deve executar sem erro fatal.",
+                                   "A saida deve conter \u0027AGENT_SCORECARD_OK\u0027.",
+                                   "O target deve refletir um fluxo verificavel do repositorio."
+                               ]
+    },
+    {
+        "title":  "Field validation: email",
+        "description":  "Validar a regra \u0027required\u0027 para o campo \u0027email\u0027.",
+        "acceptanceCriteria":  [
+                                   "O valor valido deve ser aceito.",
+                                   "O valor invalido deve ser rejeitado.",
+                                   "A validacao deve refletir o ambiente configurado."
+                               ]
+    },
+    {
+        "title":  "Mask validation: cpf",
+        "description":  "Validar a mascara \u0027^\\\\d{3}\\\\.\\\\d{3}\\\\.\\\\d{3}-\\\\d{2}$\u0027 para o campo \u0027cpf\u0027.",
+        "acceptanceCriteria":  [
+                                   "Amostras validas devem passar.",
+                                   "Amostras invalidas devem falhar.",
+                                   "A regra deve seguir o padrao configurado."
+                               ]
+    }
+]

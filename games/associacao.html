@@ -6,114 +6,12 @@
   <title>Associação | Toponímia Urbana de Ouro Branco</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Jogo de associação: conecte ruas aos bairros corretos">
-
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
-
-  <style>
-    :root {
-      --black: #000; --dark-gray: #222; --medium-gray: #444;
-      --light-gray: #f5f5f5; --lighter-gray: #fafafa; --white: #fff; --border-color: #e0e0e0;
-    }
-    body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; background: var(--lighter-gray); color: var(--medium-gray); margin: 0; line-height: 1.6; }
-    .navbar { --bs-navbar-padding-y: 1.2rem; padding: 1rem 0; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .navbar-brand { padding-right: 25px; border-right: 2px solid var(--white); }
-    .navbar-toggler { border: none; }
-
-    .assoc-container { max-width: 900px; margin: 100px auto 2rem; padding: 1.5rem; }
-    .assoc-header { text-align: center; margin-bottom: 2rem; }
-    .assoc-header h1 { font-size: 1.75rem; font-weight: 800; color: var(--black); }
-    .assoc-header p { color: var(--medium-gray); }
-    .assoc-header input { border: 1px solid var(--border-color); }
-
-    .assoc-board { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
-    .assoc-column h3 {
-      font-size: .85rem; color: var(--dark-gray); text-transform: uppercase; letter-spacing: .5px;
-      margin-bottom: 1rem; text-align: center; font-weight: 700;
-      padding-bottom: 8px; border-bottom: 2px solid var(--dark-gray);
-    }
-
-    .assoc-item {
-      background: var(--white); border: 2px solid var(--border-color);
-      border-radius: 6px; padding: .85rem 1rem; margin-bottom: .75rem;
-      cursor: pointer; transition: all 0.2s; font-size: .9rem; user-select: none;
-      border-left: 3px solid var(--medium-gray);
-    }
-    .assoc-item:hover { transform: translateX(4px); box-shadow: 0 2px 8px rgba(0,0,0,0.08); border-left-color: var(--dark-gray); }
-    .assoc-item.selected { border-color: var(--dark-gray); background: var(--light-gray); border-left-color: var(--dark-gray); }
-    .assoc-item.correct { border-color: #198754; background: #e8ffe8; border-left-color: #198754; }
-    .assoc-item.wrong { border-color: #dc3545; background: #ffe8e8; border-left-color: #dc3545; }
-    .assoc-item.matched { opacity: 0.5; pointer-events: none; }
-
-    .assoc-stats {
-      display: flex; gap: 1.5rem; justify-content: center; margin-bottom: 1.5rem;
-      font-size: .9rem; color: var(--medium-gray);
-    }
-    .assoc-stats strong { color: var(--dark-gray); }
-
-    .assoc-result {
-      text-align: center; background: var(--white); border: 1px solid var(--border-color);
-      border-radius: 8px; padding: 2rem; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-    }
-    .assoc-result h2 { color: var(--black); }
-    .assoc-score { font-size: 2.5rem; font-weight: 800; color: var(--dark-gray); }
-
-    .btn-primary { background: var(--dark-gray) !important; border-color: var(--dark-gray) !important; }
-    .btn-primary:hover { background: #333 !important; border-color: #333 !important; transform: translateY(-2px); }
-    .navbar .container-fluid { flex-wrap: nowrap; }
-    @media (max-width: 575.98px) {
-      .navbar-brand { font-size: 0.8rem !important; white-space: nowrap !important; background: linear-gradient(135deg, #ffffff 0%, #bbbbbb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-      .btn-outline-light { font-size: 0.75rem !important; padding: 0.25rem 0.5rem !important; }
-    }
-  </style>
 </head>
 <body>
-  <header>
-    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark fixed-top">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="../index.html">Toponímia Urbana de Ouro Branco</a>
-        <div class="ms-auto">
-          <a href="../portaleducativo.html" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-left me-1"></i>Voltar</a>
-        </div>
-      </div>
-    </nav>
-  </header>
-
-  <div class="assoc-container">
-    <div class="assoc-header">
-      <h1><i class="bi bi-link-45deg me-2"></i>Jogo de Associação</h1>
-      <p>Conecte cada rua ao seu bairro correto</p>
-      <input class="form-control form-control-sm mb-2" style="max-width:250px;margin:0 auto" id="jogador-nome" placeholder="Seu nome">
-      <button class="btn btn-primary" id="btn-iniciar">Iniciar Jogo</button>
-    </div>
-
-    <div id="game-area" class="d-none">
-      <div class="assoc-stats">
-        <span><i class="bi bi-check-circle me-1"></i>Acertos: <strong id="acertos-count">0</strong>/8</span>
-        <span><i class="bi bi-clock me-1"></i>Tempo: <strong id="tempo">0</strong>s</span>
-      </div>
-      <div class="assoc-board" id="assoc-board">
-        <div class="assoc-column" id="coluna-ruas">
-          <h3><i class="bi bi-signpost-2 me-1"></i>Ruas</h3>
-        </div>
-        <div class="assoc-column" id="coluna-bairros">
-          <h3><i class="bi bi-geo-alt me-1"></i>Bairros</h3>
-        </div>
-      </div>
-    </div>
-
-    <div id="result-area" class="assoc-result d-none">
-      <h2>🎉 Jogo Finalizado!</h2>
-      <div class="assoc-score" id="result-score">0</div>
-      <p id="result-detail" style="color:var(--medium-gray)"></p>
-      <div class="mt-3">
-        <button class="btn btn-primary" id="btn-novamente">Jogar Novamente</button>
-        <a href="ranking.html" class="btn btn-outline-secondary">🏆 Ranking</a>
-      </div>
-    </div>
-  </div>
-
-  <script type="module" src="../src/legacy/games/associacao.js"></script>
+  <div id="root"></div>
+  <script type="module" src="../src/associacao.jsx"></script>
 </body>
 </html>

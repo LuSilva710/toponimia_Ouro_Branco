@@ -1,0 +1,195 @@
+{
+  "version": "1.2.0",
+  "delegationBudget": {
+    "maxDepth": 2,
+    "description": "Limite de niveis de delegacao. ROVIS -> especialista -> subtarefa = 2 niveis. Profundidade maior exige aprovado explicito do usuario."
+  },
+  "slaTimeoutMinutesDefault": 15,
+  "slaTimeoutMinutes": {
+    "PM":           5,
+    "ROVIS":       10,
+    "ROVIS_FE":    20,
+    "ROVIS_BE":    20,
+    "ARCH":        15,
+    "BACKEND":     30,
+    "FRONTEND":    30,
+    "DESIGNER":    15,
+    "AI_TESTING":  20,
+    "FE_EXECUTOR": 10,
+    "BE_CONTRACTS": 10,
+    "QA":          15,
+    "REVIEWER":    10
+  },
+  "agents": [
+    {
+      "id": "PM",
+      "scope": ["planning", "triage", "clarification", "governance"],
+      "forbidden": ["backend_implementation", "frontend_implementation", "qa_execution"],
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/state-machine.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/agents/00-product-manager.md"
+      ],
+      "gates": [
+        "declare_source_of_truth",
+        "classify_intake",
+        "request_exact_approval_before_technical_work"
+      ]
+    },
+    {
+      "id": "ROVIS",
+      "scope": ["orchestration", "planning", "architecture", "backend", "frontend", "qa", "review"],
+      "forbidden": ["skip_pm_first", "skip_memory_update"],
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/state-machine.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/governance/mode-manifest.json",
+        ".cursor/governance/intent-router.md",
+        ".cursor/governance/agent-capabilities.json"
+      ],
+      "gates": [
+        "resolve_mode_and_intake",
+        "enforce_state_machine",
+        "enforce_utf8",
+        "update_memory"
+      ]
+    },
+    {
+      "id": "ROVIS_FE",
+      "scope": ["frontend", "qa_handoff"],
+      "forbidden": ["backend_implementation", "contract_creation", "endpoint_definition"],
+      "fallbackTo": "ROVIS",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/state-machine.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/agents/04-frontend.md",
+        ".cursor/agents/front-end/*"
+      ],
+      "gates": [
+        "pm_first",
+        "frontend_context_loaded",
+        "contract_required_for_contract_consumption",
+        "update_memory"
+      ]
+    },
+    {
+      "id": "ROVIS_BE",
+      "scope": ["backend", "architecture_handoff", "qa_handoff"],
+      "forbidden": ["frontend_implementation", "silent_contract_change"],
+      "fallbackTo": "ROVIS",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/state-machine.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/agents/00-product-manager.md",
+        ".cursor/agents/02-architect.md",
+        ".cursor/agents/03-backend.md",
+        ".cursor/agents/back-end/*"
+      ],
+      "gates": [
+        "pm_first",
+        "contract_before_endpoint",
+        "update_memory",
+        "validation_before_done"
+      ]
+    },
+    {
+      "id": "DESIGNER",
+      "scope": ["ui_ux", "design_system", "accessibility", "visual_review"],
+      "forbidden": ["business_logic", "endpoint_consumption", "contract_creation", "backend_implementation", "frontend_business_logic"],
+      "fallbackTo": "ROVIS_FE",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/agents/08b-designer.md"
+      ],
+      "gates": [
+        "pm_first",
+        "contract_or_wireframe_as_reference",
+        "declare_design_system",
+        "update_memory_when_significant"
+      ]
+    },
+    {
+      "id": "FE_EXECUTOR",
+      "scope": ["frontend_validation", "visual_diff", "a11y", "web_vitals", "bundle_budget"],
+      "forbidden": ["product_code_implementation", "contract_modification", "design_token_change"],
+      "fallbackTo": "ROVIS_FE",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/governance/frontend-budget.json",
+        ".cursor/agents/08c-fe-executor.md"
+      ],
+      "gates": [
+        "frontend_budget_loaded",
+        "report_results",
+        "block_on_max_exceeded"
+      ]
+    },
+    {
+      "id": "BE_CONTRACTS",
+      "scope": ["contract_validation", "breaking_changes", "migration_safety", "load_test", "dep_audit"],
+      "forbidden": ["product_code_implementation", "endpoint_creation", "schema_creation"],
+      "fallbackTo": "ROVIS_BE",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/agents/03b-be-contracts.md"
+      ],
+      "gates": [
+        "contracts_loaded",
+        "block_on_breaking_change_unapproved",
+        "block_on_unsafe_migration",
+        "report_results"
+      ]
+    },
+    {
+      "id": "AI_TESTING",
+      "scope": ["qa", "reporting", "validation"],
+      "forbidden": ["product_code_implementation", "contract_modification", "backend_implementation", "frontend_implementation"],
+      "fallbackTo": "ROVIS",
+      "requiredReads": [
+        ".cursor/bootstrap.md",
+        ".cursor/governance/memory-contract.md",
+        ".cursor/governance/agent-capabilities.json",
+        ".cursor/agents/11-ai-testing.md",
+        ".cursor/qa-reports/config/environment.json"
+      ],
+      "gates": [
+        "explicit_testing_request_or_post_implementation",
+        "report_results",
+        "update_testing_memory",
+        "respect_quality_gates"
+      ]
+    }
+  ],
+  "modeBindings": [
+    {
+      "mode": "ROVIS",
+      "primaryAgent": "ROVIS",
+      "allowedAgents": ["PM", "ROVIS", "ROVIS_FE", "ROVIS_BE", "DESIGNER", "FE_EXECUTOR", "BE_CONTRACTS", "AI_TESTING"]
+    },
+    {
+      "mode": "ROVIS-FE",
+      "primaryAgent": "ROVIS_FE",
+      "allowedAgents": ["PM", "ROVIS_FE", "DESIGNER", "FE_EXECUTOR", "AI_TESTING"]
+    },
+    {
+      "mode": "ROVIS-BE",
+      "primaryAgent": "ROVIS_BE",
+      "allowedAgents": ["PM", "ROVIS_BE", "BE_CONTRACTS", "AI_TESTING"]
+    },
+    {
+      "mode": "QA_ONLY",
+      "primaryAgent": "AI_TESTING",
+      "allowedAgents": ["PM", "AI_TESTING"]
+    }
+  ]
+}

@@ -33,3 +33,13 @@ yarn.lock
 .env.*.local
 .env.bak
 .env.*.bak
+
+# ROVIS — secrets e artefatos gerados (memória/agentes versionáveis)
+.cursor/testing-module/ai-engine/.env
+.cursor/testing-module/ai-engine/node_modules/
+.cursor/testing-module/reports/**
+!.cursor/testing-module/reports/.keep
+.cursor/code-index.json
+.cursor/memory/archive/**
+!.cursor/memory/archive/README.md
+

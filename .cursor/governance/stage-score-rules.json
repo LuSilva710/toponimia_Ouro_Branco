@@ -1,0 +1,128 @@
+{
+  "version": "1.0.0",
+  "stages": [
+    {
+      "state": "PLANNING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": false,
+      "requiresTestValidation": false
+    },
+    {
+      "state": "AWAITING_APPROVAL",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": false,
+      "requiresTestValidation": false
+    },
+    {
+      "state": "ARCHITECTING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": false
+    },
+    {
+      "state": "CONTRACT_READY",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": false
+    },
+    {
+      "state": "BACKEND_IMPLEMENTING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": true
+    },
+    {
+      "state": "FRONTEND_IMPLEMENTING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": true
+    },
+    {
+      "state": "VALIDATING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": true
+    },
+    {
+      "state": "REVIEWING",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": true,
+      "requiresTestValidation": true
+    },
+    {
+      "state": "DONE",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "handoff_quality: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": false,
+      "requiresTestValidation": true
+    },
+    {
+      "state": "QA_ONLY",
+      "requiredScorecardItems": [
+        "state_compliance: ok|fail",
+        "source_of_truth_declared: ok|fail",
+        "memory_updated: ok|fail",
+        "test_validation_executed: ok|fail",
+        "encoding_utf8_validated: ok|fail"
+      ],
+      "requiresHandoff": false,
+      "requiresTestValidation": true
+    }
+  ]
+}

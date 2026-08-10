@@ -1,0 +1,16 @@
+﻿{
+    "resolvedAt":  "2026-04-20T09:08:06.2660735-03:00",
+    "provider":  "offline",
+    "reason":  "nenhuma chave de IA configurada",
+    "chain":  [
+                  "codex",
+                  "gemini",
+                  "offline"
+              ],
+    "attempted":  [
+                      "codex",
+                      "gemini",
+                      "offline"
+                  ],
+    "offline":  true
+}

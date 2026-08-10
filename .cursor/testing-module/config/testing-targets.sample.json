@@ -1,0 +1,74 @@
+﻿{
+  "pipelineContext": {
+    "buildId": "local-manual",
+    "commitSha": "dev",
+    "environment": "local"
+  },
+  "scope": {
+    "backend": true,
+    "frontend": true,
+    "masks": true,
+    "validations": true
+  },
+  "targets": {
+    "backendMethods": [
+      {
+        "name": "HealthCheckService.GetStatus",
+        "invoke": {
+          "type": "command",
+          "command": "Write-Output 'OK'"
+        },
+        "expectedContains": "OK"
+      }
+    ],
+    "frontendFlows": [
+      {
+        "name": "Cadastro básico",
+        "route": "/cadastro",
+        "invoke": {
+          "type": "command",
+          "command": "Write-Output 'FLOW_OK'"
+        },
+        "expectedContains": "FLOW_OK"
+      }
+    ],
+    "fieldValidations": [
+      {
+        "field": "email",
+        "rule": "required",
+        "validValue": "dev@empresa.com",
+        "invalidValue": ""
+      }
+    ],
+    "maskValidations": [
+      {
+        "field": "cpf",
+        "maskPattern": "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$",
+        "validSamples": [
+          "123.456.789-10"
+        ],
+        "invalidSamples": [
+          "12345678910",
+          "123.456.789-1"
+        ]
+      }
+    ]
+  },
+  "generation": {
+    "strategy": "hybrid",
+    "maxCasesPerTarget": 100,
+    "contractsPath": ".cursor/contracts",
+    "fuzz": {
+      "enabled": true,
+      "iterations": 3
+    },
+    "contractBindings": [
+      {
+        "endpoint": "/testing-automation/run",
+        "method": "POST",
+        "command": "Write-Output 'POST /testing-automation/run contract-smoke'",
+        "expectedContains": "/testing-automation/run"
+      }
+    ]
+  }
+}

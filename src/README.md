@@ -20,9 +20,21 @@ src/
 | Página | Status |
 |--------|--------|
 | Sobre (`about.html`) | React |
-| Dicionário, Mapa, Estatísticas, Admin, Jogos | Legacy (HTML + `src/legacy`) |
+| Admin (`admin.html`) | React |
+| Estatísticas (`estatisticas.html`) | React |
+| Dicionário (`index.html`) | React (ONIM ainda via `features/onim`) |
+| Mapa (`mapa.html`) | React |
+| Portal / Jogos hub (`portaleducativo.html`) | React |
+| Quiz, Associação, Ranking | React |
+| Cruzadinha | Legacy (`src/legacy/games/cruzadinha.js`) |
 
 ## Aliases Vite
 
 - `@` → `src/`
 - `@lib`, `@features`, `@components`, `@pages`, `@styles`, `@legacy`
+
+## ROVIS
+
+Governança do Cursor em `.cursor/` (memória operacional em `.cursor/memory/`).  
+O pacote `ROVIS-Lite/` é a cópia master local; o runtime ativo é a `.cursor/` da raiz.  
+Ativar no chat: `modo ROVIS` ou `modo ROVIS-FE`.

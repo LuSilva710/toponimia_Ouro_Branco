@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "description": "Protocolos canonicos para chamadas MCP a partir dos agentes ROVIS. Define prompts, parametros e formato de resposta esperado.",
+  "providers": {
+    "codex": {
+      "mcpServer": "codex",
+      "envVar": "OPENAI_API_KEY",
+      "fallback": "gemini"
+    },
+    "gemini": {
+      "mcpServer": "gemini",
+      "envVar": "GEMINI_API_KEY",
+      "fallback": null
+    },
+    "chromeDevtools": {
+      "mcpServer": "chrome-devtools",
+      "envVar": null,
+      "fallback": null
+    }
+  },
+  "prompts": {
+    "autoFixDiagnose": {
+      "provider": "codex",
+      "title": "Diagnose QA failure",
+      "input": ["report.failedCases", "changedFiles"],
+      "template": "Voce e o AI_TESTING. Para cada caso failed em {failedCases}, identifique a root cause olhando {changedFiles}. Responda em JSON: { rootCause, suggestedPatch, domain (frontend|backend|contract), confidence (0-1) }. Sem texto fora do JSON.",
+      "expectedFormat": "json",
+      "schema": {
+        "rootCause": "string",
+        "suggestedPatch": "string",
+        "domain": "frontend | backend | contract",
+        "confidence": "number 0-1"
+      }
+    },
+    "feVisualCapture": {
+      "provider": "chromeDevtools",
+      "title": "Capture screenshot + Web Vitals",
+      "input": ["url", "viewport"],
+      "steps": [
+        "navigate(url)",
+        "setViewport({ width, height })",
+        "waitForLoad",
+        "screenshot({ path: outputPath, fullPage: true })",
+        "evaluate(measureWebVitalsScript) -> { lcp, cls, inp, fcp, tbt }"
+      ],
+      "expectedFormat": "object"
+    },
+    "feA11yScan": {
+      "provider": "chromeDevtools",
+      "title": "Run axe-core on page",
+      "input": ["url"],
+      "steps": [
+        "navigate(url)",
+        "evaluate(injectAxeCoreCdn)",
+        "evaluate('axe.run().then(r => JSON.stringify(r))') -> violations array",
+        "agrupar por impact: critical/serious/moderate/minor"
+      ],
+      "expectedFormat": "object"
+    },
+    "beTypesFromOpenApi": {
+      "provider": "codex",
+      "title": "Generate TypeScript types from OpenAPI",
+      "input": ["openapiPath", "outputPath"],
+      "template": "Leia OpenAPI em {openapiPath} e gere tipos TypeScript em {outputPath}. Apenas interfaces e enums, sem implementacao. Cada operationId vira uma interface Request e Response.",
+      "expectedFormat": "code"
+    }
+  },
+  "rules": {
+    "alwaysSaveResponseTo": ".cursor/testing-module/reports/mcp/<protocol>-<timestamp>.json",
+    "neverPersistApiKeys": true,
+    "logEveryCall": true,
+    "logFile": ".cursor/memory/cold/mcp-call-log.jsonl"
+  }
+}

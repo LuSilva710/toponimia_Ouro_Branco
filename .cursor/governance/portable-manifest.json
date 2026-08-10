@@ -1,0 +1,116 @@
+{
+  "version": "1.0.0",
+  "description": "Define o que e copiado, ignorado ou criado vazio ao instalar ROVIS num novo projeto.",
+  "categories": {
+    "core": {
+      "description": "Sempre copiado integralmente. E o ROVIS em si: scripts, agentes, governance, regras.",
+      "paths": [
+        ".cursor/scripts/**",
+        ".cursor/agents/**",
+        ".cursor/governance/**",
+        ".cursor/rules/**",
+        ".cursor/bootstrap.md",
+        ".cursor/init.md"
+      ]
+    },
+    "template": {
+      "description": "Copiado uma vez no install. O projeto pode editar livremente depois.",
+      "paths": [
+        ".cursor/contracts/.keep",
+        ".cursor/qa-reports/config/environment.json",
+        ".cursor/qa-reports/templates/**",
+        ".cursor/testing-module/config/**",
+        ".cursor/testing-module/scripts/**",
+        ".cursor/testing-module/ai-engine/**",
+        ".cursor/testing-module/package.json",
+        ".cursor/testing-module/.env.example"
+      ]
+    },
+    "project": {
+      "description": "Criado vazio. Pertence ao projeto e nunca e sincronizado entre projetos.",
+      "createEmpty": [
+        ".cursor/memory/cold/",
+        ".cursor/memory/archive/",
+        ".cursor/qa-reports/",
+        ".cursor/testing-module/reports/",
+        ".cursor/testing-module/tmp/"
+      ],
+      "createFromSeed": {
+        ".cursor/memory/00-context.md": "# Contexto do Projeto\n\n(Sera preenchido por Get-RovisProjectProfile.ps1)\n",
+        ".cursor/memory/index.md":      "# Memoria - index\n\nVer .cursor/governance/memory-contract.md para regras.\n",
+        ".cursor/memory/03-backlog.md": "# Backlog\n\n(vazio)\n",
+        ".cursor/memory/04-planning-log.md":       "# Planning log\n\n(vazio)\n",
+        ".cursor/memory/04-planning-active.md":    "# Planning ativo\n\n(vazio)\n",
+        ".cursor/memory/06-implementation-log.md": "# Implementation log\n\n(vazio)\n",
+        ".cursor/memory/07-testing-log.md":        "# Testing log\n\n(vazio)\n",
+        ".cursor/memory/09-done.md":               "# Done\n\n(vazio)\n",
+        ".cursor/memory/10-checkpoint.md":         "# Checkpoint\n\n(vazio)\n",
+        ".cursor/memory/11-session-summary.md":    "# Session summary\n\n(vazio)\n",
+        ".cursor/memory/12-active-workset.md":     "# Active workset\n\n(vazio)\n",
+        ".cursor/memory/13-session-metrics.md":    "# Session metrics\n\n## Historico de entradas\n",
+        ".cursor/memory/14-fix-patterns.md":       "# Fix patterns\n\n(vazio - sera populado pelo auto-fix loop)\n"
+      }
+    },
+    "ignore": {
+      "description": "Nunca copiado, nunca tocado.",
+      "paths": [
+        ".cursor/memory/cold/code-index.json",
+        ".cursor/memory/cold/project-profile.json",
+        ".cursor/memory/cold/mcp-call-log.jsonl",
+        ".cursor/testing-module/reports/**",
+        ".cursor/testing-module/tmp/**",
+        ".cursor/qa-reports/2*-*",
+        "node_modules/**",
+        ".git/**"
+      ]
+    }
+  },
+  "resetScopes": {
+    "memory": {
+      "description": "Limpa memoria operacional do dia-a-dia. Mantem backlog/done/contracts.",
+      "deletePaths": [
+        ".cursor/memory/06-implementation-log.md",
+        ".cursor/memory/07-testing-log.md",
+        ".cursor/memory/13-session-metrics.md",
+        ".cursor/memory/14-fix-patterns.md",
+        ".cursor/memory/cold/code-index.json",
+        ".cursor/memory/cold/project-profile.json",
+        ".cursor/memory/cold/mcp-call-log.jsonl"
+      ]
+    },
+    "state": {
+      "description": "Limpa apenas a sessao atual. Mantem logs historicos e cold cache.",
+      "deletePaths": [
+        ".cursor/memory/10-checkpoint.md",
+        ".cursor/memory/11-session-summary.md",
+        ".cursor/memory/12-active-workset.md",
+        ".cursor/memory/04-planning-active.md"
+      ]
+    },
+    "all": {
+      "description": "Reset completo de memoria. Mantem governance/scripts/agentes/contratos.",
+      "deletePaths": [
+        ".cursor/memory/04-planning-log.md",
+        ".cursor/memory/04-planning-active.md",
+        ".cursor/memory/06-implementation-log.md",
+        ".cursor/memory/07-testing-log.md",
+        ".cursor/memory/09-done.md",
+        ".cursor/memory/10-checkpoint.md",
+        ".cursor/memory/11-session-summary.md",
+        ".cursor/memory/12-active-workset.md",
+        ".cursor/memory/13-session-metrics.md",
+        ".cursor/memory/14-fix-patterns.md",
+        ".cursor/memory/cold/code-index.json",
+        ".cursor/memory/cold/project-profile.json",
+        ".cursor/memory/cold/mcp-call-log.jsonl"
+      ]
+    }
+  },
+  "rules": {
+    "alwaysSnapshotBeforeReset": true,
+    "snapshotPath": ".cursor/memory/archive/<timestamp>-<scope>/",
+    "requireConfirmationForAll": true,
+    "runProfileAfterInstall": true,
+    "runHealthCheckAfterInstall": true
+  }
+}

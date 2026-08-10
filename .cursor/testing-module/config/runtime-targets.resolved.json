@@ -1,0 +1,35 @@
+﻿{
+    "resolvedAt":  "2026-04-17T15:21:32.6667394-03:00",
+    "workspaceRoot":  "D:\\RovisMark5",
+    "activeEnvironment":  "local-secondacademy",
+    "backendUrl":  "https://apipris.secondmind.com.br",
+    "frontendUrl":  "http://localhost:5173",
+    "swaggerUiUrl":  "https://apipris.secondmind.com.br/swagger/index.html",
+    "swaggerJsonUrl":  "",
+    "swaggerDetected":  true,
+    "swaggerDocument":  {
+                            "title":  "",
+                            "version":  "",
+                            "pathCount":  0
+                        },
+    "sourceOfTruth":  {
+                          "backend":  "environment-fallback",
+                          "frontend":  "environment-fallback",
+                          "swagger":  "http-probe"
+                      },
+    "confidence":  "high",
+    "evidence":  {
+                     "launchSettingsFiles":  [
+
+                                             ],
+                     "programFiles":  [
+
+                                      ],
+                     "packageFiles":  [
+
+                                      ],
+                     "viteConfigFiles":  [
+
+                                         ]
+                 }
+}

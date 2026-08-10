@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "requiredHandoffFields": [
+    "De:",
+    "Para:",
+    "Objetivo:",
+    "Fonte de verdade:",
+    "Arquivos em foco:",
+    "Riscos:",
+    "Proxima acao:"
+  ],
+  "requiredScorecardItems": [
+    "state_compliance: ok|fail",
+    "source_of_truth_declared: ok|fail",
+    "memory_updated: ok|fail",
+    "test_validation_executed: ok|fail",
+    "handoff_quality: ok|fail",
+    "encoding_utf8_validated: ok|fail"
+  ],
+  "rules": {
+    "handoffRequiredWhenAgentChanges": true,
+    "scorecardRequiredOnStageClose": true,
+    "criticalFailureBlocksStageClose": true
+  }
+}
