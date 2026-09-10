@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { supabase } from '@lib/supabase.js'
+import { supabase, supabaseConfigError } from '@lib/supabase.js'
 import { Navbar } from '@components/layout/Navbar.jsx'
-import { initChatbot } from '@features/onim/chatbot.js'
+import { OnimChatbot } from '@features/onim/OnimChatbot.jsx'
 import { AlphaNav, StreetsByLetter } from './AlphaNav.jsx'
 import { BairroCombobox } from './BairroCombobox.jsx'
 import { SearchResults } from './SearchResults.jsx'
@@ -60,10 +60,6 @@ export default function HomePage() {
   const debouncedQuery = useDebouncedValue(searchInput, 400)
 
   useEffect(() => {
-    initChatbot()
-  }, [])
-
-  useEffect(() => {
     let cancelled = false
     ;(async () => {
       try {
@@ -86,7 +82,11 @@ export default function HomePage() {
       } catch (err) {
         console.error(err)
         if (!cancelled) {
-          setError('Não foi possível carregar os dados. Verifique sua conexão e tente novamente.')
+          setError(
+            supabaseConfigError
+              || err?.message
+              || 'Não foi possível carregar os dados. Verifique sua conexão e tente novamente.',
+          )
           setLoading(false)
         }
       }
@@ -374,6 +374,8 @@ export default function HomePage() {
           <p>&copy; {new Date().getFullYear()} Toponímia Urbana de Ouro Branco. Todos os direitos reservados.</p>
         </div>
       </footer>
+
+      <OnimChatbot />
     </>
   )
 }

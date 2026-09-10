@@ -7,8 +7,7 @@
       "@features/*": ["src/features/*"],
       "@components/*": ["src/components/*"],
       "@pages/*": ["src/pages/*"],
-      "@styles/*": ["src/styles/*"],
-      "@legacy/*": ["src/legacy/*"]
+      "@styles/*": ["src/styles/*"]
     },
     "jsx": "react-jsx",
     "module": "ESNext",

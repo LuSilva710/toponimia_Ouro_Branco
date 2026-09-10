@@ -1,6 +1,72 @@
 export const OURO_BRANCO_CENTER = [-20.5185, -43.692]
 export const DEFAULT_ZOOM = 15
 
+/** Basemaps disponíveis no mapa (toggle OSM ↔ CARTO). */
+export const BASEMAP_STORAGE_KEY = 'mapa-basemap'
+
+export function getCartoApiKey() {
+  const key = String(import.meta.env?.VITE_CARTO_API_KEY || '').trim()
+  return key || ''
+}
+
+export function buildBasemapOptions() {
+  const cartoKey = getCartoApiKey()
+  const cartoUrl = cartoKey
+    ? `https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?api_key=${encodeURIComponent(cartoKey)}`
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+
+  return {
+    osm: {
+      id: 'osm',
+      label: 'OpenStreetMap',
+      shortLabel: 'OSM',
+      url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      options: {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 19,
+      },
+      needsKey: false,
+      ready: true,
+    },
+    carto: {
+      id: 'carto',
+      label: 'CARTO Light',
+      shortLabel: 'CARTO',
+      url: cartoUrl,
+      options: {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 20,
+      },
+      needsKey: true,
+      ready: Boolean(cartoKey),
+      hint: cartoKey
+        ? ''
+        : 'Sem VITE_CARTO_API_KEY — o fundo pode pedir chave. Use OSM até configurar.',
+    },
+  }
+}
+
+export function loadSavedBasemapId(fallback = 'osm') {
+  try {
+    const saved = localStorage.getItem(BASEMAP_STORAGE_KEY)
+    if (saved === 'osm' || saved === 'carto') return saved
+  } catch {
+    /* ignore */
+  }
+  return fallback
+}
+
+export function saveBasemapId(id) {
+  try {
+    localStorage.setItem(BASEMAP_STORAGE_KEY, id)
+  } catch {
+    /* ignore */
+  }
+}
+
 export const CORES_CATEGORIA = {
   antropotoponimo: '#2563eb',
   fitotoponimo: '#16a34a',

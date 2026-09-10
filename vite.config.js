@@ -15,7 +15,6 @@ export default defineConfig({
       { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
       { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
       { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
-      { find: '@legacy', replacement: path.resolve(__dirname, 'src/legacy') },
       { find: '@', replacement: path.resolve(__dirname, 'src') },
       { find: 'langchain/agents', replacement: 'langchain/agents' },
     ],

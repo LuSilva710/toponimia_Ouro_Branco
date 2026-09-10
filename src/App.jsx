@@ -2,9 +2,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import AboutPage from '@pages/About/AboutPage.jsx'
 
 /**
- * Shell SPA (em construção).
- * Hoje a página Sobre usa `main.jsx` diretamente.
- * Nas próximas migrações, as rotas abaixo passam a ser o entry único.
+ * @deprecated Shell SPA de experimento — NÃO é entry do runtime MPA.
+ * Produção usa `*.html` + `src/*.jsx` (ex.: about.jsx → AboutPage).
+ * Manter só como referência para uma futura unificação SPA (P2).
  */
 export default function App() {
   return (

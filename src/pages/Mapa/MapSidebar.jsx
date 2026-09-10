@@ -1,6 +1,6 @@
 import { MapSearch } from './MapSearch.jsx'
 import { MapFilterPanel } from './MapFilterPanel.jsx'
-import { MapLegend, MapPanorama, MapViewControls } from './MapLegend.jsx'
+import { MapBasemapToggle, MapLegend, MapPanorama, MapViewControls } from './MapLegend.jsx'
 
 /** Shell da sidebar: busca + filtros + visualização + legenda/panorama. */
 export function MapSidebar({
@@ -20,6 +20,8 @@ export function MapSidebar({
   onVisualMode,
   showHeatmap,
   onHeatmap,
+  basemapId,
+  onBasemap,
   ruasFiltradas,
   loading,
   onSelectRua,
@@ -63,6 +65,8 @@ export function MapSidebar({
           {searchNotice}
         </div>
       )}
+
+      <MapBasemapToggle basemapId={basemapId} onBasemap={onBasemap} />
 
       <MapFilterPanel
         bairros={bairros}

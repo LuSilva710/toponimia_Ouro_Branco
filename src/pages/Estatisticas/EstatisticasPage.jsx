@@ -87,7 +87,7 @@ export default function EstatisticasPage() {
     const btn = e.currentTarget
     setExporting(true)
     try {
-      const { PdfGeneratorService } = await import('@legacy/services/PdfGeneratorService.js')
+      const { PdfGeneratorService } = await import('@features/pdf/PdfGeneratorService.js')
       await PdfGeneratorService.exportFullReport(btn)
     } catch (err) {
       console.error(err)

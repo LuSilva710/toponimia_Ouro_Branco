@@ -333,6 +333,74 @@ body {
   color: var(--black);
 }
 
+.basemap-hint {
+  font-size: 0.78rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.basemap-floating-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+}
+
+.basemap-floating-toggle button {
+  border: none;
+  background: transparent;
+  padding: 8px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.basemap-floating-toggle button + button {
+  border-left: 1px solid #e2e8f0;
+}
+
+.basemap-floating-toggle button.active {
+  background: #0f172a;
+  color: #fff;
+}
+
+.basemap-banner {
+  position: absolute;
+  top: 58px;
+  right: 16px;
+  z-index: 1000;
+  max-width: min(320px, calc(100% - 32px));
+  background: #fff7ed;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.75rem;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+.basemap-banner code {
+  font-size: 0.7rem;
+}
+
+@media (max-width: 991.98px) {
+  .basemap-floating-toggle {
+    top: 64px;
+    right: 12px;
+  }
+  .basemap-banner {
+    top: 106px;
+    right: 12px;
+  }
+}
+
 /* Legend */
 .legend-item {
   display: flex;

@@ -4,9 +4,56 @@ import {
   CORES_GENERO,
   GENEROS,
   ROTULO_CATEGORIA,
+  buildBasemapOptions,
   contarPorCategoria,
   contarPorGenero,
 } from './mapUtils.js'
+
+export function MapBasemapToggle({ basemapId, onBasemap }) {
+  const options = buildBasemapOptions()
+  const carto = options.carto
+
+  return (
+    <div className="filter-group">
+      <h3 className="filter-title">
+        <i className="bi bi-layers me-1" aria-hidden="true" />
+        Fundo do mapa
+      </h3>
+      <div className="visual-mode-toggle mb-2" role="group" aria-label="Escolher fundo do mapa">
+        <input
+          type="radio"
+          className="btn-check"
+          name="basemap"
+          id="basemap-osm"
+          checked={basemapId === 'osm'}
+          onChange={() => onBasemap('osm')}
+          autoComplete="off"
+        />
+        <label className="btn btn-outline-dark btn-sm w-50" htmlFor="basemap-osm">
+          OSM
+        </label>
+        <input
+          type="radio"
+          className="btn-check"
+          name="basemap"
+          id="basemap-carto"
+          checked={basemapId === 'carto'}
+          onChange={() => onBasemap('carto')}
+          autoComplete="off"
+        />
+        <label className="btn btn-outline-dark btn-sm w-50" htmlFor="basemap-carto">
+          CARTO
+        </label>
+      </div>
+      {basemapId === 'carto' && !carto.ready && (
+        <p className="basemap-hint mb-0" role="note">
+          <i className="bi bi-key me-1" aria-hidden="true" />
+          Sem chave CARTO no `.env` (`VITE_CARTO_API_KEY`). OSM funciona sem chave.
+        </p>
+      )}
+    </div>
+  )
+}
 
 export function MapViewControls({ visualMode, onVisualMode, showHeatmap, onHeatmap }) {
   return (

@@ -2,7 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
 import { Navbar } from '@components/layout/Navbar.jsx'
 import { MapSidebar } from './MapSidebar.jsx'
-import { mensagemFiltrosVazios } from './mapUtils.js'
+import {
+  buildBasemapOptions,
+  loadSavedBasemapId,
+  mensagemFiltrosVazios,
+  saveBasemapId,
+} from './mapUtils.js'
 import { useMapEngine } from './useMapEngine.js'
 import { useMapFilters } from './useMapFilters.js'
 
@@ -16,8 +21,11 @@ export default function MapaPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [visualMode, setVisualMode] = useState('genero')
   const [showHeatmap, setShowHeatmap] = useState(false)
+  const [basemapId, setBasemapId] = useState(() => loadSavedBasemapId('osm'))
   const [pendingFocus, setPendingFocus] = useState(null)
   const [searchNotice, setSearchNotice] = useState('')
+
+  const basemapMeta = useMemo(() => buildBasemapOptions()[basemapId], [basemapId])
 
   const {
     filtros,
@@ -91,6 +99,7 @@ export default function MapaPage() {
     streetsGeoJSON,
     visualMode,
     showHeatmap,
+    basemapId,
     ready: !loading && !error,
   })
 
@@ -119,6 +128,11 @@ export default function MapaPage() {
   function changeVisualMode(mode) {
     setVisualMode(mode)
     invalidate()
+  }
+
+  function changeBasemap(id) {
+    setBasemapId(id)
+    saveBasemapId(id)
   }
 
   function handleSelectRua(rua) {
@@ -176,6 +190,8 @@ export default function MapaPage() {
           onVisualMode={changeVisualMode}
           showHeatmap={showHeatmap}
           onHeatmap={setShowHeatmap}
+          basemapId={basemapId}
+          onBasemap={changeBasemap}
           ruasFiltradas={ruasFiltradas}
           loading={loading}
           onSelectRua={handleSelectRua}
@@ -192,6 +208,31 @@ export default function MapaPage() {
           >
             <i className="bi bi-funnel" aria-hidden="true" />
           </button>
+
+          <div className="basemap-floating-toggle" role="group" aria-label="Fundo do mapa">
+            <button
+              type="button"
+              className={basemapId === 'osm' ? 'active' : ''}
+              onClick={() => changeBasemap('osm')}
+              title="OpenStreetMap (sem chave)"
+            >
+              OSM
+            </button>
+            <button
+              type="button"
+              className={basemapId === 'carto' ? 'active' : ''}
+              onClick={() => changeBasemap('carto')}
+              title="CARTO Light (requer VITE_CARTO_API_KEY)"
+            >
+              CARTO
+            </button>
+          </div>
+
+          {basemapId === 'carto' && !basemapMeta?.ready && (
+            <div className="basemap-banner" role="status">
+              CARTO sem chave — adicione <code>VITE_CARTO_API_KEY</code> no `.env` ou use OSM.
+            </div>
+          )}
 
           {error && (
             <div className="alert alert-danger m-3" role="alert">

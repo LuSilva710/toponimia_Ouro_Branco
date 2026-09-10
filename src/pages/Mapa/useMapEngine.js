@@ -4,6 +4,7 @@ import {
   CORES_GENERO,
   DEFAULT_ZOOM,
   OURO_BRANCO_CENTER,
+  buildBasemapOptions,
   normalizarCategoria,
   normalizarNomeRua,
   popupHtml,
@@ -20,9 +21,11 @@ export function useMapEngine({
   streetsGeoJSON,
   visualMode,
   showHeatmap,
+  basemapId = 'osm',
   ready,
 }) {
   const mapRef = useRef(null)
+  const baseLayerRef = useRef(null)
   const markersLayerRef = useRef(null)
   const geojsonLayerRef = useRef(null)
   const heatFemRef = useRef(null)
@@ -44,12 +47,11 @@ export function useMapEngine({
       zoomControl: false,
     })
     L.control.zoom({ position: 'bottomright' }).addTo(map)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-      subdomains: 'abcd',
-      maxZoom: 20,
-    }).addTo(map)
+
+    const basemaps = buildBasemapOptions()
+    const initial = basemaps[basemapId] || basemaps.osm
+    const baseLayer = L.tileLayer(initial.url, initial.options).addTo(map)
+    baseLayerRef.current = baseLayer
 
     const markersLayer = L.markerClusterGroup({
       maxClusterRadius: 50,
@@ -86,13 +88,32 @@ export function useMapEngine({
       if (ro) ro.disconnect()
       map.remove()
       mapRef.current = null
+      baseLayerRef.current = null
       markersLayerRef.current = null
       geojsonLayerRef.current = null
       heatFemRef.current = null
       heatMascRef.current = null
       layersPorRuaRef.current = {}
     }
+    // basemapId is applied in a separate effect after init
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [containerRef])
+
+  // Swap basemap tiles
+  useEffect(() => {
+    const L = globalThis.L
+    const map = mapRef.current
+    if (!L || !map) return
+
+    const basemaps = buildBasemapOptions()
+    const next = basemaps[basemapId] || basemaps.osm
+    const prev = baseLayerRef.current
+    if (prev) map.removeLayer(prev)
+
+    const layer = L.tileLayer(next.url, next.options).addTo(map)
+    baseLayerRef.current = layer
+    layer.bringToBack?.()
+  }, [basemapId])
 
   // Sync navbar offset
   useEffect(() => {

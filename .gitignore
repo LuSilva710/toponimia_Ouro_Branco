@@ -18,6 +18,7 @@ scripts/ai/ai-classify.sql
 scripts/geo/osm_geometries.json
 scripts/geo/osm_coords_update.sql
 scripts/maintenance/missing_streets.json
+qa-reports/
 
 # Scripts e arquivos temporários de desenvolvimento
 scratch/

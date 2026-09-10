@@ -824,3 +824,12 @@
          white-space: nowrap !important;
      }
  }
+
+ /* Shell navbar da cruzadinha (ex-inline no HTML — Vite MPA quebra com <style> no entry) */
+ .bg-dark { background-color: var(--dark, #212529) !important; }
+ .btn-outline-light { border-color: white; color: white; }
+ .btn-outline-light:hover { background-color: white; color: var(--dark, #212529); }
+ .navbar .container-fluid { flex-wrap: nowrap; }
+ @media (max-width: 575.98px) {
+     .btn-outline-light { font-size: 0.75rem !important; padding: 0.25rem 0.5rem !important; }
+ }

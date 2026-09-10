@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - novo-branch
 
 permissions:
   contents: read
@@ -38,8 +37,10 @@ jobs:
           VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
           VITE_GEMINI_MODEL: ${{ secrets.VITE_GEMINI_MODEL || vars.VITE_GEMINI_MODEL || 'gemini-2.0-flash' }}
           VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_OPENROUTER_API_KEY: ${{ secrets.VITE_OPENROUTER_API_KEY }}
           VITE_OPENAI_BASE_URL: ${{ secrets.VITE_OPENAI_BASE_URL || vars.VITE_OPENAI_BASE_URL }}
           VITE_OPENAI_MODEL: ${{ secrets.VITE_OPENAI_MODEL || vars.VITE_OPENAI_MODEL }}
+          VITE_CARTO_API_KEY: ${{ secrets.VITE_CARTO_API_KEY || vars.VITE_CARTO_API_KEY }}
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

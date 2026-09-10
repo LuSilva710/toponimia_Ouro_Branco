@@ -32,7 +32,10 @@ function _sanitizeGeminiChatModelId(id) {
 }
 
 const GEMINI_MODEL = _sanitizeGeminiChatModelId(GEMINI_MODEL_RAW);
-const OPENAI_KEY   = import.meta.env.VITE_OPENAI_API_KEY  ?? '';
+// OpenRouter: VITE_OPENROUTER_API_KEY é alias de VITE_OPENAI_API_KEY
+const OPENAI_KEY   = import.meta.env.VITE_OPENAI_API_KEY
+  || import.meta.env.VITE_OPENROUTER_API_KEY
+  || '';
 const OPENAI_BASE  = import.meta.env.VITE_OPENAI_BASE_URL ?? 'https://openrouter.ai/api/v1';
 const OLLAMA_BASE  = import.meta.env.VITE_OLLAMA_URL       ?? 'http://localhost:11434';
 const OLLAMA_MODEL = import.meta.env.VITE_OLLAMA_MODEL     ?? 'qwen2.5:3b';
@@ -146,7 +149,10 @@ export function validateConfig() {
     );
   }
   if ((AI_PROVIDER === 'openai' || AI_PROVIDER === 'openrouter') && !OPENAI_KEY) {
-    throw new Error(`[ai-client] VITE_OPENAI_API_KEY não configurada.`);
+    // Mensagem cobre VITE_OPENAI_API_KEY e alias VITE_OPENROUTER_API_KEY
+    throw new Error(
+      '[ai-client] Configure VITE_OPENAI_API_KEY ou VITE_OPENROUTER_API_KEY no .env.'
+    );
   }
   if (AI_PROVIDER === 'openai' && OPENAI_BASE.includes('groq.com') && !GEMINI_KEY) {
     console.warn(

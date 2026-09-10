@@ -1,40 +1,36 @@
-# Estrutura `src/` (migração React)
+# Estrutura `src/` (React MPA)
 
 ```
 src/
-  main.jsx / App.jsx     Entry React (páginas migradas)
-  components/            UI reutilizável
+  *.jsx                  Entries por página (home, admin, mapa, jogos…)
   pages/                 Telas React
-  features/              Domínio (ex.: ONIM)
-  lib/                   Infra (Supabase, AI client)
-  hooks/                 Hooks React (futuro)
-  styles/                CSS global / por domínio
-  legacy/                JS das páginas ainda em HTML multi-page
-    pages/
-    games/
-    services/
+  components/            UI (Navbar, Footer, GameChrome)
+  features/              Domínio (onim/, pdf/)
+  lib/                   supabase.js, ai-client.js
+  styles/                CSS por domínio
+  App.jsx                DEPRECATED — shell SPA P2 (não usado no runtime MPA)
 ```
 
 ## Estado da migração
 
 | Página | Status |
 |--------|--------|
-| Sobre (`about.html`) | React |
-| Admin (`admin.html`) | React |
-| Estatísticas (`estatisticas.html`) | React |
-| Dicionário (`index.html`) | React (ONIM ainda via `features/onim`) |
-| Mapa (`mapa.html`) | React |
-| Portal / Jogos hub (`portaleducativo.html`) | React |
-| Quiz, Associação, Ranking | React |
-| Cruzadinha | Legacy (`src/legacy/games/cruzadinha.js`) |
+| Sobre, Admin, Estatísticas, Dicionário | React |
+| Mapa | React (+ toggle OSM/CARTO) |
+| Portal / Quiz / Associação / Ranking / Cruzadinha | React |
+| ONIM | React (`OnimChatbot.jsx`) |
 
 ## Aliases Vite
 
-- `@` → `src/`
-- `@lib`, `@features`, `@components`, `@pages`, `@styles`, `@legacy`
+`@lib`, `@features`, `@components`, `@pages`, `@styles` **antes** de `@`.
+
+## Troubleshooting rápido
+
+- Sem `VITE_SUPABASE_*` → mensagem na Home (não tela branca).
+- Mapa CARTO sem chave → use OSM no toggle.
+- ONIM sem IA → UI abre; respostas falham até configurar `.env`.
+- Jogos gravam em `pontuacoes` (Supabase + RLS).
 
 ## ROVIS
 
-Governança do Cursor em `.cursor/` (memória operacional em `.cursor/memory/`).  
-O pacote `ROVIS-Lite/` é a cópia master local; o runtime ativo é a `.cursor/` da raiz.  
-Ativar no chat: `modo ROVIS` ou `modo ROVIS-FE`.
+Governança em `.cursor/`. No chat: `modo ROVIS` ou `modo ROVIS-FE`.

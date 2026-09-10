@@ -3,10 +3,14 @@
   "version": "1.0.0",
   "description": "Dicionário de Ruas e Portal Educativo de Ouro Branco, MG",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
+    "smoke": "node scripts/smoke-mpa.mjs",
     "ai:build": "npm run build --prefix ai-provider-kit",
     "ai:classify:dry": "node scripts/ai/ai-classify.mjs --dry-run",
     "ai:classify": "node scripts/ai/ai-classify.mjs --limit=20",
@@ -28,6 +32,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.5.2",
+    "playwright": "^1.55.0",
     "vite": "^6.3.5",
     "vite-plugin-pwa": "^0.21.1"
   },
