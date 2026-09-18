@@ -1,5 +1,5 @@
 /** Palavras e dicas da cruzadinha (escolas de Ouro Branco). */
-export const GRID_SIZE = 45
+export const GRID_SIZE = 47
 
 export const CRUZADINHA_WORDS = [
   {
