@@ -241,7 +241,6 @@
      grid-gap: 0;
      background: transparent;
      padding: 6px 0 0 0;
-     border: 1px solid var(--border-color);
      width: 100%;
      height: auto;
      max-width: 100%;
@@ -495,10 +494,246 @@
  }
 
  /* ============================================
+    MODO MOBILE — CRUZADINHA COM GRADE REAL
+    ============================================ */
+
+ .mobile-play {
+     width: 100%;
+     display: flex;
+     flex-direction: column;
+     gap: 12px;
+ }
+
+ .mobile-progress-meta {
+     display: flex;
+     justify-content: space-between;
+     align-items: center;
+     gap: 10px;
+     font-size: 0.85rem;
+     color: #666;
+     font-weight: 500;
+ }
+
+ .mobile-word-nav {
+     display: flex;
+     align-items: stretch;
+     gap: 8px;
+ }
+
+ .mobile-nav-btn {
+     flex: 0 0 auto;
+     width: 44px;
+     min-width: 44px;
+     padding: 0;
+     justify-content: center;
+     align-self: stretch;
+ }
+
+ .mobile-clue-card {
+     flex: 1;
+     min-width: 0;
+     background: var(--accent);
+     border: 1px solid #ddd;
+     border-radius: 10px;
+     padding: 12px 14px;
+     border-left: 4px solid var(--dark);
+ }
+
+ .mobile-clue-meta {
+     display: flex;
+     flex-wrap: wrap;
+     align-items: center;
+     gap: 8px;
+     margin-bottom: 8px;
+ }
+
+ .mobile-clue-number {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     width: 28px;
+     height: 28px;
+     background: var(--dark);
+     color: white;
+     border-radius: 50%;
+     font-size: 0.85rem;
+ }
+
+ .mobile-clue-done {
+     margin-left: auto;
+     font-size: 0.75rem;
+     color: #2c6e49;
+     font-weight: 600;
+     display: inline-flex;
+     align-items: center;
+     gap: 4px;
+ }
+
+ .mobile-clue-text {
+     margin: 0;
+     font-size: 0.9rem;
+     line-height: 1.4;
+     color: #333;
+     display: -webkit-box;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+ }
+
+ .mobile-board-hint {
+     margin: 0;
+     text-align: center;
+     font-size: 0.78rem;
+     color: #888;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 6px;
+ }
+
+ /* Viewport: pan/scroll na grade 45x45 com células tocáveis */
+ .mobile-board-viewport {
+     width: 100%;
+     height: min(58vh, 520px);
+     overflow: auto;
+     -webkit-overflow-scrolling: touch;
+     overscroll-behavior: contain;
+     border: 1px solid #ddd;
+     border-radius: 10px;
+     background: #fafafa;
+     touch-action: pan-x pan-y;
+     scrollbar-width: thin;
+ }
+
+ .mobile-board-viewport::-webkit-scrollbar {
+     width: 6px;
+     height: 6px;
+ }
+
+ .mobile-board-viewport::-webkit-scrollbar-thumb {
+     background: #999;
+     border-radius: 3px;
+ }
+
+ .mobile-crossword-section {
+     flex: none;
+     min-width: 0;
+     width: max-content;
+     padding: 8px;
+     background: transparent;
+     overflow: visible;
+     display: block;
+ }
+
+ .game-container.cruzadinha-mobile .mobile-crossword-section #crossword-container {
+     width: auto;
+     height: auto;
+     max-width: none;
+     max-height: none;
+     aspect-ratio: auto;
+     margin: 0;
+ }
+
+ .game-container.cruzadinha-mobile .mobile-crossword-section #crossword {
+     width: auto;
+     height: auto;
+ }
+
+ .game-container.cruzadinha-mobile .mobile-crossword-section .grid-cell {
+     min-width: 32px;
+     min-height: 32px;
+ }
+
+ .game-container.cruzadinha-mobile .mobile-crossword-section .grid-cell input {
+     font-size: 0.95rem;
+ }
+
+ .game-container.cruzadinha-mobile .mobile-crossword-section .word-number {
+     top: 1px;
+     left: 2px;
+     font-size: 0.55rem;
+     opacity: 0.85;
+ }
+
+ .mobile-word-chips {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+     justify-content: center;
+ }
+
+ .mobile-word-chip {
+     width: 40px;
+     height: 40px;
+     border-radius: 8px;
+     border: 1.5px solid #ccc;
+     background: white;
+     color: var(--dark);
+     font-weight: 600;
+     font-size: 0.9rem;
+     cursor: pointer;
+     transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+ }
+
+ .mobile-word-chip.is-active {
+     background: var(--dark);
+     border-color: var(--dark);
+     color: white;
+ }
+
+ .mobile-word-chip.is-done:not(.is-active) {
+     background: var(--correct);
+     border-color: #4a7;
+     color: #2c6e49;
+ }
+
+ .mobile-word-chip:active {
+     transform: scale(0.96);
+ }
+
+ .mobile-clues-toggle {
+     width: 100%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     gap: 8px;
+     padding: 10px 12px;
+     border: 1px dashed #bbb;
+     border-radius: 8px;
+     background: transparent;
+     color: #555;
+     font-size: 0.9rem;
+     font-weight: 500;
+     cursor: pointer;
+ }
+
+ .mobile-clues-toggle:hover {
+     background: var(--accent);
+     color: var(--dark);
+ }
+
+ .mobile-clues-panel {
+     width: 100%;
+     max-height: 240px;
+     margin: 0;
+ }
+
+ .game-container.cruzadinha-mobile {
+     align-items: stretch;
+ }
+
+ .game-container.cruzadinha-mobile .jogador-nome-field {
+     max-width: none !important;
+     width: 100%;
+ }
+
+ .game-container.cruzadinha-mobile .game-status {
+     margin-top: 4px;
+ }
+
+ /* ============================================
     RESPONSIVIDADE
     ============================================ */
 
- /* Crossword scrollável em telas menores */
  .crossword-scroll-wrapper {
      width: 100%;
      overflow-x: auto;
@@ -521,32 +756,6 @@
      border-radius: 3px;
  }
 
- /* Indicador de scroll em mobile */
- .scroll-hint {
-     display: none;
-     text-align: center;
-     padding: 8px;
-     font-size: 0.8rem;
-     color: #888;
-     animation: pulseHint 2s ease-in-out infinite;
- }
-
- .scroll-hint i {
-     margin-right: 4px;
- }
-
- @keyframes pulseHint {
-
-     0%,
-     100% {
-         opacity: 0.5;
-     }
-
-     50% {
-         opacity: 1;
-     }
- }
-
  /* === Desktop Grande (< 1200px) === */
  @media (max-width: 1200px) {
      .game-container {
@@ -558,45 +767,10 @@
      }
  }
 
- /* === Tablet (< 992px) === */
+ /* === Tablet / Mobile (< 992px) === */
  @media (max-width: 992px) {
-     .game-content {
-         flex-direction: column;
-     }
-
-     .crossword-section {
-         overflow-x: auto;
-         overflow-y: hidden;
-         width: 100%;
-         padding: 10px;
-         -webkit-overflow-scrolling: touch;
-     }
-
-     .clues-section {
-         width: 100%;
-         padding: 15px;
-         max-height: 400px;
-     }
-
      .game-title {
          font-size: 1.8rem;
-     }
-
-     #crossword {
-         min-width: 600px;
-     }
-
-     .grid-cell {
-         min-width: 14px;
-         min-height: 14px;
-     }
-
-     .grid-cell input {
-         font-size: 0.75rem;
-     }
-
-     .scroll-hint {
-         display: block;
      }
  }
 
@@ -624,6 +798,10 @@
          justify-content: center;
          padding: 10px 12px;
          font-size: 0.85rem;
+     }
+
+     .mobile-nav-btn {
+         flex: 0 0 44px;
      }
 
      #timer {
@@ -658,7 +836,6 @@
          font-size: 1rem;
      }
 
-     /* Footer mobile */
      .footer {
          padding: 40px 15px 20px;
      }
@@ -697,8 +874,13 @@
      }
 
      .controls {
-         flex-direction: column;
+         display: grid;
+         grid-template-columns: 1fr 1fr;
          gap: 6px;
+     }
+
+     .controls .game-button.restart {
+         grid-column: 1 / -1;
      }
 
      .game-button {
@@ -713,31 +895,23 @@
          padding: 8px 16px;
      }
 
-     .crossword-section {
-         padding: 5px;
-         border-radius: 6px;
+     .mobile-clue-text {
+         font-size: 0.85rem;
      }
 
-     #crossword {
-         min-width: 500px;
+     .mobile-board-viewport {
+         height: min(52vh, 420px);
      }
 
-     .grid-cell {
-         min-width: 12px;
-         min-height: 12px;
-     }
-
-     .grid-cell input {
-         font-size: 0.65rem;
-     }
-
-     .word-number {
-         font-size: 0.35rem;
+     .mobile-word-chip {
+         width: 36px;
+         height: 36px;
+         font-size: 0.82rem;
      }
 
      .clues-section {
          padding: 12px;
-         max-height: 300px;
+         max-height: 260px;
          border-radius: 8px;
      }
 
@@ -773,7 +947,6 @@
          border-radius: 6px;
      }
 
-     /* Footer compact */
      .footer {
          padding: 30px 12px 15px;
      }
@@ -805,8 +978,14 @@
          padding: 8px;
      }
 
-     #crossword {
-         min-width: 450px;
+     .mobile-board-viewport {
+         height: min(48vh, 360px);
+     }
+
+     .mobile-nav-btn {
+         width: 38px;
+         min-width: 38px;
+         flex-basis: 38px;
      }
 
      .clues-section h2 {

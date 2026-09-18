@@ -12,8 +12,28 @@ import {
   isWordComplete,
 } from './cruzadinhaData.js'
 
+const MOBILE_BREAKPOINT = 992
+const MOBILE_CELL_SIZE = 32
+
 function cloneGrid(grid) {
   return grid.map((row) => [...row])
+}
+
+function useIsMobile(breakpoint = MOBILE_BREAKPOINT) {
+  const [isMobile, setIsMobile] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia(`(max-width: ${breakpoint}px)`).matches
+  })
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint}px)`)
+    const onChange = (event) => setIsMobile(event.matches)
+    setIsMobile(mq.matches)
+    mq.addEventListener('change', onChange)
+    return () => mq.removeEventListener('change', onChange)
+  }, [breakpoint])
+
+  return isMobile
 }
 
 function fireConfetti() {
@@ -45,6 +65,7 @@ function fireConfetti() {
 }
 
 export default function CruzadinhaPage() {
+  const isMobile = useIsMobile()
   const gridModel = useMemo(() => buildGrid(CRUZADINHA_WORDS), [])
   const {
     correctLetters,
@@ -65,8 +86,13 @@ export default function CruzadinhaPage() {
   const [won, setWon] = useState(false)
   const [jogadorNome, setJogadorNome] = useState('')
   const [score, setScore] = useState(null)
+  const [showAllClues, setShowAllClues] = useState(false)
+
+  const [zoomScale, setZoomScale] = useState(0.6)
+  const zoomScaleRef = useRef(1)
 
   const wrapperRef = useRef(null)
+  const boardViewportRef = useRef(null)
   const inputRefs = useRef(new Map())
   const activeWordRef = useRef(-1)
   const wonRef = useRef(false)
@@ -74,6 +100,10 @@ export default function CruzadinhaPage() {
   const revealedRef = useRef(revealed)
   const secondsRef = useRef(0)
   const hintsRef = useRef(0)
+
+  useEffect(() => {
+    zoomScaleRef.current = zoomScale
+  }, [zoomScale])
 
   useEffect(() => {
     activeWordRef.current = activeWordIndex
@@ -94,6 +124,11 @@ export default function CruzadinhaPage() {
     wonRef.current = won
   }, [won])
 
+  useEffect(() => {
+    if (!isMobile || activeWordIndex >= 0 || won) return
+    setActiveWordIndex(0)
+  }, [isMobile, activeWordIndex, won])
+
   const completedCells = useMemo(
     () => countCompleted(userAnswers, correctLetters, cellIsPartOfWord),
     [userAnswers, correctLetters, cellIsPartOfWord],
@@ -105,19 +140,62 @@ export default function CruzadinhaPage() {
     [wordEntries, userAnswers, correctLetters],
   )
 
+  const activeClue = activeWordIndex >= 0 ? CRUZADINHA_WORDS[activeWordIndex] : null
+
   useEffect(() => {
     if (won) return undefined
     const id = setInterval(() => setSeconds((s) => s + 1), 1000)
     return () => clearInterval(id)
   }, [won])
 
-  const focusCell = useCallback((row, col) => {
+  const scrollWordIntoView = useCallback((wordIdx) => {
+    if (wordIdx < 0 || wordIdx >= wordEntries.length) return
+    const entry = wordEntries[wordIdx]
+    const viewport = boardViewportRef.current
+    if (!viewport || !entry?.positions.length) return
+
+    const mid = entry.positions[Math.floor(entry.positions.length / 2)]
+    const key = `${mid.row},${mid.col}`
+    const input = inputRefs.current.get(key)
+    const cell = input?.closest('.grid-cell')
+    if (!cell) return
+
+    const cellRect = cell.getBoundingClientRect()
+    const viewRect = viewport.getBoundingClientRect()
+    const offsetX = cellRect.left - viewRect.left - viewRect.width / 2 + cellRect.width / 2
+    const offsetY = cellRect.top - viewRect.top - viewRect.height / 2 + cellRect.height / 2
+
+    viewport.scrollBy({
+      left: offsetX,
+      top: offsetY,
+      behavior: 'smooth',
+    })
+  }, [wordEntries])
+
+  const focusCell = useCallback((row, col, { scrollBoard = true } = {}) => {
     const key = `${row},${col}`
     const el = inputRefs.current.get(key)
     if (el && !el.disabled) {
-      el.focus()
+      el.focus({ preventScroll: true })
       el.select()
-      el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+      if (scrollBoard && boardViewportRef.current) {
+        const cell = el.closest('.grid-cell')
+        if (cell) {
+          const viewport = boardViewportRef.current
+          const cellRect = cell.getBoundingClientRect()
+          const viewRect = viewport.getBoundingClientRect()
+          const pad = 40
+          let dx = 0
+          let dy = 0
+          if (cellRect.left < viewRect.left + pad) dx = cellRect.left - viewRect.left - pad
+          else if (cellRect.right > viewRect.right - pad) dx = cellRect.right - viewRect.right + pad
+          if (cellRect.top < viewRect.top + pad) dy = cellRect.top - viewRect.top - pad
+          else if (cellRect.bottom > viewRect.bottom - pad) dy = cellRect.bottom - viewRect.bottom + pad
+          if (dx || dy) viewport.scrollBy({ left: dx, top: dy, behavior: 'smooth' })
+        }
+      } else if (!boardViewportRef.current) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' })
+      }
     }
   }, [])
 
@@ -286,6 +364,7 @@ export default function CruzadinhaPage() {
           entry.positions.find((p) => !revealedRef.current[p.row][p.col]) ||
           entry.positions[0]
         focusCell(emptyPos.row, emptyPos.col)
+        requestAnimationFrame(() => scrollWordIntoView(nextWordIdx))
         return
       }
 
@@ -306,6 +385,7 @@ export default function CruzadinhaPage() {
       highlightWord,
       focusCell,
       cellIsPartOfWord,
+      scrollWordIntoView,
     ],
   )
 
@@ -322,22 +402,49 @@ export default function CruzadinhaPage() {
         ) ||
         entry.positions.find((p) => !revealedRef.current[p.row][p.col]) ||
         entry.positions[0]
-      focusCell(target.row, target.col)
+
+      requestAnimationFrame(() => {
+        scrollWordIntoView(wordIdx)
+        focusCell(target.row, target.col, { scrollBoard: false })
+      })
     },
-    [highlightWord, wordEntries, focusCell],
+    [highlightWord, wordEntries, focusCell, scrollWordIntoView],
+  )
+
+  const goToAdjacentWord = useCallback(
+    (delta) => {
+      if (!wordEntries.length) return
+      let next = activeWordRef.current + delta
+      if (next >= wordEntries.length) next = 0
+      if (next < 0) next = wordEntries.length - 1
+      focusWord(next)
+    },
+    [wordEntries.length, focusWord],
   )
 
   function giveHint() {
     if (won) return
-    const eligible = wordEntries.filter((entry) =>
-      entry.positions.some((pos) => !revealedRef.current[pos.row][pos.col]),
-    )
-    if (!eligible.length) {
-      setStatus({ text: 'Todas as dicas já foram reveladas!', color: '#666' })
-      return
+
+    let entry = null
+    if (isMobile && activeWordRef.current >= 0) {
+      const current = wordEntries[activeWordRef.current]
+      const hasUnrevealed = current.positions.some(
+        (pos) => !revealedRef.current[pos.row][pos.col],
+      )
+      if (hasUnrevealed) entry = current
     }
 
-    const entry = eligible[Math.floor(Math.random() * eligible.length)]
+    if (!entry) {
+      const eligible = wordEntries.filter((item) =>
+        item.positions.some((pos) => !revealedRef.current[pos.row][pos.col]),
+      )
+      if (!eligible.length) {
+        setStatus({ text: 'Todas as dicas já foram reveladas!', color: '#666' })
+        return
+      }
+      entry = eligible[Math.floor(Math.random() * eligible.length)]
+    }
+
     const unrevealed = entry.positions.filter((pos) => !revealedRef.current[pos.row][pos.col])
     const pos = unrevealed[Math.floor(Math.random() * unrevealed.length)]
     const letter = correctLetters[pos.row][pos.col]
@@ -414,12 +521,14 @@ export default function CruzadinhaPage() {
     setUserAnswers(emptyGrid(''))
     setRevealed(emptyBoolGrid())
     setCellMarks(emptyGrid(''))
-    setActiveWordIndex(-1)
+    setActiveWordIndex(isMobile ? 0 : -1)
     setSeconds(0)
     setHintsUsed(0)
     setWon(false)
     wonRef.current = false
     setScore(null)
+    setShowAllClues(false)
+    setZoomScale(1)
     setStatus({ text: 'Jogo reiniciado! Boa sorte!', color: 'inherit' })
     setTimeout(() => {
       setStatus({
@@ -429,8 +538,10 @@ export default function CruzadinhaPage() {
     }, 2000)
   }
 
-  // Tamanho dinâmico das células
+  // Desktop: células se adaptam ao container
   useEffect(() => {
+    if (isMobile) return undefined
+
     function calculateCellSize() {
       const wrapper = wrapperRef.current
       if (!wrapper || wrapper.clientWidth === 0) return
@@ -459,7 +570,121 @@ export default function CruzadinhaPage() {
       clearTimeout(t)
       window.removeEventListener('resize', calculateCellSize)
     }
-  }, [])
+  }, [isMobile])
+
+  // Mobile Cell Sizing Setup
+  useEffect(() => {
+    if (!isMobile) return undefined
+
+    function applyMobileCellSize() {
+      const wrapper = wrapperRef.current
+      if (!wrapper) return
+      const cellSize = MOBILE_CELL_SIZE
+      const board = wrapper.querySelector('#crossword')
+      if (board) {
+        board.style.width = `${GRID_SIZE * cellSize}px`
+        board.style.height = `${GRID_SIZE * cellSize}px`
+      }
+
+      wrapper.querySelectorAll('.grid-cell').forEach((cell) => {
+        cell.style.width = `${cellSize}px`
+        cell.style.height = `${cellSize}px`
+        const input = cell.querySelector('input')
+        if (input) input.style.fontSize = `${cellSize * 0.55}px`
+        const marker = cell.querySelector('.word-number')
+        if (marker) marker.style.fontSize = `${Math.max(9, cellSize * 0.32)}px`
+      })
+    }
+
+    applyMobileCellSize()
+    const t = setTimeout(() => {
+      applyMobileCellSize()
+      if (activeWordRef.current >= 0) scrollWordIntoView(activeWordRef.current)
+    }, 80)
+
+    return () => clearTimeout(t)
+  }, [isMobile, scrollWordIntoView])
+
+  // Pinch-to-zoom 
+  useEffect(() => {
+    if (!isMobile) return
+
+    const viewport = boardViewportRef.current
+    const board = wrapperRef.current?.querySelector('#crossword')
+    if (!viewport || !board) return
+
+    let startDist = 0
+    let startScale = zoomScaleRef.current
+
+    function getTouchData(touches) {
+      const [t1, t2] = touches
+      const dist = Math.hypot(t2.clientX - t1.clientX, t2.clientY - t1.clientY)
+
+      const rect = viewport.getBoundingClientRect()
+      const midX = (t1.clientX + t2.clientX) / 2 - rect.left
+      const midY = (t1.clientY + t2.clientY) / 2 - rect.top
+
+      return { dist, midX, midY }
+    }
+
+    function handleTouchStart(e) {
+      if (e.touches.length === 2) {
+        const { dist } = getTouchData(e.touches)
+        startDist = dist
+        startScale = zoomScaleRef.current
+        board.style.transformOrigin = '0 0'
+      }
+    }
+
+    function handleTouchMove(e) {
+      if (e.touches.length === 2 && startDist > 0) {
+        e.preventDefault()
+        const { dist, midX, midY } = getTouchData(e.touches)
+        const scaleFactor = dist / startDist
+
+        const baseSize = GRID_SIZE * MOBILE_CELL_SIZE
+
+        const minScaleX = viewport.clientWidth / baseSize
+        const minScaleY = viewport.clientHeight / baseSize
+        const minScale = Math.min(minScaleX, minScaleY)
+
+        const nextScale = Math.min(Math.max(startScale * scaleFactor, minScale), 3.5)
+        const prevScale = zoomScaleRef.current
+
+        const unscaledX = (midX + viewport.scrollLeft) / prevScale
+        const unscaledY = (midY + viewport.scrollTop) / prevScale
+
+        zoomScaleRef.current = nextScale
+        board.style.transform = `scale(${nextScale})`
+
+        const section = viewport.querySelector('.mobile-crossword-section')
+        if (section) {
+          section.style.width = `${baseSize * nextScale}px`
+          section.style.height = `${baseSize * nextScale}px`
+        }
+
+        viewport.scrollLeft = unscaledX * nextScale - midX
+        viewport.scrollTop = unscaledY * nextScale - midY
+      }
+    }
+
+    function handleTouchEnd(e) {
+      if (e.touches.length < 2) {
+        startDist = 0
+        setZoomScale(zoomScaleRef.current)
+      }
+    }
+
+    viewport.addEventListener('touchstart', handleTouchStart, { passive: true })
+    viewport.addEventListener('touchmove', handleTouchMove, { passive: false })
+    viewport.addEventListener('touchend', handleTouchEnd, { passive: true })
+
+    return () => {
+      viewport.removeEventListener('touchstart', handleTouchStart)
+      viewport.removeEventListener('touchmove', handleTouchMove)
+      viewport.removeEventListener('touchend', handleTouchEnd)
+    }
+  }, [isMobile])
 
   const cells = []
   for (let row = 0; row < GRID_SIZE; row++) {
@@ -490,6 +715,8 @@ export default function CruzadinhaPage() {
             .filter(Boolean)
             .join(' ')}
           role="gridcell"
+          data-row={row}
+          data-col={col}
         >
           {marker != null && <span className="word-number">{marker}</span>}
           <input
@@ -498,8 +725,10 @@ export default function CruzadinhaPage() {
               else inputRefs.current.delete(key)
             }}
             maxLength={1}
+            inputMode="text"
             autoComplete="off"
             autoCorrect="off"
+            autoCapitalize="characters"
             spellCheck={false}
             disabled={isRevealed || won}
             value={value}
@@ -515,11 +744,84 @@ export default function CruzadinhaPage() {
     }
   }
 
+  const dirIcon = activeClue?.direction === 'horizontal' ? '→' : '↓'
+  const dirLabel = activeClue?.direction === 'horizontal' ? 'Horizontal' : 'Vertical'
+  const wordsDoneCount = completedWords.filter(Boolean).length
+
+  const crosswordBoard = (
+    <div
+      id="crossword-container"
+      ref={wrapperRef}
+      role="grid"
+      aria-label="Grade de palavras cruzadas"
+    >
+      <div
+        id="crossword"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
+          gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
+          transform: isMobile ? `scale(${zoomScale})` : undefined,
+          transformOrigin: '0 0',
+          willChange: 'transform',
+        }}
+      >
+        {cells}
+      </div>
+    </div>
+  )
+
+  const cluesList = (
+    <ul id="clues-list">
+      {CRUZADINHA_WORDS.map((item, index) => {
+        const done = completedWords[index]
+        const active = activeWordIndex === index
+        const icon = item.direction === 'horizontal' ? '→' : '↓'
+        const label = item.direction === 'horizontal' ? 'Horizontal' : 'Vertical'
+        return (
+          <li
+            key={item.word}
+            className={active ? 'clue-active' : ''}
+            aria-current={active ? 'true' : undefined}
+            data-word-index={index}
+            onClick={() => {
+              focusWord(index)
+              if (isMobile) setShowAllClues(false)
+            }}
+            style={{
+              opacity: done ? 0.6 : 1,
+              textDecoration: done ? 'line-through' : 'none',
+              cursor: 'pointer',
+            }}
+          >
+            <strong>{index + 1}</strong>
+            <span className="clue-direction" title={label}>
+              {icon}
+            </span>{' '}
+            {item.clue}
+          </li>
+        )
+      })}
+    </ul>
+  )
+
+  const statusBlock = (
+    <div className="game-status">
+      <div id="status-message" aria-live="polite" role="status" style={{ color: status.color }}>
+        {status.text}
+        {won && score != null ? ` Pontuação: ${score}` : ''}
+      </div>
+      <div className="progress-container">
+        <div id="progress-bar" style={{ width: `${progressPct}%` }} />
+      </div>
+    </div>
+  )
+
   return (
     <>
       <GameChrome />
 
-      <div className="game-container">
+      <div className={`game-container${isMobile ? ' cruzadinha-mobile' : ''}`}>
         <h1 className="game-title">Palavras Cruzadas</h1>
 
         <div className="game-header">
@@ -539,7 +841,7 @@ export default function CruzadinhaPage() {
           </div>
         </div>
 
-        <div className="mb-3" style={{ maxWidth: 320 }}>
+        <div className="mb-3 jogador-nome-field" style={{ maxWidth: 320 }}>
           <label htmlFor="jogador-nome" className="form-label small mb-1">
             Seu nome (ranking)
           </label>
@@ -553,75 +855,136 @@ export default function CruzadinhaPage() {
           />
         </div>
 
-        <div className="game-content">
-          <div className="crossword-section">
-            <div className="crossword-scroll-wrapper">
-              <div className="scroll-hint">
-                <i className="bi bi-arrows-expand" aria-hidden="true" />
-                Role para ver tudo
-              </div>
-              <div
-                id="crossword-container"
-                ref={wrapperRef}
-                role="grid"
-                aria-label="Grade de palavras cruzadas"
+        {isMobile ? (
+          <div className="mobile-play">
+            <div className="mobile-progress-meta" aria-live="polite">
+              <span>
+                Palavra {Math.max(activeWordIndex, 0) + 1} de {wordEntries.length}
+              </span>
+              <span>
+                {wordsDoneCount}/{wordEntries.length} completas
+              </span>
+            </div>
+
+            <div className="mobile-word-nav">
+              <button
+                type="button"
+                className="game-button mobile-nav-btn"
+                onClick={() => goToAdjacentWord(-1)}
+                aria-label="Palavra anterior"
               >
-                <div
-                  id="crossword"
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: `repeat(${GRID_SIZE}, 1fr)`,
-                    gridTemplateRows: `repeat(${GRID_SIZE}, 1fr)`,
-                  }}
-                >
-                  {cells}
+                <i className="bi bi-chevron-left" aria-hidden="true" />
+              </button>
+
+              <div className="mobile-clue-card">
+                <div className="mobile-clue-meta">
+                  <strong className="mobile-clue-number">{activeWordIndex + 1}</strong>
+                  <span className="clue-direction" title={dirLabel}>
+                    {dirIcon} {dirLabel}
+                  </span>
+                  {activeWordIndex >= 0 && completedWords[activeWordIndex] && (
+                    <span className="mobile-clue-done">
+                      <i className="bi bi-check2" aria-hidden="true" /> Completa
+                    </span>
+                  )}
                 </div>
+                <p className="mobile-clue-text">{activeClue?.clue}</p>
+              </div>
+
+              <button
+                type="button"
+                className="game-button mobile-nav-btn"
+                onClick={() => goToAdjacentWord(1)}
+                aria-label="Próxima palavra"
+              >
+                <i className="bi bi-chevron-right" aria-hidden="true" />
+              </button>
+            </div>
+
+            <p className="mobile-board-hint">
+              <i className="bi bi-hand-index" aria-hidden="true" />
+              Arraste a grade para navegar · use dois dedos para dar zoom · toque nas células
+            </p>
+
+            <div
+              className="mobile-board-viewport"
+              ref={boardViewportRef}
+              style={{ touchAction: 'pan-x pan-y' }}
+            >
+              <div
+                className="crossword-section mobile-crossword-section"
+                style={{
+                  width: `${GRID_SIZE * MOBILE_CELL_SIZE * zoomScale}px`,
+                  height: `${GRID_SIZE * MOBILE_CELL_SIZE * zoomScale}px`,
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+              >
+                {crosswordBoard}
               </div>
             </div>
-          </div>
 
-          <div className="clues-section">
-            <h2>Dicas - Escolas</h2>
-            <ul id="clues-list">
+            <div className="mobile-word-chips" role="list" aria-label="Ir para palavra na grade">
               {CRUZADINHA_WORDS.map((item, index) => {
                 const done = completedWords[index]
                 const active = activeWordIndex === index
-                const dirIcon = item.direction === 'horizontal' ? '→' : '↓'
-                const dirLabel = item.direction === 'horizontal' ? 'Horizontal' : 'Vertical'
                 return (
-                  <li
+                  <button
                     key={item.word}
-                    className={active ? 'clue-active' : ''}
-                    aria-current={active ? 'true' : undefined}
-                    data-word-index={index}
+                    type="button"
+                    role="listitem"
+                    className={[
+                      'mobile-word-chip',
+                      active ? 'is-active' : '',
+                      done ? 'is-done' : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
                     onClick={() => focusWord(index)}
-                    style={{
-                      opacity: done ? 0.6 : 1,
-                      textDecoration: done ? 'line-through' : 'none',
-                      cursor: 'pointer',
-                    }}
+                    aria-current={active ? 'true' : undefined}
+                    aria-label={`Palavra ${index + 1}${done ? ', completa' : ''}`}
                   >
-                    <strong>{index + 1}</strong>
-                    <span className="clue-direction" title={dirLabel}>
-                      {dirIcon}
-                    </span>{' '}
-                    {item.clue}
-                  </li>
+                    {index + 1}
+                  </button>
                 )
               })}
-            </ul>
+            </div>
 
-            <div className="game-status">
-              <div id="status-message" aria-live="polite" role="status" style={{ color: status.color }}>
-                {status.text}
-                {won && score != null ? ` Pontuação: ${score}` : ''}
+            <button
+              type="button"
+              className="mobile-clues-toggle"
+              onClick={() => setShowAllClues((v) => !v)}
+              aria-expanded={showAllClues}
+            >
+              <i
+                className={`bi ${showAllClues ? 'bi-chevron-up' : 'bi-list-ul'}`}
+                aria-hidden="true"
+              />
+              {showAllClues ? 'Ocultar todas as dicas' : 'Ver todas as dicas'}
+            </button>
+
+            {showAllClues && (
+              <div className="clues-section mobile-clues-panel">
+                <h2>Dicas - Escolas</h2>
+                {cluesList}
               </div>
-              <div className="progress-container">
-                <div id="progress-bar" style={{ width: `${progressPct}%` }} />
-              </div>
+            )}
+
+            {statusBlock}
+          </div>
+        ) : (
+          <div className="game-content">
+            <div className="crossword-section">
+              <div className="crossword-scroll-wrapper">{crosswordBoard}</div>
+            </div>
+
+            <div className="clues-section">
+              <h2>Dicas - Escolas</h2>
+              {cluesList}
+              {statusBlock}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   )
