@@ -1,5 +1,4 @@
 import { supabase } from '../../lib/supabase.js'
-import { validateConfig, getProviderLabel } from '../../lib/ai-client.js'
 
 export const SUGESTOES = [
   { text: 'Quem foi Amaro Lanari?', icon: 'bi-person-badge' },
@@ -36,13 +35,13 @@ export function onimLog(etapa, detalhe) {
   console.log(`%c[ONIM · ${etapa}] ${detalhe}`, estilos[etapa] || 'color:#e2e8f0')
 }
 
-export function bootOnimConfig() {
-  try {
-    validateConfig()
-    onimLog('RESPOSTA', `Provider de IA ativo: ${getProviderLabel()}`)
-  } catch (e) {
-    console.warn('[ONIM] Aviso de configuração de IA:', e.message)
-  }
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
 }
 
 export function horaAtual() {
@@ -71,6 +70,8 @@ export async function detectarAmbiguidade(pergunta) {
   const keywords = pergunta
     .toLowerCase()
     .split(/\s+/)
+    // Remove caracteres com significado na sintaxe de filtro do PostgREST (.or())
+    .map((w) => w.replace(/[,()%*\\."':]/g, ''))
     .filter((w) => w.length >= 3 && !STOPWORDS.has(w))
 
   if (!keywords.length) return null
@@ -97,61 +98,65 @@ export async function detectarAmbiguidade(pergunta) {
       const nomeFormatado =
         resultados.find((r) => r.nome_oficial?.toLowerCase() === nome)?.nome_oficial || nome
       onimLog('DECISAO', `Ambiguidade detectada: "${nomeFormatado}"`)
-      const bairrosList = bairros.map((b) => `<strong>${b}</strong>`).join(' ou ')
+      const bairrosList = bairros.map((b) => `<strong>${escapeHtml(b)}</strong>`).join(' ou ')
       return {
         pendingName: nomeFormatado,
-        html: `Encontrei <strong>"${nomeFormatado}"</strong> em mais de um local: ${bairrosList}.<br>Sobre qual desses bairros você gostaria de conhecer a história?`,
+        html: `Encontrei <strong>"${escapeHtml(nomeFormatado)}"</strong> em mais de um local: ${bairrosList}.<br>Sobre qual desses bairros você gostaria de conhecer a história?`,
       }
     }
   }
   return null
 }
 
-/** Consulta o agente LangChain (lazy import para não inflar o bundle inicial). */
+/** Lê o corpo JSON de erro devolvido pela Edge Function (FunctionsHttpError.context é a Response). */
+async function lerErroFuncao(error) {
+  try {
+    return (await error?.context?.json?.()) ?? {}
+  } catch {
+    return {}
+  }
+}
+
+/**
+ * Consulta o agente ONIM na Edge Function `onim-chat` (supabase/functions/onim-chat).
+ * As chaves de LLM ficam no servidor; o navegador só envia a pergunta e o histórico curto.
+ */
 export async function consultarAgente(pergunta, historico) {
   onimLog('INTENCAO', `Nova pergunta para o Agente: "${pergunta}"`)
 
-  const [{ HumanMessage, AIMessage }, { executarAgenteONIM }] = await Promise.all([
-    import('@langchain/core/messages'),
-    import('./onim-chain.js'),
-  ])
+  const historicoCurto = historico
+    .filter((m) => m.role === 'user' || m.role === 'bot')
+    .slice(-4)
+    .map((m) => ({ role: m.role, text: String(m.text ?? '').slice(0, 1500) }))
 
-  const chatHistory = historico
-    .map((m) => {
-      if (m.role === 'user') return new HumanMessage(m.text)
-      if (m.role === 'bot') return new AIMessage(m.text)
-      return null
-    })
-    .filter(Boolean)
+  const { data, error } = await supabase.functions.invoke('onim-chat', {
+    body: { pergunta: pergunta.slice(0, 500), historico: historicoCurto },
+  })
 
-  try {
-    const resposta = await executarAgenteONIM(pergunta, chatHistory)
-    onimLog('RESPOSTA', 'Agente LangChain respondeu com sucesso.')
-    return resposta
-  } catch (err) {
-    console.error('[ONIM] Erro no Agente LangChain:', err)
-    const msg = String(err?.message ?? '')
-    const nome = err?.name ?? ''
-    const rateLimited =
-      nome === 'RateLimitError' || msg.includes('429') || /rate limit/i.test(msg)
-    if (rateLimited) {
-      const retryMatch = msg.match(/try again in ([^.]+)/i)
-      const tempoEspera = retryMatch ? retryMatch[1].trim() : 'alguns minutos'
-      return (
-        '<p>O serviço de IA (Groq) recusou a requisição por <strong>limite de uso</strong> ' +
-        '(cotas diárias de tokens ou muitas chamadas seguidas).</p>' +
-        `<p>Se a mensagem da API indicar tempo de espera, tente de novo em <strong>${tempoEspera}</strong>. ` +
-        'No plano gratuito, o limite renova conforme a política da Groq; mais capacidade em ' +
-        '<a href="https://console.groq.com/settings/billing" target="_blank" rel="noopener">console Groq → billing</a>.</p>'
-      )
-    }
-    return 'Tive um problema ao processar sua pergunta com meu novo motor de inteligência. Tente novamente.'
+  if (!error && data?.html) {
+    onimLog('RESPOSTA', `Agente respondeu (${data.provider ?? 'servidor'}).`)
+    return data.html
   }
+
+  const detalhe = error ? await lerErroFuncao(error) : {}
+  console.error('[ONIM] Erro na Edge Function onim-chat:', error ?? data, detalhe)
+
+  if (detalhe.code === 'rate_limited' || detalhe.code === 'provider_rate_limited') {
+    return (
+      '<p>Recebi muitas perguntas em pouco tempo e atingi o <strong>limite de uso</strong>.</p>' +
+      '<p>Aguarde alguns minutos e tente novamente.</p>'
+    )
+  }
+  if (detalhe.code === 'too_long') {
+    return 'Sua pergunta ficou muito longa. Tente resumi-la em poucas frases.'
+  }
+  return 'Tive um problema ao processar sua pergunta. Tente novamente em instantes.'
 }
 
 export async function enviarContribuicao(nomeRua, contribuicao) {
   const { error } = await supabase
     .from('contribuicoes_chatbot')
-    .insert({ nome_rua: nomeRua, contribuicao })
+    // Limites espelham o RLS de 09_rls_roles.sql
+    .insert({ nome_rua: String(nomeRua).trim().slice(0, 200), contribuicao: String(contribuicao).trim().slice(0, 2000) })
   if (error) throw error
 }

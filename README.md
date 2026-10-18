@@ -13,7 +13,7 @@ Plataforma de catalogação, preservação e análise dos nomes de logradouros d
 | Frontend | **Vite 6 + React 19** (MPA: um HTML por tela) |
 | Dados | **Supabase** (Postgres, Auth, RLS) |
 | Mapa | Leaflet (CDN) + GeoJSON em `public/data/` |
-| IA / ONIM | LangChain + Gemini / OpenAI-compatível (Groq, OpenRouter…) |
+| IA / ONIM | Supabase Edge Function `onim-chat` → Gemini / OpenAI-compatível (Groq, OpenRouter…) |
 | Deploy | GitHub Actions → GitHub Pages (`base`: `/toponimia_Ouro_Branco/`) |
 
 **Node recomendado:** 20.x (igual ao CI). Node 22+ costuma funcionar.
@@ -38,20 +38,12 @@ Abra `http://localhost:5173/` (Dicionário). Outras telas: `/mapa.html`, `/estat
 | `VITE_SUPABASE_URL` | **Sim** | App inteiro |
 | `VITE_SUPABASE_ANON_KEY` | **Sim** | App inteiro (chave `anon` pública do projeto) |
 | `VITE_CARTO_API_KEY` | Não | Basemap CARTO no mapa (default: OSM via toggle) |
-| `VITE_AI_PROVIDER` | Não* | ONIM (`gemini` / `openai` / `openrouter`) |
-| `VITE_GEMINI_API_KEY` | Não* | Chat + embeddings do agente |
-| `VITE_GEMINI_MODEL` | Não | Ex.: `gemini-2.0-flash` |
-| `VITE_OPENAI_API_KEY` | Não* | Groq / OpenAI / OpenRouter (compatível) |
-| `VITE_OPENROUTER_API_KEY` | Não* | Alias aceito se `VITE_OPENAI_API_KEY` estiver vazia |
-| `VITE_OPENAI_BASE_URL` | Não | Ex.: `https://api.groq.com/openai/v1` |
-| `VITE_OPENAI_MODEL` | Não | Modelo do provider OpenAI-compatível |
-| `VITE_OLLAMA_URL` / `VITE_OLLAMA_MODEL` | Não | Fallback local |
 | `SUPABASE_SERVICE_ROLE_KEY` | Não | Só scripts de embeddings (nunca no Vite) |
 | `AI_PROVIDER` / `GEMINI_API_KEY` | Não | Scripts `ai-provider-kit` (Node) |
 
-\* Sem chaves de IA a UI sobe, mas o chatbot ONIM não responde.
+As chaves de IA do chatbot ONIM **não** são variáveis do Vite: ficam como secrets da Edge Function `onim-chat`. Ver [`supabase/functions/README.md`](supabase/functions/README.md).
 
-> **Aviso de segurança:** qualquer `VITE_*` entra no bundle do browser (Pages). Não use service role no front. Rotacione chaves de IA se vazar no deploy.
+> **Aviso de segurança:** qualquer `VITE_*` entra no bundle do browser (Pages). Nunca coloque chaves de LLM ou service role em `VITE_*`.
 
 ## Scripts npm
 
@@ -80,7 +72,8 @@ MPA Vite: cada `*.html` monta um entry `src/*.jsx`.
 - `src/pages/` — telas React  
 - `src/components/` — Navbar, Footer, GameChrome  
 - `src/features/` — ONIM, PDF  
-- `src/lib/` — supabase, ai-client  
+- `src/lib/` — cliente Supabase  
+- `supabase/functions/onim-chat/` — agente ONIM (servidor)  
 
 Aliases (`vite.config.js` / `jsconfig.json`): `@lib`, `@features`, `@components`, `@pages`, `@styles` **antes** de `@`.
 
@@ -93,7 +86,7 @@ Workflow: `.github/workflows/deploy.yml` (branch `main`).
 Secrets/vars necessários no repositório:
 
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-- Opcional IA: `VITE_AI_PROVIDER`, `VITE_GEMINI_API_KEY`, `VITE_GEMINI_MODEL`, `VITE_OPENAI_*`
+- IA: **não** vai no GitHub — configure os secrets da Edge Function (`supabase secrets set`)
 - Opcional mapa: `VITE_CARTO_API_KEY` (se não houver, o toggle OSM cobre)
 
 ## Troubleshooting
@@ -102,7 +95,7 @@ Secrets/vars necessários no repositório:
 |---------|----------------|
 | Tela branca ou erro de dados na Home | Falta `.env` com Supabase — `cp .env.example .env` e reinicie o Vite |
 | Mapa com “API KEY REQUIRED” | Use toggle **OSM** ou configure `VITE_CARTO_API_KEY` |
-| ONIM não responde | Configure provider + chave; veja console `[ONIM]` |
+| ONIM não responde | Função `onim-chat` sem deploy ou sem secrets — veja `supabase functions logs onim-chat` e o console `[ONIM]` |
 | `npm install` com conflito peer | Use `npm install --legacy-peer-deps` (há `.npmrc`) |
 | Preview 404 em `/about.html` | Use prefixo `/toponimia_Ouro_Branco/` no `vite preview` |
 | `ai:classify` falha no import | Rode `npm run ai:build` antes |
@@ -112,7 +105,7 @@ Secrets/vars necessários no repositório:
 
 - Dicionário de ruas, mapa, estatísticas (+ PDF), admin  
 - Portal educativo: quiz, associação, cruzadinha, ranking  
-- Chatbot ONIM (React + LangChain)  
+- Chatbot ONIM (React + Edge Function com tool calling)  
 - PWA  
 
 ## Licença

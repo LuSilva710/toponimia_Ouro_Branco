@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { supabase } from '@lib/supabase.js'
 import { GameChrome } from '@components/layout/GameChrome.jsx'
+import { salvarPontuacao } from './scoreApi.js'
 import {
   CRUZADINHA_WORDS,
   GRID_SIZE,
@@ -219,14 +219,12 @@ export default function CruzadinhaPage() {
       color: '#2c6e49',
     })
 
-    try {
-      await supabase.from('pontuacoes').insert({
-        jogador_nome: jogadorNome.trim() || 'Anônimo',
-        jogo: 'cruzadinha',
-        pontos: finalScore,
+    const ok = await salvarPontuacao({ jogo: 'cruzadinha', nome: jogadorNome, pontos: finalScore })
+    if (!ok) {
+      setStatus({
+        text: 'Parabéns! Você completou o jogo — mas não foi possível salvar sua pontuação no ranking.',
+        color: '#2c6e49',
       })
-    } catch (error) {
-      console.error('Erro ao salvar pontuação:', error)
     }
 
     setTimeout(fireConfetti, 400)
@@ -851,6 +849,7 @@ export default function CruzadinhaPage() {
             value={jogadorNome}
             onChange={(e) => setJogadorNome(e.target.value)}
             placeholder="Anônimo"
+            maxLength={40}
             disabled={won}
           />
         </div>

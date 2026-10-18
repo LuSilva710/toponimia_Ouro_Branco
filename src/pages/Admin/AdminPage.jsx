@@ -275,8 +275,10 @@ export default function AdminPage() {
   }
 
   async function alterarRole(id, role) {
-    const { error } = await supabase.from('perfis').update({ role }).eq('id', id)
+    // RLS recusa em silêncio (0 linhas) — inclusive ao tentar alterar o próprio papel
+    const { data, error } = await supabase.from('perfis').update({ role }).eq('id', id).select('id')
     if (error) return alert(`Erro: ${error.message}`)
+    if (!data?.length) return alert('Sem permissão para alterar este usuário (apenas admins, e não o próprio papel).')
     showToast('Permissão atualizada.')
     await loadUsuarios()
   }

@@ -6,7 +6,7 @@ src/
   pages/                 Telas React
   components/            UI (Navbar, Footer, GameChrome)
   features/              Domínio (onim/, pdf/)
-  lib/                   supabase.js, ai-client.js
+  lib/                   supabase.js
   styles/                CSS por domínio
   App.jsx                DEPRECATED — shell SPA P2 (não usado no runtime MPA)
 ```

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import DOMPurify from 'dompurify'
 import {
   SUGESTOES,
-  bootOnimConfig,
   consultarAgente,
   detectarAmbiguidade,
   enviarContribuicao,
@@ -11,8 +11,10 @@ import {
   saveHistorico,
 } from './onimService.js'
 
+/** Saída do LLM / histórico do sessionStorage não é confiável: sanitiza antes de renderizar. */
 function BotHtml({ html }) {
-  return <div className="chat-text" dangerouslySetInnerHTML={{ __html: html }} />
+  const safe = DOMPurify.sanitize(String(html ?? ''), { USE_PROFILES: { html: true } })
+  return <div className="chat-text" dangerouslySetInnerHTML={{ __html: safe }} />
 }
 
 export function OnimChatbot() {
@@ -35,19 +37,6 @@ export function OnimChatbot() {
   useEffect(() => {
     historyRef.current = messages
   }, [messages])
-
-  useEffect(() => {
-    bootOnimConfig()
-    const onFallback = () => {
-      const geminiModel = import.meta.env.VITE_GEMINI_MODEL ?? 'gemini'
-      onimLog(
-        'AVISO',
-        `Limite do provedor principal atingido — o agente está usando Gemini (${geminiModel}).`,
-      )
-    }
-    window.addEventListener('onim-langchain-gemini-fallback', onFallback)
-    return () => window.removeEventListener('onim-langchain-gemini-fallback', onFallback)
-  }, [])
 
   useEffect(() => {
     document.body.classList.toggle('chatbot-open', open)
@@ -112,6 +101,8 @@ export function OnimChatbot() {
       setContribOffer(null)
       setContribOpen(false)
       setContribDone(false)
+      // Histórico anterior à pergunta atual (ela vai separada para o agente)
+      const historicoAnterior = historyRef.current
       pushMessage('user', texto)
       setTyping(true)
 
@@ -123,10 +114,10 @@ export function OnimChatbot() {
         } else if (pendingQuery) {
           const queryOriginal = pendingQuery
           setPendingQuery(null)
-          onimLog('DECISAO', 'Esclarecimento recebido. Consultando Agente LangChain...')
+          onimLog('DECISAO', 'Esclarecimento recebido. Consultando o agente...')
           resposta = await consultarAgente(
             `${queryOriginal} do bairro ${texto}`,
-            historyRef.current,
+            historicoAnterior,
           )
         } else {
           const ambigua = await detectarAmbiguidade(texto)
@@ -134,7 +125,7 @@ export function OnimChatbot() {
             setPendingQuery(ambigua.pendingName)
             resposta = ambigua.html
           } else {
-            resposta = await consultarAgente(texto, historyRef.current)
+            resposta = await consultarAgente(texto, historicoAnterior)
           }
         }
 
@@ -328,6 +319,7 @@ export function OnimChatbot() {
                   <textarea
                     id="contribText"
                     placeholder="Conte-nos o que você sabe..."
+                    maxLength={2000}
                     value={contribText}
                     onChange={(e) => setContribText(e.target.value)}
                   />

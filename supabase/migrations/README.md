@@ -10,5 +10,7 @@ Scripts de **estrutura** do banco Supabase já aplicados (ou a aplicar) no proje
 | `04_contribuicoes_chatbot.sql` | Contribuições do chatbot |
 | `05_gamificacao.sql` | Tabelas de gamificação |
 | `06_rls_policies.sql` | Políticas RLS |
+| `07_harden_gamificacao.sql` | `is_admin()`, limites de pontuação e salas com dono |
+| `08_onim_rate_limit.sql` | Rate limit da Edge Function `onim-chat` |
 
 Updates one-shot de dados (classificação, coordenadas, significados) **não** ficam versionados aqui — use o painel admin ou scripts em `scripts/` quando necessário.

@@ -1,5 +1,4 @@
-// assets/js/systemPrompt.js
-// ONIM v2.0 — Arquiteto de Memória Toponímica
+// ONIM — prompt de sistema (movido de src/features/onim/systemPrompt.js)
 
 export const SYSTEM_PROMPT = `
 ### PERSONA

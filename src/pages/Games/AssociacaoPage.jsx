@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
 import { GameChrome } from '@components/layout/GameChrome.jsx'
+import { salvarPontuacao } from './scoreApi.js'
 
 function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5)
@@ -35,6 +36,7 @@ export default function AssociacaoPage() {
   const [pontos, setPontos] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [rankingFalhou, setRankingFalhou] = useState(false)
   const timerRef = useRef(null)
 
   useEffect(() => () => clearInterval(timerRef.current), [])
@@ -72,15 +74,8 @@ export default function AssociacaoPage() {
     const score = Math.max(acertosFinais * 100 - tempo * 2, 50)
     setPontos(score)
     setFase('result')
-    supabase
-      .from('pontuacoes')
-      .insert({
-        jogador_nome: nome.trim() || 'Anônimo',
-        jogo: 'associacao',
-        pontos: score,
-      })
-      .then(() => {})
-      .catch((e) => console.warn(e))
+    setRankingFalhou(false)
+    salvarPontuacao({ jogo: 'associacao', nome, pontos: score }).then((ok) => setRankingFalhou(!ok))
   }
 
   function escolher(tipo, par) {
@@ -143,6 +138,7 @@ export default function AssociacaoPage() {
               className="form-control form-control-sm mb-2"
               style={{ maxWidth: 250, margin: '0 auto' }}
               placeholder="Seu nome"
+              maxLength={40}
               value={nome}
               onChange={(e) => setNome(e.target.value)}
             />
@@ -211,6 +207,11 @@ export default function AssociacaoPage() {
             <p style={{ color: 'var(--medium-gray)' }}>
               {acertos} de {pares.length} acertos em {segundos}s
             </p>
+            {rankingFalhou && (
+              <p className="text-warning" style={{ fontSize: '.85rem' }}>
+                Não foi possível salvar sua pontuação no ranking.
+              </p>
+            )}
             <div className="mt-3">
               <button type="button" className="btn btn-primary me-2" onClick={iniciar}>
                 Jogar Novamente

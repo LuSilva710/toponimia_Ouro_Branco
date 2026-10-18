@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
 import { GameChrome } from '@components/layout/GameChrome.jsx'
+import { salvarPontuacao } from './scoreApi.js'
 
 const TOTAL = 10
 const TEMPO = 30
@@ -55,6 +56,7 @@ export default function QuizPage() {
   const [escolha, setEscolha] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [rankingFalhou, setRankingFalhou] = useState(false)
 
   const dataRef = useRef({ ruas: [], bairros: [] })
   const lockedRef = useRef(false)
@@ -62,6 +64,10 @@ export default function QuizPage() {
   const idxRef = useRef(0)
   const perguntasRef = useRef([])
   const pontosRef = useRef(0)
+  const avancarRef = useRef(null)
+
+  // Cancela a transição pendente entre perguntas ao sair da página
+  useEffect(() => () => clearTimeout(avancarRef.current), [])
 
   useEffect(() => {
     lockedRef.current = locked
@@ -83,16 +89,8 @@ export default function QuizPage() {
     setFase('result')
     setPerguntas(lista)
     setPontos(score)
-    try {
-      await supabase.from('pontuacoes').insert({
-        jogador_nome: nome.trim() || 'Anônimo',
-        jogo: 'quiz',
-        pontos: score,
-        sala_id: sala.trim() || null,
-      })
-    } catch (e) {
-      console.warn(e)
-    }
+    const ok = await salvarPontuacao({ jogo: 'quiz', nome, pontos: score, salaId: sala })
+    setRankingFalhou(!ok)
   }, [nome, sala])
 
   const responder = useCallback(
@@ -115,7 +113,8 @@ export default function QuizPage() {
       setPontos(score)
       setEscolha(opcao)
 
-      setTimeout(() => {
+      clearTimeout(avancarRef.current)
+      avancarRef.current = setTimeout(() => {
         if (i + 1 >= lista.length) {
           irParaResultado(lista, score)
         } else {
@@ -134,17 +133,15 @@ export default function QuizPage() {
     if (fase !== 'game' || locked) return undefined
     setTempo(TEMPO)
     const t = setInterval(() => {
-      setTempo((s) => {
-        if (s <= 1) {
-          clearInterval(t)
-          responder(null)
-          return 0
-        }
-        return s - 1
-      })
+      setTempo((s) => Math.max(s - 1, 0))
     }, 1000)
     return () => clearInterval(t)
-  }, [fase, idx, locked, responder])
+  }, [fase, idx, locked])
+
+  // Tempo esgotado: responde fora do updater de estado (updaters devem ser puros)
+  useEffect(() => {
+    if (fase === 'game' && !locked && tempo === 0) responder(null)
+  }, [fase, locked, tempo, responder])
 
   async function iniciar() {
     setLoading(true)
@@ -165,9 +162,12 @@ export default function QuizPage() {
         return
       }
       const lista = gerarPerguntas(dataRef.current.ruas, dataRef.current.bairros)
+      clearTimeout(avancarRef.current)
+      setRankingFalhou(false)
       setPerguntas(lista)
       setIdx(0)
       setPontos(0)
+      setTempo(TEMPO)
       setEscolha(null)
       lockedRef.current = false
       setLocked(false)
@@ -229,6 +229,7 @@ export default function QuizPage() {
                   className="form-control form-control-sm"
                   style={{ maxWidth: 200 }}
                   placeholder="Código da sala"
+                  maxLength={40}
                   value={sala}
                   onChange={(e) => setSala(e.target.value)}
                 />
@@ -236,6 +237,7 @@ export default function QuizPage() {
                   className="form-control form-control-sm"
                   style={{ maxWidth: 200 }}
                   placeholder="Seu nome"
+                  maxLength={40}
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                 />
@@ -301,6 +303,11 @@ export default function QuizPage() {
             <p style={{ color: 'var(--medium-gray)' }}>
               {acertos} de {perguntas.length} corretas · {Math.round(pct * 100)}% de acerto
             </p>
+            {rankingFalhou && (
+              <p className="text-warning" style={{ fontSize: '.85rem' }}>
+                Não foi possível salvar sua pontuação no ranking.
+              </p>
+            )}
             <div className="mt-3 d-flex gap-2 justify-content-center flex-wrap">
               <button type="button" className="btn btn-primary" onClick={iniciar}>
                 Jogar Novamente

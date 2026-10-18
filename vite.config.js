@@ -16,7 +16,6 @@ export default defineConfig({
       { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
       { find: '@styles', replacement: path.resolve(__dirname, 'src/styles') },
       { find: '@', replacement: path.resolve(__dirname, 'src') },
-      { find: 'langchain/agents', replacement: 'langchain/agents' },
     ],
   },
   build: {
@@ -34,9 +33,6 @@ export default defineConfig({
         ranking: 'games/ranking.html',
       },
     },
-  },
-  optimizeDeps: {
-    include: ['langchain/agents', '@langchain/openai', '@langchain/core'],
   },
   plugins: [
     react(),

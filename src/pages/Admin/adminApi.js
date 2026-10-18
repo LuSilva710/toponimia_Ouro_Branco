@@ -45,7 +45,8 @@ export async function uploadImage(file, folder) {
 
 export async function registrarAuditoria(user, acao, tabela, registroId, dadosAntes, dadosDepois) {
   try {
-    await supabase.from('audit_log').insert({
+    // insert não lança exceção: o erro (ex.: recusa do RLS) vem em { error }
+    const { error } = await supabase.from('audit_log').insert({
       user_id: user?.id,
       user_email: user?.email,
       acao,
@@ -54,6 +55,7 @@ export async function registrarAuditoria(user, acao, tabela, registroId, dadosAn
       dados_antes: dadosAntes || null,
       dados_depois: dadosDepois || null,
     })
+    if (error) throw error
   } catch (err) {
     console.warn('Auditoria não registrada:', err)
   }

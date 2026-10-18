@@ -49,6 +49,9 @@ export const supabase = supabaseConfigError
       rpc() {
         return rejectedResult()
       },
+      functions: {
+        invoke: () => rejectedResult(),
+      },
       auth: {
         getSession: () => Promise.resolve({ data: { session: null }, error: null }),
         getUser: () => Promise.resolve({ data: { user: null }, error: null }),
@@ -58,7 +61,3 @@ export const supabase = supabaseConfigError
       },
     }
   : createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
-
-if (typeof window !== 'undefined' && !supabaseConfigError) {
-  window.supabase = supabase
-}
