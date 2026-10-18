@@ -101,6 +101,8 @@ CREATE POLICY "Staff update contributions"
 DROP POLICY IF EXISTS "Admin/Editor write bairros" ON bairros;
 DROP POLICY IF EXISTS "Admin/Editor update bairros" ON bairros;
 DROP POLICY IF EXISTS "Admin delete bairros" ON bairros;
+-- Criada fora das migrations em produção; substituída pelas políticas abaixo
+DROP POLICY IF EXISTS "bairros write admins" ON bairros;
 
 CREATE POLICY "Admin/Editor write bairros"
   ON bairros FOR INSERT
@@ -122,6 +124,8 @@ CREATE POLICY "Admin delete bairros"
 DROP POLICY IF EXISTS "Admin/Editor write ruas" ON ruas;
 DROP POLICY IF EXISTS "Admin/Editor update ruas" ON ruas;
 DROP POLICY IF EXISTS "Admin delete ruas" ON ruas;
+-- Criada fora das migrations em produção; substituída pelas políticas abaixo
+DROP POLICY IF EXISTS "ruas write admins" ON ruas;
 
 CREATE POLICY "Admin/Editor write ruas"
   ON ruas FOR INSERT
