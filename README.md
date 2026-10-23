@@ -41,7 +41,7 @@ Abra `http://localhost:5173/` (Dicionário). Outras telas: `/mapa.html`, `/estat
 | `SUPABASE_SERVICE_ROLE_KEY` | Não | Só scripts de embeddings (nunca no Vite) |
 | `AI_PROVIDER` / `GEMINI_API_KEY` | Não | Scripts `ai-provider-kit` (Node) |
 
-As chaves de IA do chatbot ONIM **não** são variáveis do Vite: ficam como secrets da Edge Function `onim-chat`. Ver [`supabase/functions/README.md`](supabase/functions/README.md).
+As chaves de IA do chatbot ONIM **não** são variáveis do Vite: são cadastradas no **painel admin → Inteligência Artificial** e usadas só pela Edge Function `onim-chat`. Ver [`supabase/functions/README.md`](supabase/functions/README.md).
 
 > **Aviso de segurança:** qualquer `VITE_*` entra no bundle do browser (Pages). Nunca coloque chaves de LLM ou service role em `VITE_*`.
 
@@ -86,7 +86,7 @@ Workflow: `.github/workflows/deploy.yml` (branch `main`).
 Secrets/vars necessários no repositório:
 
 - `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-- IA: **não** vai no GitHub — configure os secrets da Edge Function (`supabase secrets set`)
+- IA: **não** vai no GitHub — configure no painel admin → Inteligência Artificial
 - Opcional mapa: `VITE_CARTO_API_KEY` (se não houver, o toggle OSM cobre)
 
 ## Troubleshooting
@@ -95,11 +95,31 @@ Secrets/vars necessários no repositório:
 |---------|----------------|
 | Tela branca ou erro de dados na Home | Falta `.env` com Supabase — `cp .env.example .env` e reinicie o Vite |
 | Mapa com “API KEY REQUIRED” | Use toggle **OSM** ou configure `VITE_CARTO_API_KEY` |
-| ONIM não responde | Função `onim-chat` sem deploy ou sem secrets — veja `supabase functions logs onim-chat` e o console `[ONIM]` |
+| ONIM não responde | Painel admin → Inteligência Artificial → **Testar conexão** mostra o erro do provedor (chave inválida, modelo inexistente, cota) |
 | `npm install` com conflito peer | Use `npm install --legacy-peer-deps` (há `.npmrc`) |
 | Preview 404 em `/about.html` | Use prefixo `/toponimia_Ouro_Branco/` no `vite preview` |
 | `ai:classify` falha no import | Rode `npm run ai:build` antes |
 | Build falha em `html-proxy` / CSS | Não use `<style>` inline nos HTML de entry do Vite MPA — CSS via `src/styles/` |
+
+## Passagem do projeto (novos responsáveis)
+
+Nada no sistema depende das chaves pessoais de quem desenvolveu. Para assumir:
+
+1. **Supabase** — peça ao dono atual para transferir o projeto para uma organização da instituição
+   (Dashboard → Project Settings → General → *Transfer project*) ou para te adicionar como membro da organização.
+2. **Admin do site** — crie sua conta (Authentication → Users → *Add user*) e peça a um admin para mudar seu papel
+   para **Admin** em Painel admin → Usuários. Sem nenhum admin, rode no SQL Editor:
+   `update perfis set role = 'admin' where id = (select id from auth.users where email = 'seu@email');`
+3. **Chaves de IA** — Painel admin → **Inteligência Artificial**: cole sua chave do Gemini
+   ([aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey)), salve e clique em **Testar conexão**.
+   Peça ao responsável anterior para revogar a chave dele.
+4. **GitHub** — transfira o repositório (Settings → General → *Transfer ownership*) ou faça um fork.
+   Configure os secrets `VITE_SUPABASE_URL` e `VITE_SUPABASE_ANON_KEY` em Settings → Secrets and variables → Actions
+   e ative o GitHub Pages (Settings → Pages → Source: *GitHub Actions*).
+5. **Endereço novo do site** — se o endereço mudar (ex.: `https://novo-usuario.github.io`), acrescente-o em
+   Painel admin → Inteligência Artificial → *Endereços do site autorizados*.
+6. **Edge Function** — só precisa ser publicada de novo se o código em `supabase/functions/` mudar:
+   `npx supabase login` e `npx supabase functions deploy onim-chat --project-ref <ref> --use-api`.
 
 ## Funcionalidades
 

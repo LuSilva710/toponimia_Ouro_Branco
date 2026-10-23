@@ -90,6 +90,37 @@ export async function fetchDashboardStats() {
   }
 }
 
+/** Configuração de IA (migration 10). As chaves nunca voltam do banco — só os 4 últimos caracteres. */
+export async function fetchConfigIa() {
+  const { data, error } = await supabase.rpc('admin_get_config_ia')
+  if (error) throw error
+  return data
+}
+
+/** Chaves: null = manter a atual, '' = remover. */
+export async function salvarConfigIa(cfg) {
+  const { error } = await supabase.rpc('admin_set_config_ia', {
+    p_provider: cfg.provider,
+    p_gemini_api_key: cfg.geminiKey,
+    p_gemini_model: cfg.geminiModel,
+    p_openai_api_key: cfg.openaiKey,
+    p_openai_base_url: cfg.openaiBaseUrl,
+    p_openai_model: cfg.openaiModel,
+    p_origens_permitidas: cfg.origens,
+  })
+  if (error) throw error
+}
+
+/** Pede à Edge Function uma chamada mínima a cada provedor; devolve o erro real (só para admin). */
+export async function testarConfigIa() {
+  const { data, error } = await supabase.functions.invoke('onim-chat', { body: { teste: true } })
+  if (error) {
+    const detalhe = await error.context?.json?.().catch(() => null)
+    throw new Error(detalhe?.error || error.message)
+  }
+  return data
+}
+
 export const CATEGORIAS = [
   { value: 'antropotoponimo', label: 'Antropotopônimo' },
   { value: 'fitotoponimo', label: 'Fitotopônimo' },
@@ -109,4 +140,5 @@ export const SIDEBAR_TABS = [
   { id: 'contribuicoes', label: 'Contribuições', icon: 'bi-chat-square-text' },
   { id: 'auditoria', label: 'Auditoria', icon: 'bi-journal-text' },
   { id: 'usuarios', label: 'Usuários', icon: 'bi-people' },
+  { id: 'ia', label: 'Inteligência Artificial', icon: 'bi-robot' },
 ]

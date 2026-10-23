@@ -44,3 +44,6 @@ yarn.lock
 .cursor/memory/archive/**
 !.cursor/memory/archive/README.md
 
+
+# Supabase CLI (cache local)
+supabase/.temp/

@@ -12,6 +12,12 @@ e `neighborhood_info`.
 Proteções: limite de 500 caracteres por pergunta, rate limit por IP (hash) via
 `onim_consume_quota` (migration `08_onim_rate_limit.sql`) e CORS restrito a `ALLOWED_ORIGINS`.
 
+### Configuração das chaves
+
+O jeito normal é pelo **painel admin → Inteligência Artificial** (tabela `configuracao_ia`, migration `10`):
+qualquer admin troca chave, modelo e endereços autorizados sem CLI, e o botão **Testar conexão** mostra o
+erro real do provedor. Os secrets abaixo são só *fallback* para campos não preenchidos no painel.
+
 ### Deploy
 
 Pré-requisito: [Supabase CLI](https://supabase.com/docs/guides/cli) e a migration `08` aplicada.
@@ -40,7 +46,7 @@ supabase functions deploy onim-chat
 | Secret | Default | Uso |
 |--------|---------|-----|
 | `GEMINI_API_KEY` | — | Chat (endpoint OpenAI-compatível do Gemini) + embeddings da busca vetorial |
-| `GEMINI_MODEL` | `gemini-2.0-flash` | Modelo de chat |
+| `GEMINI_MODEL` | `gemini-flash-latest` | Modelo de chat |
 | `OPENAI_API_KEY` / `OPENAI_BASE_URL` / `OPENAI_MODEL` | — / OpenAI / `gpt-4o-mini` | Provider alternativo |
 | `AI_PROVIDER` | `gemini` | Primário (`gemini` ou `openai`); o outro só entra em erro de cota |
 | `ALLOWED_ORIGINS` | *(vazio = qualquer origem)* | Origens aceitas, separadas por vírgula |

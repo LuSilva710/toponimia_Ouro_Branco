@@ -17,6 +17,7 @@ import { RuasTab } from './tabs/RuasTab.jsx'
 import { ContribuicoesTab } from './tabs/ContribuicoesTab.jsx'
 import { AuditoriaTab } from './tabs/AuditoriaTab.jsx'
 import { UsuariosTab } from './tabs/UsuariosTab.jsx'
+import { IaTab } from './tabs/IaTab.jsx'
 
 export default function AdminPage() {
   const [user, setUser] = useState(null)
@@ -376,6 +377,7 @@ export default function AdminPage() {
             {tab === 'usuarios' && (
               <UsuariosTab users={usuarios} error={usuariosError} onRoleChange={alterarRole} />
             )}
+            {tab === 'ia' && <IaTab showToast={showToast} />}
           </main>
         </div>
       </div>
