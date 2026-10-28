@@ -3,13 +3,14 @@
    ============================================ */
 
 :root {
-  --black: #000000;
-  --dark-gray: #222222;
-  --medium-gray: #444444;
-  --light-gray: #f5f5f5;
-  --lighter-gray: #fafafa;
-  --white: #ffffff;
-  --border-color: #e0e0e0;
+  /* Tokens antigos apontam para a paleta de tema_jogos.css (PDF da cruzadinha) */
+  --black: var(--marrom);
+  --dark-gray: var(--marrom);
+  --medium-gray: var(--tinta);
+  --light-gray: var(--casa);
+  --lighter-gray: var(--papel-fundo);
+  --white: var(--papel);
+  --border-color: var(--linha);
   --sidebar-width: 300px;
   /* Atualizado em JS para bater com a altura real da navbar (evita faixa vazia com calc(100vh)) */
   --map-navbar-offset: 60px;
@@ -143,7 +144,7 @@ body {
 }
 
 .filter-group-actions-sep {
-  color: #bbb;
+  color: var(--marrom-medio);
   font-size: 0.75rem;
 }
 
@@ -305,7 +306,7 @@ body {
 /* Visual Mode Toggle */
 .visual-mode-toggle {
   display: flex;
-  background: #f1f5f9;
+  background: var(--casa);
   padding: 4px;
   border-radius: 8px;
   gap: 4px;
@@ -319,13 +320,13 @@ body {
 }
 
 .visual-mode-toggle .btn-check:checked + .btn {
-  background: var(--white);
-  color: var(--black);
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: var(--marrom);
+  color: var(--creme);
+  box-shadow: 0 2px 4px rgba(92, 61, 23, 0.2);
 }
 
 .visual-mode-toggle .btn-outline-dark {
-  color: #64748b;
+  color: var(--marrom);
 }
 
 .visual-mode-toggle .btn-outline-dark:hover {
@@ -335,7 +336,7 @@ body {
 
 .basemap-hint {
   font-size: 0.78rem;
-  color: #64748b;
+  color: var(--marrom-medio);
   line-height: 1.35;
 }
 
@@ -345,11 +346,11 @@ body {
   right: 16px;
   z-index: 1000;
   display: flex;
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid #e2e8f0;
+  background: rgba(250, 246, 231, 0.96);
+  border: 1px solid var(--linha);
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 4px 16px rgba(92, 61, 23, 0.16);
 }
 
 .basemap-floating-toggle button {
@@ -358,17 +359,17 @@ body {
   padding: 8px 12px;
   font-size: 0.78rem;
   font-weight: 700;
-  color: #64748b;
+  color: var(--marrom);
   cursor: pointer;
 }
 
 .basemap-floating-toggle button + button {
-  border-left: 1px solid #e2e8f0;
+  border-left: 1px solid var(--linha);
 }
 
 .basemap-floating-toggle button.active {
-  background: #0f172a;
-  color: #fff;
+  background: var(--marrom);
+  color: var(--creme);
 }
 
 .basemap-banner {
@@ -582,7 +583,7 @@ body:has(#navbarScroll.show) .btn-toggle-sidebar {
 
 .stat-bar-bg {
   height: 8px;
-  background: #e2e8f0;
+  background: var(--casa);
   border-radius: 4px;
   overflow: hidden;
 }
@@ -615,15 +616,16 @@ body:has(#navbarScroll.show) .btn-toggle-sidebar {
 
 .mapa-popup .popup-header {
   padding: 12px 16px;
-  background: #f8fafc;
+  background: var(--casa);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--linha);
 }
 
 .mapa-popup h4 {
-  font-size: 1.1rem;
+  font-family: var(--fonte-titulo);
+  font-size: 1.35rem;
   font-weight: 700;
   margin: 0;
   color: var(--dark-gray);
@@ -652,8 +654,8 @@ body:has(#navbarScroll.show) .btn-toggle-sidebar {
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 20px;
-  background: #f1f5f9;
-  color: #475569;
+  background: var(--casa);
+  color: var(--tinta);
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -701,4 +703,23 @@ body:has(#navbarScroll.show) .btn-toggle-sidebar {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ============================================
+   TEMA DOS JOGOS (tema_jogos.css): títulos e popup
+   ============================================ */
+.sidebar-header h2,
+.filter-title {
+  font-family: var(--fonte-titulo);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--marrom);
+}
+
+.filter-title { font-size: 1.05rem; }
+
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: var(--papel);
+  color: var(--tinta);
 }

@@ -2611,3 +2611,32 @@
             max-width: 60% !important;
         }
     }
+
+
+    /* ============================================
+       FUNDO E LETRAS no padrão das demais telas (tema_jogos.css / PDF da cruzadinha).
+       Menu lateral, filtro do topo, cards e rodapé continuam no modelo original.
+       ============================================ */
+    html,
+    body,
+    #main-doc {
+        background-color: #f3eedb; /* --papel-fundo */
+    }
+
+    body {
+        font-family: 'Open Sans', 'Segoe UI', sans-serif;
+        color: #4f3414; /* --tinta */
+    }
+
+    .hero-title,
+    .intro-title,
+    .bairro-title,
+    .footer-title,
+    .footer-heading {
+        font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+    }
+
+    .intro-title { color: #7c5220; } /* --marrom */
