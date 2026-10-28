@@ -9,10 +9,7 @@ export function Footer() {
               Projeto de pesquisa dedicado ao estudo dos nomes de lugares e sua relação com a história e cultura local.
             </p>
             <div className="social-icons">
-              <a href="#" aria-label="Facebook"><i className="bi bi-facebook" aria-hidden="true" /></a>
               <a href="#" aria-label="Instagram"><i className="bi bi-instagram" aria-hidden="true" /></a>
-              <a href="#" aria-label="Twitter"><i className="bi bi-twitter" aria-hidden="true" /></a>
-              <a href="#" aria-label="YouTube"><i className="bi bi-youtube" aria-hidden="true" /></a>
             </div>
           </div>
 
@@ -21,7 +18,6 @@ export function Footer() {
             <div className="contact-info">
               <p><i className="bi bi-geo-alt" aria-hidden="true" /> Instituto Federal de Ouro Branco, MG</p>
               <p><i className="bi bi-envelope" aria-hidden="true" /> toponimiaob@gmail.com</p>
-              <p><i className="bi bi-telephone" aria-hidden="true" /> (31) 99999-9999</p>
             </div>
           </div>
 
@@ -29,7 +25,7 @@ export function Footer() {
             <h4>Links Rápidos</h4>
             <ul className="list-unstyled">
               <li><a href="./index.html" className="text-white">Dicionário de Ruas</a></li>
-              <li><a href="./portaleducativo.html" className="text-white">Projeto Saberes</a></li>
+              <li><a href="./portaleducativo.html" className="text-white">Portal Educativo</a></li>
               <li><a href="./about.html" className="text-white">Sobre Nós</a></li>
             </ul>
           </div>

@@ -46,116 +46,189 @@ const TIMELINE = [
   },
 ]
 
-export default function AboutPage() {
-  const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
+const asset = (path) => `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`
 
+/**
+ * Peças da colagem do topo: escolas (faixas largas) e placas de rua (menores).
+ * `className` define a posição em style_about.css; `so-desktop` some em telas pequenas.
+ */
+const COLAGEM_TOPO = [
+  { className: 'c-escola-1', src: 'images/sobre/escola-pio-xii.webp', alt: 'Colagem sobre a Escola Pio XII', giro: -3, fita: 'esquerda' },
+  { className: 'c-placa-1', src: 'images/sobre/placa.webp', alt: 'Placas da Rua Amaro Lanari', giro: 6, fita: 'direita' },
+  { className: 'c-escola-2', src: 'images/sobre/escola-maria-firmina.webp', alt: 'Colagem sobre a Escola Maria Firmina da Silva', giro: 2, fita: 'centro' },
+  { className: 'c-placa-2', src: 'images/sobre/placa-getulio-vargas.webp', alt: 'Placa da Rua Getúlio Vargas', giro: -5, fita: 'centro' },
+  { className: 'c-placa-3 so-desktop', src: 'images/sobre/placa-clodomiro-oliveira.webp', alt: 'Placa enferrujada da Rua Clodomiro de Oliveira', giro: 4, fita: 'esquerda' },
+  { className: 'c-escola-3 so-desktop', src: 'images/sobre/escola-oswaldo-cruz.webp', alt: 'Colagem sobre a Escola Oswaldo Cruz', giro: -2, fita: 'direita' },
+  { className: 'c-placa-4', src: 'images/sobre/placa-carlos-wigg.webp', alt: 'Placa da Rua Comendador Carlos Wigg', giro: -4, fita: 'direita' },
+  { className: 'c-escola-4', src: 'images/sobre/escola-dom-luciano.webp', alt: 'Colagem sobre a Escola Dom Luciano Mendes', giro: 3, fita: 'esquerda' },
+]
+
+/** Traço à mão (como os rabiscos do PDF da cruzadinha). */
+function Rabisco({ className = '' }) {
+  return (
+    <svg className={`rabisco ${className}`} viewBox="0 0 120 40" aria-hidden="true" focusable="false">
+      <path d="M4 30 C 20 6, 34 6, 30 22 S 18 34, 36 26 S 64 6, 70 20 S 86 34, 116 12" />
+    </svg>
+  )
+}
+
+/** Foto "colada" na página: moldura de papel, leve rotação e fita adesiva. */
+function Colagem({ src, alt, legenda, giro = 0, fita = 'centro', className = '' }) {
+  return (
+    <figure className={`colagem fita-${fita} ${className}`} style={{ '--giro': `${giro}deg` }}>
+      <img src={asset(src)} alt={alt} loading="lazy" />
+      {legenda && <figcaption>{legenda}</figcaption>}
+    </figure>
+  )
+}
+
+function BlocoSobre({ icone, titulo, children, imagem, invertido = false }) {
+  return (
+    <div className={`sobre-bloco${invertido ? ' sobre-bloco--invertido' : ''}`}>
+      <div className="sobre-texto">
+        <h3>
+          <i className={`bi ${icone}`} aria-hidden="true" /> {titulo}
+        </h3>
+        {children}
+      </div>
+      <div className="sobre-imagem">{imagem}</div>
+    </div>
+  )
+}
+
+export default function AboutPage() {
   return (
     <>
       <Navbar active="about" />
 
-      <section className="hero-section">
-        <div className="container">
-          <h1>Descubra a História por Trás dos Nomes</h1>
-          <p>
-            O projeto &quot;Tradição e Memória na Toponímia Urbana de Ouro Branco&quot; revela as histórias e memórias
-            por trás dos nomes dos espaços públicos da cidade
-          </p>
-          <a href="#timeline" className="btn hero-btn">Conheça nossa jornada</a>
-        </div>
-      </section>
-
-      <section className="about-section">
-        <div className="container">
-          <h2 className="section-title">Sobre o Projeto</h2>
-
-          <div className="row g-5 mb-5">
-            <div className="col-lg-6">
-              <div className="about-card">
-                <h3><i className="bi bi-book" aria-hidden="true" /> Nosso Propósito</h3>
-                <p>
-                  Propõe-se, neste projeto de pesquisa, a continuidade do estudo da toponímia urbana ouro-branquense a
-                  partir da análise da motivação dos topônimos relativos aos espaços públicos de Ouro Branco - MG, com o
-                  intuito de resgatar e conhecer a história e a memória local.
-                </p>
-                <p>
-                  Entenda-se por topônimo o nome dado a determinado lugar, seja acidente físico (rio, córrego, serra,
-                  etc.) ou humano (povoado, rua, capela, escola, etc.).
-                </p>
-              </div>
+      <main className="sobre" id="conteudo">
+        {/* Topo: painel marrom com curvas (lateral do PDF) + colagem de fotos */}
+        <section className="sobre-hero">
+          <div className="sobre-hero-painel">
+            <div className="sobre-hero-marcas">
+              <span className="selo-fundo">
+                <img src={asset('images/sobre/selo.webp')} alt="Selo Toponímia Ouro Branco MG" width="281" height="255" />
+              </span>
             </div>
-            <div className="col-lg-6">
-              <div className="about-img">
-                <img src={asset('images/header/toponimia.png')} alt="Logo do Projeto" />
-              </div>
+            <p className="sobre-eyebrow">Projeto de pesquisa e extensão · IFMG Campus Ouro Branco</p>
+            <h1>Tradição e memória cultural na toponímia urbana do município</h1>
+            <Rabisco />
+            <p className="sobre-hero-texto">
+              O projeto &quot;Tradição e Memória na Toponímia Urbana de Ouro Branco&quot; revela as histórias e memórias
+              por trás dos nomes dos espaços públicos da cidade.
+            </p>
+            <div className="sobre-hero-acoes">
+              <a href="#timeline" className="btn-sobre btn-sobre--claro">Conheça nossa jornada</a>
+              <a href="./index.html" className="btn-sobre btn-sobre--contorno">Explorar o Dicionário</a>
             </div>
           </div>
 
-          <div className="row g-5 mb-5">
-            <div className="col-lg-6 order-lg-2">
-              <div className="about-card">
-                <h3><i className="bi bi-bullseye" aria-hidden="true" /> Nossa Missão</h3>
-                <p>
-                  Em outros termos, pretende-se mostrar que os topônimos do município não foram e não são escolhidos
-                  aleatoriamente; pelo contrário, várias são as questões sociopolíticas e culturais que permeiam essas
-                  escolhas.
-                </p>
-                <p>
-                  Espera-se, dessa forma, a partir da investigação toponímica proposta, contribuir para os estudos
-                  linguísticos que se pautam na inter-relação língua, cultura e sociedade.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6 order-lg-1">
-              <div className="about-img">
-                <img src={asset('images/header/dicionario.png')} alt="Objetivos do projeto" />
-              </div>
-            </div>
+          <div className="sobre-hero-colagem" aria-label="Colagem de escolas e placas de rua de Ouro Branco">
+            {COLAGEM_TOPO.map((peca) => (
+              <Colagem key={peca.src} {...peca} />
+            ))}
+            <Rabisco className="rabisco--colagem" />
           </div>
+        </section>
 
-          <div className="row g-5">
-            <div className="col-lg-6">
-              <div className="about-card">
-                <h3><i className="bi bi-people" aria-hidden="true" /> Educação e Extensão</h3>
-                <p>
-                  Como um projeto de extensão e pesquisa do IFMG, nossa missão é compartilhar o conhecimento com a
-                  comunidade. Levamos a história de Ouro Branco para as salas de aula e espaços públicos, fortalecendo a
-                  identidade local.
-                </p>
-                <p>
-                  Você pode baixar nossa <strong>Cartilha Toponímica</strong> completa, um material educativo preparado
-                  para auxiliar professores e pesquisadores na exploração do patrimônio histórico da nossa cidade.
-                </p>
-              </div>
-            </div>
-            <div className="col-lg-6">
-              <div className="about-img" style={{ padding: 40, background: 'white' }}>
-                <img
-                  src={asset('images/header/ob3-removebg-preview.png')}
-                  alt="Educação e Extensão"
-                  style={{ maxHeight: 180 }}
-                />
-              </div>
-            </div>
+        <section className="sobre-secao" aria-labelledby="titulo-sobre">
+          <h2 id="titulo-sobre" className="sobre-titulo">Sobre o Projeto</h2>
+
+          <BlocoSobre
+            icone="bi-book"
+            titulo="Nosso Propósito"
+            imagem={
+              <Colagem
+                src="images/sobre/aerea-centro.webp"
+                alt="Vista aérea do bairro Centro de Ouro Branco"
+                legenda="Bairro Centro visto do alto"
+                giro={2}
+              />
+            }
+          >
+            <p>
+              Propõe-se, neste projeto de pesquisa, a continuidade do estudo da toponímia urbana ouro-branquense a
+              partir da análise da motivação dos topônimos relativos aos espaços públicos de Ouro Branco - MG, com o
+              intuito de resgatar e conhecer a história e a memória local.
+            </p>
+            <p>
+              Entenda-se por topônimo o nome dado a determinado lugar, seja acidente físico (rio, córrego, serra,
+              etc.) ou humano (povoado, rua, capela, escola, etc.).
+            </p>
+          </BlocoSobre>
+
+          <BlocoSobre
+            invertido
+            icone="bi-bullseye"
+            titulo="Nossa Missão"
+            imagem={
+              <Colagem
+                src="images/sobre/dicionario.webp"
+                alt="O que é o Dicionário de Ruas?"
+                giro={-3}
+                fita="direita"
+              />
+            }
+          >
+            <p>
+              Em outros termos, pretende-se mostrar que os topônimos do município não foram e não são escolhidos
+              aleatoriamente; pelo contrário, várias são as questões sociopolíticas e culturais que permeiam essas
+              escolhas.
+            </p>
+            <p>
+              Espera-se, dessa forma, a partir da investigação toponímica proposta, contribuir para os estudos
+              linguísticos que se pautam na inter-relação língua, cultura e sociedade.
+            </p>
+          </BlocoSobre>
+
+          <BlocoSobre
+            icone="bi-people"
+            titulo="Educação e Extensão"
+            imagem={
+              <Colagem
+                src="images/sobre/escola-joao-xxiii.webp"
+                alt="Colagem sobre a Escola João XXIII"
+                giro={2}
+                fita="esquerda"
+              />
+            }
+          >
+            <p>
+              Como um projeto de extensão e pesquisa do IFMG, nossa missão é compartilhar o conhecimento com a
+              comunidade. Levamos a história de Ouro Branco para as salas de aula e espaços públicos, fortalecendo a
+              identidade local.
+            </p>
+            <p>
+              Você pode baixar nossa{' '}
+              <a href="./estatisticas.html#cartilha"><strong>Cartilha Toponímica</strong></a> completa, um material
+              educativo preparado para auxiliar professores e pesquisadores na exploração do patrimônio histórico da
+              nossa cidade.
+            </p>
+            <a className="btn-sobre btn-sobre--marrom" href="./estatisticas.html#cartilha">
+              <i className="bi bi-file-earmark-pdf me-1" aria-hidden="true" /> Baixar a Cartilha (PDF)
+            </a>
+            <img className="sobre-ifmg" src={asset('images/sobre/ifmg.webp')} alt="Instituto Federal de Minas Gerais — Campus Ouro Branco" />
+          </BlocoSobre>
+        </section>
+
+        <section className="sobre-jornada" id="timeline" aria-labelledby="titulo-jornada">
+          <div className="faixa-titulo sobre-jornada-faixa">
+            <h2 id="titulo-jornada">Nossa Jornada</h2>
+            <p>Da primeira análise das ruas ao portal educativo</p>
           </div>
-        </div>
-      </section>
-
-      <section className="timeline-section" id="timeline">
-        <div className="container">
-          <h2 className="section-title text-black">Nossa Jornada</h2>
-          <div className="timeline">
+          <ol className="timeline">
             {TIMELINE.map((item) => (
-              <div className={`timeline-item ${item.side}`} key={`${item.year}-${item.title}-${item.side}`}>
+              <li className={`timeline-item ${item.side}`} key={`${item.year}-${item.title}-${item.side}`}>
                 <div className="timeline-content">
                   <span className="timeline-year">{item.year}</span>
-                  <h4><i className={`bi ${item.icon}`} aria-hidden="true" /> {item.title}</h4>
+                  <h3><i className={`bi ${item.icon}`} aria-hidden="true" /> {item.title}</h3>
                   <p>{item.text}</p>
                 </div>
-              </div>
+              </li>
             ))}
-          </div>
-        </div>
-      </section>
+          </ol>
+        </section>
+      </main>
 
       <Footer />
     </>

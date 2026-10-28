@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import AboutPage from './pages/About/AboutPage.jsx'
+import './styles/tema_jogos.css'
 import './styles/style_about.css'
 
 /**
