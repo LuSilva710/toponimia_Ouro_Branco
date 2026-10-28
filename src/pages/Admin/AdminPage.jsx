@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
+import { RUA_COLUNAS } from '@lib/ruas.js'
 import {
   SIDEBAR_TABS,
   encontrarRuaPorNome,
@@ -69,7 +70,7 @@ export default function AdminPage() {
   const loadRuas = useCallback(async () => {
     const { data, error } = await supabase
       .from('ruas')
-      .select('*, bairros(nome)')
+      .select(`${RUA_COLUNAS}, bairros(nome)`)
       .order('nome_oficial', { ascending: true })
     if (error) return console.error(error)
     setRuas(data || [])

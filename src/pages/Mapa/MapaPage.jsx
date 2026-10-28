@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
+import { RUA_COLUNAS } from '@lib/ruas.js'
 import { Navbar } from '@components/layout/Navbar.jsx'
 import { MapSidebar } from './MapSidebar.jsx'
 import {
@@ -53,7 +54,7 @@ export default function MapaPage() {
         const geoUrl = `${import.meta.env.BASE_URL}data/ouro_branco_streets.json`
         const [bairrosRes, ruasRes, geoRes] = await Promise.all([
           supabase.from('bairros').select('id, nome, slug').order('nome'),
-          supabase.from('ruas').select('*').order('nome_oficial'),
+          supabase.from('ruas').select(RUA_COLUNAS).order('nome_oficial'),
           fetch(geoUrl),
         ])
         if (cancelled) return

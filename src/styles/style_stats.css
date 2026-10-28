@@ -1,19 +1,21 @@
 /* ============================================
-   ESTATÍSTICAS - Segue o design do site principal
+   ESTATÍSTICAS — mesmo design dos jogos (tema_jogos.css, PDF da cruzadinha)
+   Os tokens antigos da página apontam para a paleta do tema.
+   As cores dos gráficos (categorias e gêneros) representam dados e não mudam.
    ============================================ */
 
 :root {
-  --black: #000000;
-  --dark-gray: #222222;
-  --medium-gray: #444444;
-  --light-gray: #f5f5f5;
-  --lighter-gray: #fafafa;
-  --white: #ffffff;
-  --border-color: #e0e0e0;
+  --black: var(--marrom);
+  --dark-gray: var(--marrom);
+  --medium-gray: var(--tinta);
+  --light-gray: var(--casa);
+  --lighter-gray: var(--papel-fundo);
+  --white: var(--papel);
+  --border-color: var(--linha);
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-family: var(--fonte-texto);
   background-color: var(--lighter-gray);
   color: var(--medium-gray);
   margin: 0;
@@ -57,8 +59,13 @@ body {
     opacity: 0.85;
 }
 
+.navbar-brand,
+.nav-link {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .navbar-nav .nav-item:hover .nav-link {
-    color: var(--white) !important;
+    color: #fff !important;
     opacity: 1;
     transform: translateY(-1px);
 }
@@ -74,15 +81,45 @@ body {
 }
 
 .stats-header {
+  position: relative;
   display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 1rem; margin-bottom: 30px;
+  flex-wrap: wrap; gap: 1rem; margin-bottom: 44px;
+  background: var(--marrom);
+  border-radius: 14px 14px 0 0;
+  padding: 1.4rem 1.5rem 1.2rem;
+}
+
+/* Borda ondulada (como a faixa dos jogos) */
+.stats-header::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -15px;
+  height: 16px;
+  background: radial-gradient(circle at 50% 0, var(--marrom) 15px, transparent 16px) 0 0 / 32px 16px repeat-x;
 }
 
 .stats-header h1 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-family: var(--fonte-titulo);
+  font-size: clamp(1.9rem, 4vw, 2.7rem);
   font-weight: 700;
-  color: var(--black);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--creme);
   margin: 0;
+}
+
+.stats-header .btn-primary {
+  background: var(--creme) !important;
+  border-color: var(--creme) !important;
+  color: var(--marrom) !important;
+}
+
+.stats-header .btn-primary:hover {
+  background: var(--ativo) !important;
+  border-color: var(--ativo) !important;
+  color: var(--marrom-escuro) !important;
 }
 
 /* Summary Cards */
@@ -96,7 +133,7 @@ body {
 .summary-card {
   background: var(--white);
   border: 2px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px 16px;
   text-align: center;
   transition: all 0.3s ease;
@@ -116,7 +153,7 @@ body {
 
 .summary-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 16px rgba(92, 61, 23, 0.12);
   border-color: var(--dark-gray);
 }
 
@@ -129,11 +166,12 @@ body {
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-size: 1.3rem;
-  color: var(--white);
+  color: var(--creme);
 }
 
 .summary-value {
-  font-size: 2rem;
+  font-family: var(--fonte-titulo);
+  font-size: 2.6rem;
   font-weight: 700;
   color: var(--black);
   line-height: 1;
@@ -148,21 +186,29 @@ body {
 /* Charts Grid */
 .charts-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
+}
+
+/* Itens de grid não encolhem abaixo do conteúdo por padrão: sem isso, tabelas e gráficos largos estouram a tela no celular */
+.charts-grid > * {
+  min-width: 0;
 }
 
 .chart-card {
   background: var(--white);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 8px rgba(92, 61, 23, 0.07);
 }
 
 .chart-card h3 {
-  font-size: 1rem;
-  font-weight: 600;
+  font-family: var(--fonte-titulo);
+  font-size: 1.45rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
   margin: 0 0 16px;
   color: var(--dark-gray);
   padding-bottom: 8px;
@@ -185,10 +231,10 @@ body {
 
 .chart-timeline-insight {
   font-size: 0.88rem;
-  color: #1e293b;
+  color: var(--tinta);
   margin: 0 0 15px;
   padding: 12px 16px;
-  background: linear-gradient(to right, #f8fafc, #f1f5f9);
+  background: var(--casa);
   border-radius: 8px;
   border-left: 4px solid var(--dark-gray);
   box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
@@ -220,12 +266,13 @@ body {
 /* Custom Chart Legend */
 .custom-legend {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
   padding: 0 10px;
 }
 
 .custom-legend-item {
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -311,8 +358,10 @@ body {
 }
 
 .waffle-cidade-title {
+  font-family: var(--fonte-titulo);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  text-transform: uppercase;
   color: var(--black);
 }
 
@@ -393,8 +442,8 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  background: rgba(20, 20, 20, 0.95);
-  color: var(--white);
+  background: rgba(79, 52, 20, 0.96);
+  color: var(--creme);
   padding: 8px 12px;
   border-radius: 6px;
   pointer-events: none; /* Para o mouse transpassar ignorando a caixa (Performance) */
@@ -443,7 +492,7 @@ body {
 }
 
 .skeleton-pulse {
-  background: linear-gradient(90deg, #ececec 25%, #f7f7f7 50%, #ececec 75%);
+  background: linear-gradient(90deg, var(--casa) 25%, var(--papel) 50%, var(--casa) 75%);
   background-size: 200% 100%;
   animation: stats-shimmer 1.4s ease-in-out infinite;
 }
@@ -458,13 +507,13 @@ body {
   height: 48px;
   border-radius: 50%;
   margin: 0 auto 12px;
-  background: #ececec;
+  background: var(--casa);
 }
 
 .skeleton-line {
   display: block;
   border-radius: 4px;
-  background: #ececec;
+  background: var(--casa);
   margin: 0 auto;
 }
 
@@ -506,19 +555,22 @@ body {
 
 /* Buttons */
 .btn-primary {
-  background: var(--dark-gray) !important;
-  border-color: var(--dark-gray) !important;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  background: var(--marrom) !important;
+  border-color: var(--marrom) !important;
+  color: var(--creme) !important;
+  border-radius: 999px;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(92, 61, 23, 0.15);
 }
 .btn-primary:hover {
-  background: #333 !important;
-  border-color: #333 !important;
+  background: var(--marrom-escuro) !important;
+  border-color: var(--marrom-escuro) !important;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0,0,0,0.15);
 }
 
 @media (max-width: 768px) {
-  .charts-grid { grid-template-columns: 1fr; }
+  .charts-grid { grid-template-columns: minmax(0, 1fr); }
   .summary-cards { grid-template-columns: 1fr 1fr; }
 }
 
@@ -552,4 +604,221 @@ body {
   .btn-primary:hover {
     transform: none;
   }
+}
+
+/* ============================================
+   PAINÉIS: GÊNERO, COMPARATIVO POR BAIRRO, PROGRESSO
+   ============================================ */
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.stat-progress {
+  height: 8px;
+  background: var(--casa);
+  border-radius: 999px;
+  overflow: hidden;
+  flex: 1;
+  min-width: 60px;
+}
+
+.stat-progress-fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* Gênero */
+.genero-layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 2fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.genero-destaque-numero {
+  font-family: var(--fonte-titulo);
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--dark-gray);
+  line-height: 1.1;
+}
+
+.genero-destaque-texto {
+  margin: 6px 0 14px;
+  color: var(--medium-gray);
+}
+
+.genero-numeros {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.9rem;
+  display: grid;
+  gap: 6px;
+}
+
+.genero-numeros li {
+  display: flex;
+  align-items: center;
+}
+
+.genero-chart-wrap {
+  position: relative;
+  height: 260px;
+}
+
+.genero-chart-wrap canvas {
+  max-height: none;
+}
+
+/* Comparativo por bairro */
+.bairros-table-wrap {
+  max-height: 520px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+}
+
+.bairros-table {
+  font-size: 0.9rem;
+}
+
+.bairros-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--white);
+  z-index: 1;
+  box-shadow: inset 0 -2px 0 var(--dark-gray);
+  white-space: nowrap;
+}
+
+.th-sort {
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  font-weight: 600;
+  color: var(--dark-gray);
+  cursor: pointer;
+}
+
+.th-sort:focus-visible {
+  outline: 2px solid var(--dark-gray);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.th-sort .bi-chevron-expand {
+  opacity: 0.35;
+}
+
+.perfil-cat {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.celula-progresso {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+  min-width: 140px;
+}
+
+.celula-progresso span {
+  width: 3ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bairros-table td,
+.pendencias-table td {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Progresso da pesquisa */
+.progresso-lista {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px 32px;
+}
+
+.progresso-item-topo {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.9rem;
+  margin-bottom: 4px;
+}
+
+.progresso-item-num {
+  color: var(--medium-gray);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.progresso-item-num strong {
+  color: var(--dark-gray);
+  margin-left: 4px;
+}
+
+.pendencias {
+  margin-top: 18px;
+}
+
+.pendencias summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.pendencias-table {
+  font-size: 0.85rem;
+}
+
+.pendencias-table th {
+  white-space: nowrap;
+}
+
+.pendencias-table td.pendente {
+  color: #b45309;
+}
+
+.pendencias-table td.completo {
+  color: #16a34a;
+}
+
+@media (max-width: 768px) {
+  .genero-layout,
+  .progresso-lista {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Destaque ao chegar pelo link "Cartilha Toponímica" (estatisticas.html#cartilha) */
+.btn-destaque {
+  animation: pulso-cartilha 1s ease-in-out 3;
+  box-shadow: 0 0 0 4px rgba(250, 247, 232, 0.55) !important;
+}
+
+@keyframes pulso-cartilha {
+  50% { box-shadow: 0 0 0 10px rgba(250, 247, 232, 0.25); }
+}
+
+.cartilha-dica {
+  text-align: right;
+  font-size: 0.9rem;
+  color: var(--tinta);
+  margin: -24px 0 20px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-destaque { animation: none; }
 }

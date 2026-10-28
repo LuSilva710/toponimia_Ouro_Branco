@@ -2,10 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   CORES,
   CORES_GENERO,
-  ORDEM_CATEGORIAS,
+  buildGeneroData,
   buildTimelineData,
   buildWaffleData,
   buildWordCloudItems,
+  categoriasPresentes,
   contarPorCategoria,
   rotuloCategoriaToponimica,
 } from './statsUtils.js'
@@ -13,7 +14,7 @@ import { useChart } from './useChart.js'
 
 export function CategoriaChart({ ruas }) {
   const contagem = useMemo(() => contarPorCategoria(ruas), [ruas])
-  const keysChart = useMemo(() => ORDEM_CATEGORIAS.filter((k) => contagem[k] > 0), [contagem])
+  const keysChart = useMemo(() => categoriasPresentes(contagem), [contagem])
 
   const canvasRef = useChart((canvas, Chart) => {
     if (!keysChart.length) return null
@@ -24,9 +25,9 @@ export function CategoriaChart({ ruas }) {
         datasets: [{
           data: keysChart.map((k) => contagem[k]),
           backgroundColor: keysChart.map((k) => CORES[k]),
-          borderColor: keysChart.map(() => '#ffffff'),
+          borderColor: keysChart.map(() => '#faf6e7'),
           borderWidth: 2,
-          hoverBorderColor: '#ffffff',
+          hoverBorderColor: '#faf6e7',
           hoverOffset: 6,
         }],
       },
@@ -56,7 +57,7 @@ export function CategoriaChart({ ruas }) {
       <h3><i className="bi bi-pie-chart me-2" aria-hidden="true" />Distribuição por Categoria Toponímica</h3>
       <canvas ref={canvasRef} id="chart-categorias" />
       <div id="legend-html-categorias" className="custom-legend mt-3">
-        {ORDEM_CATEGORIAS.map((k) => (
+        {keysChart.map((k) => (
           <div className="custom-legend-item" key={k}>
             <span className="custom-legend-color" style={{ backgroundColor: CORES[k] }} />
             <span className="custom-legend-label">{rotuloCategoriaToponimica(k)}</span>
@@ -69,25 +70,19 @@ export function CategoriaChart({ ruas }) {
 }
 
 export function GeneroChart({ ruas }) {
-  const contagem = useMemo(() => {
-    const c = { masculino: 0, feminino: 0, neutro: 0 }
-    ruas.forEach((r) => {
-      const g = r.genero_homenageado || 'neutro'
-      c[g] = (c[g] || 0) + 1
-    })
-    return c
-  }, [ruas])
+  // Ruas sem gênero ficam em barra própria (antes eram somadas a "Neutro")
+  const contagem = useMemo(() => buildGeneroData(ruas).contagem, [ruas])
 
   const canvasRef = useChart((canvas, Chart) => {
-    const coresGen = [CORES_GENERO.masculino, CORES_GENERO.feminino, CORES_GENERO.neutro]
+    const coresGen = [CORES_GENERO.masculino, CORES_GENERO.feminino, CORES_GENERO.neutro, '#cbd5e1']
     return new Chart(canvas, {
       type: 'bar',
       data: {
-        labels: ['Masculino', 'Feminino', 'Neutro'],
+        labels: ['Masculino', 'Feminino', 'Neutro', 'Não classificado'],
         datasets: [{
-          data: [contagem.masculino, contagem.feminino, contagem.neutro],
+          data: [contagem.masculino, contagem.feminino, contagem.neutro, contagem.naoClassificado],
           backgroundColor: coresGen,
-          borderColor: coresGen.map(() => '#ffffff'),
+          borderColor: coresGen.map(() => '#faf6e7'),
           borderWidth: 2,
           borderRadius: 6,
         }],
@@ -97,8 +92,8 @@ export function GeneroChart({ ruas }) {
         responsive: true,
         plugins: { colors: { enabled: false }, legend: { display: false } },
         scales: {
-          x: { ticks: { color: '#444' }, grid: { color: 'rgba(0,0,0,0.06)' } },
-          y: { ticks: { color: '#444' }, grid: { display: false } },
+          x: { ticks: { color: '#4f3414' }, grid: { color: 'rgba(124,82,32,0.10)' } },
+          y: { ticks: { color: '#4f3414' }, grid: { display: false } },
         },
       },
     })
@@ -193,7 +188,7 @@ export function TimelineChart({ ruas }) {
       label: rotuloCategoriaToponimica(k),
       data: decadas.map((d) => porDecadaCat[d][k] || 0),
       backgroundColor: CORES[k] || CORES.outro,
-      borderColor: '#ffffff',
+      borderColor: '#faf6e7',
       borderWidth: 1,
       stack: 'decadas',
       order: 2,
@@ -203,10 +198,10 @@ export function TimelineChart({ ruas }) {
       type: 'line',
       label: 'Expansão Urbana (Acumulado)',
       data: dadosAcumulados,
-      borderColor: '#222222',
+      borderColor: '#7c5220',
       borderWidth: 3,
-      pointBackgroundColor: '#ffffff',
-      pointBorderColor: '#222222',
+      pointBackgroundColor: '#faf6e7',
+      pointBorderColor: '#7c5220',
       pointHoverRadius: 6,
       fill: false,
       tension: 0.4,
@@ -222,7 +217,7 @@ export function TimelineChart({ ruas }) {
         plugins: {
           legend: { display: true, position: 'bottom', labels: { usePointStyle: true, padding: 15, font: { size: 11 } } },
           tooltip: {
-            backgroundColor: 'rgba(0,0,0,0.85)',
+            backgroundColor: 'rgba(79,52,20,0.95)',
             padding: 12,
             callbacks: {
               label: (ctx) => (ctx.dataset.type === 'line' ? ` Cúmulo: ${ctx.raw} ruas` : ` ${ctx.dataset.label}: ${ctx.raw}`),
@@ -245,8 +240,8 @@ export function TimelineChart({ ruas }) {
                   display: true,
                   content: 'Emancipação (1953)',
                   position: 'start',
-                  backgroundColor: 'rgba(255,255,255,0.8)',
-                  color: '#222',
+                  backgroundColor: 'rgba(250,246,231,0.9)',
+                  color: '#4f3414',
                   font: { size: 10, weight: 'bold' },
                   padding: 4,
                 },
@@ -262,8 +257,8 @@ export function TimelineChart({ ruas }) {
                   display: true,
                   content: 'Início Açominas (1976)',
                   position: 'end',
-                  backgroundColor: 'rgba(255,255,255,0.8)',
-                  color: '#222',
+                  backgroundColor: 'rgba(250,246,231,0.9)',
+                  color: '#4f3414',
                   font: { size: 10, weight: 'bold' },
                   padding: 4,
                 },

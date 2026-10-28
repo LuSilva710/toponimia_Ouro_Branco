@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@lib/supabase.js'
+import { RUA_COLUNAS } from '@lib/ruas.js'
 import { Navbar } from '@components/layout/Navbar.jsx'
 import { computeSummary } from './statsUtils.js'
 import {
@@ -9,6 +10,7 @@ import {
   WafflePanorama,
   WordCloud,
 } from './Charts.jsx'
+import { ComparativoBairros, PainelGenero, ProgressoPesquisa } from './Paineis.jsx'
 
 const SUMMARY_META = [
   { id: 'total-ruas', icon: 'bi-signpost-2', label: 'Total de Ruas', key: 'totalRuas' },
@@ -57,7 +59,7 @@ export default function EstatisticasPage() {
     try {
       const { data, error: fetchError } = await supabase
         .from('ruas')
-        .select('*')
+        .select(`${RUA_COLUNAS}, bairros(nome)`)
         .order('nome_oficial', { ascending: true })
 
       if (signal?.aborted) return
@@ -82,6 +84,17 @@ export default function EstatisticasPage() {
   }, [loadData, reloadKey])
 
   const summary = useMemo(() => computeSummary(ruas), [ruas])
+
+  // Link da página Sobre ("Cartilha Toponímica"): estatisticas.html#cartilha destaca o botão de exportar
+  const [destacarCartilha, setDestacarCartilha] = useState(
+    () => typeof window !== 'undefined' && window.location.hash === '#cartilha',
+  )
+  useEffect(() => {
+    if (!destacarCartilha || loading) return undefined
+    document.getElementById('btn-exportar-pdf')?.focus({ preventScroll: true })
+    const t = setTimeout(() => setDestacarCartilha(false), 4000)
+    return () => clearTimeout(t)
+  }, [destacarCartilha, loading])
 
   async function handleExport(e) {
     const btn = e.currentTarget
@@ -108,7 +121,7 @@ export default function EstatisticasPage() {
             <h1>Análise da Toponímia Urbana</h1>
             <button
               type="button"
-              className="btn btn-primary"
+              className={`btn btn-primary${destacarCartilha ? ' btn-destaque' : ''}`}
               id="btn-exportar-pdf"
               onClick={handleExport}
               disabled={exporting || loading || !!error || ruas.length === 0}
@@ -117,6 +130,12 @@ export default function EstatisticasPage() {
               {exporting ? 'Preparando…' : 'Exportar PDF'}
             </button>
           </div>
+          {destacarCartilha && !loading && !error && (
+            <p className="cartilha-dica" role="status">
+              <i className="bi bi-arrow-up-right me-1" aria-hidden="true" />
+              A <strong>Cartilha Toponímica</strong> é gerada pelo botão <strong>Exportar PDF</strong> acima.
+            </p>
+          )}
 
           <div
             id="stats-loading-status"
@@ -182,9 +201,12 @@ export default function EstatisticasPage() {
                 <div className="charts-grid" id="charts-container">
                   <CategoriaChart ruas={ruas} />
                   <GeneroChart ruas={ruas} />
+                  <PainelGenero ruas={ruas} />
+                  <ComparativoBairros ruas={ruas} />
                   <WafflePanorama ruas={ruas} />
                   <TimelineChart ruas={ruas} />
                   <WordCloud ruas={ruas} />
+                  <ProgressoPesquisa ruas={ruas} />
                 </div>
               </>
             )

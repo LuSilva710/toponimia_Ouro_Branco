@@ -1,67 +1,37 @@
-// ============================================
-// CHART COLORS
-// ============================================
-export const CORES = {
-  antropotoponimo: '#ED4A7B', // Magenta Vibrante
-  fitotoponimo: '#109655',    // Verde Limpo
-  axiotoponimo: '#6B4B9A',    // Roxo App
-  hagiotoponimo: '#29B6F6',   // Azul Celeste Suave (Agradável)
-  corotoponimo: '#FF7043',    // Laranja Coral (Agradável)
-  zootoponimo: '#26A69A',     // Verde-água Menta (Agradável)
-  litotoponimo: '#607D8B',    // Azul Rochoso/Metálico (Agradável e semântico para litos=pedra)
-  sociotoponimo: '#C5CB81',   // Verde musgo rgb(197, 203, 129)
-  outro: '#DFDFDF',           // Cinza claro maciço
-}
+import { IDS_TAXES, OUTRO, corTaxe, normalizarTaxe, rotuloTaxe } from '@lib/taxonomiaDick.js'
 
-/** Rótulos acentuados para gráfico e legendas */
-export const ROTULO_CATEGORIA = {
-  antropotoponimo: 'Antropotopônimo',
-  fitotoponimo: 'Fitotopônimo',
-  axiotoponimo: 'Axiotopônimo',
-  hagiotoponimo: 'Hagiotopônimo',
-  corotoponimo: 'Corotopônimo',
-  zootoponimo: 'Zootopônimo',
-  litotoponimo: 'Litotopônimo',
-  sociotoponimo: 'Sociotopônimo',
-  outro: 'Outro / sem classificação',
-}
+// ============================================
+// CATEGORIAS (taxonomia de Dick em src/lib/taxonomiaDick.js)
+// ============================================
+
+/** Cor de cada taxe nesta página (as 8 originais vêm da própria taxonomia). */
+export const CORES = Object.fromEntries(IDS_TAXES.map((id) => [id, corTaxe(id)]))
 
 export function rotuloCategoriaToponimica(chaveNormalizada) {
-  return ROTULO_CATEGORIA[chaveNormalizada] || (chaveNormalizada.charAt(0).toUpperCase() + chaveNormalizada.slice(1))
+  return rotuloTaxe(chaveNormalizada)
 }
 
-/** Ordem fixa na legenda (todas as categorias aparecem, mesmo com contagem 0). */
-export const ORDEM_CATEGORIAS = [
-  'antropotoponimo', 'fitotoponimo', 'axiotoponimo', 'hagiotoponimo',
-  'corotoponimo', 'zootoponimo', 'litotoponimo', 'sociotoponimo', 'outro',
-]
+/** Ordem da taxonomia (física, depois antropocultural), com "outro" no fim. */
+export const ORDEM_CATEGORIAS = IDS_TAXES
+
+/** Paleta da nuvem de palavras: as cores originais da página, independentes da taxonomia. */
+const PALETA_NUVEM = ['#ED4A7B', '#109655', '#6B4B9A', '#29B6F6', '#FF7043', '#26A69A', '#607D8B', '#C5CB81']
 
 export function contarPorCategoria(ruas) {
-  const contagem = {}
-  Object.keys(CORES).forEach((k) => {
-    contagem[k] = 0
-  })
+  const contagem = Object.fromEntries(IDS_TAXES.map((k) => [k, 0]))
   ruas.forEach((r) => {
-    const cat = normalizarCategoria(r.categoria_toponimica)
-    if (contagem[cat] !== undefined) contagem[cat]++
-    else contagem.outro++
+    contagem[normalizarCategoria(r.categoria_toponimica)]++
   })
   return contagem
 }
 
+/** Categorias com pelo menos uma rua, na ordem da taxonomia ("outro" só se houver). */
+export function categoriasPresentes(contagem) {
+  return ORDEM_CATEGORIAS.filter((k) => contagem[k] > 0)
+}
+
 export function normalizarCategoria(cat) {
-  if (!cat) return 'outro'
-  // Minúsculas, sem acento (ô = o), sem espaços/hífens internos — alinha com chaves em CORES
-  let n = String(cat)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[\u200b-\u200d\ufeff]/g, '')
-    .trim()
-  n = n.replace(/[-_\s\u00a0]+/g, '')
-  while (n.endsWith('toponimos')) n = n.slice(0, -1)
-  if (CORES[n] !== undefined) return n
-  return 'outro'
+  return normalizarTaxe(cat)
 }
 
 export const CORES_GENERO = {
@@ -122,7 +92,7 @@ export function buildWordCloudItems(ruas) {
   if (sorted.length === 0) return []
 
   const maxFreq = sorted[0][1]
-  const paletaToponimia = Object.values(CORES).filter((c) => c !== CORES.outro)
+  const paletaToponimia = PALETA_NUVEM
 
   // Misturar aleatoriamente para que as palavras grandes não fiquem apenas no começo
   const scrambled = [...sorted].sort(() => Math.random() - 0.5)
@@ -166,7 +136,7 @@ export function buildWaffleData(ruas) {
       return { ...r, cat, color, label }
     })
 
-  const legend = ORDEM_CATEGORIAS.map((cat) => ({
+  const legend = categoriasPresentes(contagemCat).map((cat) => ({
     cat,
     count: contagemCat[cat],
     color: CORES[cat] || CORES.outro,
@@ -266,4 +236,141 @@ export function buildTimelineData(ruas) {
       catDominantePico,
     },
   }
+}
+
+// ============================================
+// GÊNERO, BAIRROS E PROGRESSO DA PESQUISA
+// ============================================
+
+/**
+ * Normaliza o gênero gravado no banco ("Feminina", "feminin", "MASCULINO"…).
+ * @returns {'masculino' | 'feminino' | 'neutro' | null} null = ainda não classificado
+ */
+export function normalizarGenero(valor) {
+  const g = String(valor ?? '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+  if (!g) return null
+  if (g.startsWith('fem')) return 'feminino'
+  if (g.startsWith('masc')) return 'masculino'
+  return 'neutro'
+}
+
+const pct = (parte, total) => (total ? Math.round((parte / total) * 100) : 0)
+const temTexto = (v, min = 1) => typeof v === 'string' && v.trim().length >= min
+
+/** Nome do bairro sem o prefixo "Bairro " (economiza espaço em tabelas e eixos). */
+export function nomeCurtoBairro(rua) {
+  return (rua.bairros?.nome || 'Sem bairro').replace(/^Bairro\s+/i, '')
+}
+
+/**
+ * Contagem geral e por período (ano da lei de denominação) das ruas que homenageiam pessoas.
+ * Só entram ruas com gênero masculino/feminino; "neutro" (não homenageia pessoa) e não classificadas ficam à parte.
+ */
+export function buildGeneroData(ruas) {
+  const contagem = { masculino: 0, feminino: 0, neutro: 0, naoClassificado: 0 }
+  const porDecada = {}
+
+  ruas.forEach((r) => {
+    const g = normalizarGenero(r.genero_homenageado)
+    if (!g) {
+      contagem.naoClassificado++
+      return
+    }
+    contagem[g]++
+    if (g === 'neutro') return
+    const decada = resolverDecada(r)
+    if (decada == null) return
+    if (!porDecada[decada]) porDecada[decada] = { masculino: 0, feminino: 0 }
+    porDecada[decada][g]++
+  })
+
+  const pessoas = contagem.masculino + contagem.feminino
+  const decadas = Object.keys(porDecada).map(Number).sort((a, b) => a - b)
+
+  return {
+    contagem,
+    pessoas,
+    pctFeminino: pct(contagem.feminino, pessoas),
+    /** Em cada 10 pessoas homenageadas, quantas são mulheres (arredondado). */
+    mulheresEm10: pessoas ? Math.round((contagem.feminino / pessoas) * 10) : 0,
+    decadas,
+    porDecada,
+    pessoasComAno: decadas.reduce((s, d) => s + porDecada[d].masculino + porDecada[d].feminino, 0),
+  }
+}
+
+/** Uma linha por bairro: tamanho, perfil toponímico, gênero e o quanto já foi pesquisado. */
+export function buildBairroStats(ruas) {
+  const grupos = {}
+  ruas.forEach((r) => {
+    const nome = nomeCurtoBairro(r)
+    if (!grupos[nome]) grupos[nome] = []
+    grupos[nome].push(r)
+  })
+
+  return Object.entries(grupos).map(([nome, lista]) => {
+    const total = lista.length
+    const cats = contarPorCategoria(lista)
+    const classificadas = lista.filter((r) => r.categoria_toponimica)
+    const catDominante = classificadas.length
+      ? ORDEM_CATEGORIAS.filter((k) => k !== OUTRO.id).reduce((a, b) => (cats[b] > cats[a] ? b : a))
+      : null
+
+    const generos = lista.map((r) => normalizarGenero(r.genero_homenageado))
+    const feminino = generos.filter((g) => g === 'feminino').length
+    const masculino = generos.filter((g) => g === 'masculino').length
+    const comSignificado = lista.filter((r) => temTexto(r.significado, 11)).length
+
+    return {
+      nome,
+      total,
+      catDominante: catDominante && cats[catDominante] > 0 ? catDominante : null,
+      pctCatDominante: catDominante ? pct(cats[catDominante], total) : 0,
+      feminino,
+      pessoas: feminino + masculino,
+      /** null quando o bairro ainda não tem nenhuma pessoa homenageada classificada */
+      pctFeminino: feminino + masculino ? pct(feminino, feminino + masculino) : null,
+      comSignificado,
+      pctSignificado: pct(comSignificado, total),
+    }
+  })
+}
+
+/** Campos acompanhados no painel de progresso (rótulo, teste de preenchimento, dica para quem continuar). */
+export const CAMPOS_PESQUISA = [
+  { key: 'categoria', label: 'Categoria toponímica', ok: (r) => temTexto(r.categoria_toponimica) },
+  { key: 'local', label: 'Localização no mapa', ok: (r) => r.lat != null && r.lng != null },
+  { key: 'genero', label: 'Gênero do homenageado', ok: (r) => normalizarGenero(r.genero_homenageado) != null },
+  { key: 'lei', label: 'Lei de denominação', ok: (r) => temTexto(r.legislacao) },
+  { key: 'significado', label: 'História / significado', ok: (r) => temTexto(r.significado, 11) },
+  { key: 'imagem', label: 'Imagem', ok: (r) => temTexto(r.imagem) || temTexto(r.imagemhomenageado) },
+]
+
+/**
+ * Preenchimento de cada campo no acervo todo e por bairro (para a lista de pendências).
+ * @returns {{ geral: Array<{key,label,feitas,total,pct}>, porBairro: Array<{nome,total,pendentes:Object}>, completas: number }}
+ */
+export function buildProgressoPesquisa(ruas) {
+  const total = ruas.length
+  const geral = CAMPOS_PESQUISA.map((c) => {
+    const feitas = ruas.filter(c.ok).length
+    return { key: c.key, label: c.label, feitas, total, pct: pct(feitas, total) }
+  })
+
+  const grupos = {}
+  ruas.forEach((r) => {
+    const nome = nomeCurtoBairro(r)
+    if (!grupos[nome]) grupos[nome] = []
+    grupos[nome].push(r)
+  })
+  const porBairro = Object.entries(grupos).map(([nome, lista]) => {
+    const pendentes = {}
+    CAMPOS_PESQUISA.forEach((c) => {
+      pendentes[c.key] = lista.filter((r) => !c.ok(r)).length
+    })
+    return { nome, total: lista.length, pendentes }
+  })
+
+  const completas = ruas.filter((r) => CAMPOS_PESQUISA.every((c) => c.ok(r))).length
+  return { geral, porBairro, completas }
 }
