@@ -1,3 +1,5 @@
+import { IDS_TAXES, OUTRO, corTaxe, normalizarTaxe, rotuloTaxe } from '@lib/taxonomiaDick.js'
+
 export const OURO_BRANCO_CENTER = [-20.5185, -43.692]
 export const DEFAULT_ZOOM = 15
 
@@ -67,7 +69,8 @@ export function saveBasemapId(id) {
   }
 }
 
-export const CORES_CATEGORIA = {
+/** Cores próprias do mapa para as taxes que já existiam; as demais usam a cor padrão da taxonomia. */
+const PALETA_MAPA = {
   antropotoponimo: '#2563eb',
   fitotoponimo: '#16a34a',
   axiotoponimo: '#9333ea',
@@ -79,19 +82,20 @@ export const CORES_CATEGORIA = {
   outro: '#6b7280',
 }
 
-export const ROTULO_CATEGORIA = {
-  antropotoponimo: 'Antropotopônimo',
-  fitotoponimo: 'Fitotopônimo',
-  axiotoponimo: 'Axiotopônimo',
-  hagiotoponimo: 'Hagiotopônimo',
-  corotoponimo: 'Corotopônimo',
-  zootoponimo: 'Zootopônimo',
-  litotoponimo: 'Litotopônimo',
-  sociotoponimo: 'Sociotopônimo',
-  outro: 'Outro',
-}
+/** Todas as taxes de Dick (src/lib/taxonomiaDick.js) + "outro". */
+export const CATEGORIAS = IDS_TAXES
 
-export const CATEGORIAS = Object.keys(CORES_CATEGORIA)
+export const CORES_CATEGORIA = Object.fromEntries(CATEGORIAS.map((id) => [id, corTaxe(id, PALETA_MAPA)]))
+
+export const ROTULO_CATEGORIA = Object.fromEntries(
+  CATEGORIAS.map((id) => [id, id === OUTRO.id ? 'Outro' : rotuloTaxe(id)]),
+)
+
+/** Categorias com ao menos uma rua na lista, na ordem da taxonomia (filtros e legendas não listam as 30). */
+export function categoriasPresentes(ruas) {
+  const presentes = new Set(ruas.map((r) => normalizarCategoria(r.categoria_toponimica)))
+  return CATEGORIAS.filter((id) => presentes.has(id))
+}
 
 export const CORES_GENERO = {
   masculino: '#06b6d4',
@@ -102,17 +106,7 @@ export const CORES_GENERO = {
 export const GENEROS = ['masculino', 'feminino', 'neutro']
 
 export function normalizarCategoria(cat) {
-  if (!cat) return 'outro'
-  let n = String(cat)
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[\u200b-\u200d\ufeff]/g, '')
-    .trim()
-  n = n.replace(/[-_\s\u00a0]+/g, '')
-  while (n.endsWith('toponimos')) n = n.slice(0, -1)
-  const chaves = CATEGORIAS.filter((k) => k !== 'outro')
-  return chaves.includes(n) ? n : 'outro'
+  return normalizarTaxe(cat)
 }
 
 export function normalizarNomeRua(nome) {

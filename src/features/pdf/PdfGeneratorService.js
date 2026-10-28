@@ -5,6 +5,7 @@
  */
 
 import { supabase } from '../../lib/supabase.js'
+import { IDS_TAXES, corTaxe, normalizarTaxe, rotuloTaxe } from '../../lib/taxonomiaDick.js'
 
 // ============================================
 // CONSTANTES E CONFIGURAÇÕES (ESTILO ARQUIVO)
@@ -16,8 +17,9 @@ const ESTILO = {
     recorte: [180, 180, 180] // Cinza claro para o tracejado
 }
 
-const CORES_CATEGORIA = {
-    antropotoponimo: '#8E3E56', // Tons dessaturados (mais sóbrios)
+// Tons dessaturados (mais sóbrios) para as taxes que já existiam; as demais usam a cor padrão da taxonomia
+const PALETA_PDF = {
+    antropotoponimo: '#8E3E56',
     fitotoponimo: '#3D6142',
     axiotoponimo: '#4B3B6D',
     hagiotoponimo: '#2E5E7A',
@@ -28,22 +30,10 @@ const CORES_CATEGORIA = {
     outro: '#A0A0A0',
 }
 
-const ROTULO_CATEGORIA = {
-    antropotoponimo: 'Antropotopônimo',
-    fitotoponimo: 'Fitotopônimo',
-    axiotoponimo: 'Axiotopônimo',
-    hagiotoponimo: 'Hagiotopônimo',
-    corotoponimo: 'Corotopônimo',
-    zootoponimo: 'Zootopônimo',
-    litotoponimo: 'Litotopônimo',
-    sociotoponimo: 'Sociotopônimo',
-    outro: 'Outro / sem classificação',
-}
+const CORES_CATEGORIA = Object.fromEntries(IDS_TAXES.map((id) => [id, corTaxe(id, PALETA_PDF)]))
 
-const ORDEM_CATEGORIAS = [
-    'antropotoponimo', 'fitotoponimo', 'axiotoponimo', 'hagiotoponimo',
-    'corotoponimo', 'zootoponimo', 'litotoponimo', 'sociotoponimo', 'outro',
-]
+// Taxonomia de Dick (src/lib/taxonomiaDick.js), com "outro" no fim
+const ORDEM_CATEGORIAS = IDS_TAXES
 
 // ============================================
 // FUNÇÕES UTILITÁRIAS
@@ -65,15 +55,11 @@ function hexRgb(hex) {
 }
 
 function rotuloCategoriaToponimica(chaveNormalizada) {
-    return ROTULO_CATEGORIA[chaveNormalizada] || (chaveNormalizada.charAt(0).toUpperCase() + chaveNormalizada.slice(1))
+    return rotuloTaxe(chaveNormalizada)
 }
 
 function normalizarCategoria(cat) {
-    if (!cat) return 'outro'
-    let n = String(cat).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-    n = n.replace(/[-_\s\u00a0]+/g, '')
-    while (n.endsWith('toponimos')) n = n.slice(0, -1)
-    return CORES_CATEGORIA[n] !== undefined ? n : 'outro'
+    return normalizarTaxe(cat)
 }
 
 async function urlParaBase64(url) {

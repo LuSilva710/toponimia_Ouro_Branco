@@ -1,4 +1,5 @@
 import { supabase } from '@lib/supabase.js'
+import { taxesPorNatureza } from '@lib/taxonomiaDick.js'
 
 export function gerarSlug(texto) {
   return String(texto || '')
@@ -121,17 +122,8 @@ export async function testarConfigIa() {
   return data
 }
 
-export const CATEGORIAS = [
-  { value: 'antropotoponimo', label: 'Antropotopônimo' },
-  { value: 'fitotoponimo', label: 'Fitotopônimo' },
-  { value: 'axiotoponimo', label: 'Axiotopônimo' },
-  { value: 'hagiotoponimo', label: 'Hagiotopônimo' },
-  { value: 'corotoponimo', label: 'Corotopônimo' },
-  { value: 'litotoponimo', label: 'Litotopônimo' },
-  { value: 'zootoponimo', label: 'Zootopônimo' },
-  { value: 'sociotoponimo', label: 'Sociotopônimo' },
-  { value: 'outro', label: 'Outro' },
-]
+/** Opções do campo "Categoria Toponímica": as taxes de Dick (src/lib/taxonomiaDick.js) agrupadas por natureza. */
+export const GRUPOS_CATEGORIAS = taxesPorNatureza()
 
 export const SIDEBAR_TABS = [
   { id: 'dashboard', label: 'Dashboard', icon: 'bi-speedometer2' },

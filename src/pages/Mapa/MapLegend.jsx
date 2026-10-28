@@ -1,10 +1,10 @@
 import {
-  CATEGORIAS,
   CORES_CATEGORIA,
   CORES_GENERO,
   GENEROS,
   ROTULO_CATEGORIA,
   buildBasemapOptions,
+  categoriasPresentes,
   contarPorCategoria,
   contarPorGenero,
 } from './mapUtils.js'
@@ -127,7 +127,7 @@ export function MapLegend({ visualMode, ruasFiltradas }) {
           </div>
         ) : (
           <div id="legenda-categorias">
-            {CATEGORIAS.map((cat) => (
+            {categoriasPresentes(ruasFiltradas).map((cat) => (
               <div className="legend-item" key={cat}>
                 <span className="legend-color" style={{ background: CORES_CATEGORIA[cat] }} />
                 {ROTULO_CATEGORIA[cat]}{' '}
@@ -196,7 +196,7 @@ export function MapPanorama({ visualMode, ruasFiltradas }) {
         ) : (
           <div className="category-stats-container" id="panorama-categorias">
             <div id="stats-list-categorias" className="mt-2">
-              {CATEGORIAS.map((cat) => {
+              {categoriasPresentes(ruasFiltradas).map((cat) => {
                 const count = contagemCat[cat] || 0
                 const percent = total > 0 ? ((count / total) * 100).toFixed(1) : '0'
                 return (

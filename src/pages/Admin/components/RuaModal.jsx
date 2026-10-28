@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
-import { CATEGORIAS, gerarSlug } from '../adminApi.js'
+import { GRUPOS_CATEGORIAS, gerarSlug } from '../adminApi.js'
+import { OUTRO, normalizarTaxe, taxe } from '@lib/taxonomiaDick.js'
 
 const empty = {
   id: '',
@@ -42,7 +43,8 @@ export function RuaModal({ open, initial, bairros, onClose, onSubmit }) {
         codigo: initial.codigo || '',
         regional: initial.regional || '',
         mapa: initial.mapa || '',
-        categoria_toponimica: initial.categoria_toponimica || '',
+        // Valores antigos ("Corotopônimo", com acento ou quebra de linha) viram o id da taxonomia
+        categoria_toponimica: initial.categoria_toponimica ? normalizarTaxe(initial.categoria_toponimica) : '',
         genero_homenageado: initial.genero_homenageado || '',
         decada_nomeacao: initial.decada_nomeacao ?? '',
         lat: initial.lat ?? '',
@@ -142,10 +144,21 @@ export function RuaModal({ open, initial, bairros, onClose, onSubmit }) {
                     <label className="form-label">Categoria Toponímica</label>
                     <select className="form-select" value={form.categoria_toponimica} onChange={(e) => set('categoria_toponimica', e.target.value)}>
                       <option value="">Selecione...</option>
-                      {CATEGORIAS.map((c) => (
-                        <option key={c.value} value={c.value}>{c.label}</option>
+                      {GRUPOS_CATEGORIAS.map((g) => (
+                        <optgroup key={g.natureza} label={g.rotulo}>
+                          {g.taxes.map((t) => (
+                            <option key={t.id} value={t.id}>{t.subdivisaoDe ? `↳ ${t.nome}` : t.nome}</option>
+                          ))}
+                        </optgroup>
                       ))}
+                      <option value={OUTRO.id}>{OUTRO.nome}</option>
                     </select>
+                    {taxe(form.categoria_toponimica)?.definicao && (
+                      <div className="form-text">
+                        {taxe(form.categoria_toponimica).definicao}{' '}
+                        <span className="text-muted">Ex.: {taxe(form.categoria_toponimica).exemplos?.join(', ')}.</span>
+                      </div>
+                    )}
                   </div>
                   <div className="col-md-4 mb-3">
                     <label className="form-label">Gênero do Homenageado</label>

@@ -11,6 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "smoke": "node scripts/smoke-mpa.mjs",
+    "taxonomia:sync": "node scripts/taxonomia-sync.mjs",
     "ai:build": "npm run build --prefix ai-provider-kit",
     "ai:classify:dry": "node scripts/ai/ai-classify.mjs --dry-run",
     "ai:classify": "node scripts/ai/ai-classify.mjs --limit=20",

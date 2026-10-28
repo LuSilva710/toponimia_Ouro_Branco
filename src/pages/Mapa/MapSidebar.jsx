@@ -69,6 +69,7 @@ export function MapSidebar({
       <MapBasemapToggle basemapId={basemapId} onBasemap={onBasemap} />
 
       <MapFilterPanel
+        ruas={todasRuas}
         bairros={bairros}
         filtros={filtros}
         onToggle={onToggle}

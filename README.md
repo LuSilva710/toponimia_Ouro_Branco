@@ -53,6 +53,7 @@ As chaves de IA do chatbot ONIM **não** são variáveis do Vite: são cadastrad
 | `npm run build` | Build de produção → `dist/` |
 | `npm run preview` | Serve `dist/` (porta 4173) — URL: `/toponimia_Ouro_Branco/` |
 | `npm run smoke` | Smoke Playwright nas 10 páginas MPA (precisa `preview` rodando) |
+| `npm run taxonomia:sync` | Atualiza o prompt do chatbot com a taxonomia de `src/lib/taxonomiaDick.js` (depois publique a função `onim-chat`) |
 | `npm run ai:build` | Compila `ai-provider-kit` |
 | `npm run ai:classify` | Classifica ruas via IA (precisa kit buildado + env) |
 
@@ -72,7 +73,7 @@ MPA Vite: cada `*.html` monta um entry `src/*.jsx`.
 - `src/pages/` — telas React  
 - `src/components/` — Navbar, Footer, GameChrome  
 - `src/features/` — ONIM, PDF  
-- `src/lib/` — cliente Supabase  
+- `src/lib/` — cliente Supabase, colunas de `ruas` e taxonomia de Dick (fonte única das categorias — ver [`docs/taxonomia-dick.md`](docs/taxonomia-dick.md))  
 - `supabase/functions/onim-chat/` — agente ONIM (servidor)  
 
 Aliases (`vite.config.js` / `jsconfig.json`): `@lib`, `@features`, `@components`, `@pages`, `@styles` **antes** de `@`.

@@ -1,7 +1,8 @@
-import { CATEGORIAS, GENEROS, ROTULO_CATEGORIA } from './mapUtils.js'
+import { CATEGORIAS, GENEROS, ROTULO_CATEGORIA, categoriasPresentes } from './mapUtils.js'
 import { FilterGroupActions } from './FilterGroupActions.jsx'
 
 export function MapFilterPanel({
+  ruas = [],
   bairros,
   filtros,
   onToggle,
@@ -12,6 +13,8 @@ export function MapFilterPanel({
   onResetAll,
 }) {
   const bairroIds = bairros.map((b) => String(b.id))
+  // Só as taxes que existem no acervo (das 30 da taxonomia); o filtro guarda todas como selecionadas
+  const categorias = categoriasPresentes(ruas)
 
   return (
     <>
@@ -66,14 +69,14 @@ export function MapFilterPanel({
             )}
           </h3>
           <FilterGroupActions
-            selectedCount={filtros.categorias.length}
-            totalCount={CATEGORIAS.length}
+            selectedCount={categorias.filter((c) => filtros.categorias.includes(c)).length}
+            totalCount={categorias.length}
             onSelectAll={() => onSelectAll('categorias', CATEGORIAS)}
             onSelectNone={() => onSelectNone('categorias')}
           />
         </div>
         <div id="filtro-categorias" className="filter-options">
-          {CATEGORIAS.map((cat) => (
+          {categorias.map((cat) => (
             <label className="filter-checkbox" key={cat}>
               <input
                 type="checkbox"

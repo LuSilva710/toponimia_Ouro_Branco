@@ -26,6 +26,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { OUTRO, TAXES, normalizarTaxe } from '../../src/lib/taxonomiaDick.js';
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
@@ -81,32 +82,39 @@ const INPUT   = args.find(a => a.startsWith('--input='))?.split('=')[1]
 
 // ─── Categorias válidas ───────────────────────────────────────────────────────
 
-/** Taxonomia toponímica usada pelo projeto (conforme banco Supabase) */
-const CATEGORIAS_VALIDAS = [
-  'antropotopônimo',    // Homenagem a pessoas (ex: Getúlio Vargas, Tiradentes)
-  'hagiotopônimo',      // Referência a santos ou entidades religiosas (ex: São Francisco)
-  'corotopônimo',       // Nome de lugar geográfico maior: cidade, estado, país (ex: Brasil, Minas)
-  'sociotopônimo',      // Instituições, grupos sociais, profissões (ex: Metalúrgicos, Estudantes)
-  'axiotopônimo',       // Títulos de honra, cargos ou dignidade (ex: General, Barão, Professor)
-  'fitotopônimo',       // Vegetação, plantas, flores (ex: Ipês, Orquídeas)
-  'zootopônimo',        // Animais (ex: Lobo Guará, Beija-flor)
-  'outros',             // Não enquadrado nas anteriores
-  'indefinido',         // Dados insuficientes ou ambiguidade total
-];
+/**
+ * Taxonomia de Dick (1990) — fonte única em src/lib/taxonomiaDick.js.
+ * A IA responde com o id (sem acento), que é o valor gravado em ruas.categoria_toponimica.
+ */
+const CATEGORIAS_VALIDAS = [...TAXES.map((t) => t.id), OUTRO.id, 'indefinido'];
+
+/**
+ * Título + nome próprio ("Doutor Pedrinho", "Presidente Prudente"):
+ *   'antropotoponimo' → regra histórica do projeto (o nome da pessoa prevalece)
+ *   'axiotoponimo'    → definição literal de Dick (1990, p. 32)
+ * Ver docs/taxonomia-dick.md, seção "Decisões do projeto".
+ */
+const REGRA_TITULO_COM_NOME = 'antropotoponimo';
+
+const DEFINICOES = TAXES.map((t) =>
+  `- ${t.id} (${t.nome}): ${t.definicao} Ex.: ${t.exemplos.join(', ')}.`
+).join('\n');
 
 // ─── System prompt para classificação ────────────────────────────────────────
 
 const SYSTEM_PROMPT_CLASSIF = `
-Você é um especialista em Toponímia brasileira. Sua tarefa é analisar o nome de um logradouro e classificá-lo em UMA das categorias permitidas.
+Você é um especialista em Toponímia brasileira e classifica nomes de logradouros segundo a taxonomia de Dick (1990).
+
+TAXONOMIA (use o id antes dos parênteses):
+${DEFINICOES}
 
 REGRAS DE CLASSIFICAÇÃO:
-1. ANTROPOTOPÔNIMO: Use se houver Nome e/ou Sobrenome de pessoa. Se houver título junto ao nome, ANTROPOTOPÔNIMO ainda é a prioridade.
-2. HAGIOTOPÔNIMO: Use para nomes de santos ("São", "Santo", "Santa", "Nossa Senhora").
-3. COROTOPÔNIMO: Use para nomes de Cidades, Estados, Países ou Regiões.
-4. SOCIOTOPÔNIMO: Use para nomes de profissões, grupos ou classes (ex: Rua dos Metalúrgicos, dos Estudantes).
-5. AXIOTOPÔNIMO: Use apenas quando houver UM TÍTULO sem nome de pessoa (ex: "Rua do Barão", "Avenida do Governador").
-6. FITO/ZOOTOPÔNIMO: Nomes de plantas ou animais.
-7. OUTROS / INDEFINIDO: Se o nome for uma data, cor, número ou conceito que não se encaixe acima, use "outros". Se não houver dados suficientes, use "indefinido".
+1. Classifique pela motivação semântica do nome (o que ele homenageia ou descreve), em UMA única taxe.
+2. Nome de pessoa (prenome e/ou sobrenome) sem título: antropotoponimo.
+3. Título ou dignidade junto a nome de pessoa (Doutor, Professor, Padre, Presidente, Coronel…): ${REGRA_TITULO_COM_NOME}.
+4. Santos e santas ("São", "Santo", "Santa"): hagiotoponimo. Outros nomes sagrados, festas e locais de culto: hierotoponimo.
+5. Datas e movimentos históricos ("Inconfidentes", "Vinte e Um de Abril"): historiotoponimo.
+6. Se nenhuma taxe se aplicar, use "${OUTRO.id}". Se não houver dados suficientes para decidir, use "indefinido".
 
 LISTA DE CATEGORIAS PERMITIDAS:
 ${CATEGORIAS_VALIDAS.join(', ')}
@@ -202,7 +210,9 @@ Retorne um array JSON com o mesmo número de elementos, cada um contendo:
         resultados.push({
           ...item,
           original,
-          categoria_valida: CATEGORIAS_VALIDAS.includes(item.categoria),
+          // Aceita variações ("Antropotopônimo") e guarda o id canônico
+          categoria: item.categoria === 'indefinido' ? 'indefinido' : normalizarTaxe(item.categoria),
+          categoria_valida: CATEGORIAS_VALIDAS.includes(item.categoria === 'indefinido' ? 'indefinido' : normalizarTaxe(item.categoria)),
         });
       });
 
@@ -251,9 +261,14 @@ function _salvarResultados(resultados) {
   });
 
   // SQL para Supabase (apenas resultados com ID e confiança >= 0.7)
-  const seguros = resultados.filter(r => r.id && !r.erro && r.confianca >= 0.7);
+  const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+  const seguros = resultados.filter(r =>
+    r.id && UUID.test(r.id) && !r.erro && r.confianca >= 0.7
+    && r.categoria_valida && r.categoria !== 'indefinido'
+  );
+  const comentario = (txt) => String(txt ?? '').replace(/[\r\n]+/g, ' ').slice(0, 200);
   const sqlLines = seguros.map(r =>
-    `UPDATE ruas SET categoria_toponimica = '${r.categoria}', classificado_por_ia = true WHERE id = '${r.id}'; -- ${r.confianca.toFixed(2)} | ${r.justificativa}`
+    `UPDATE ruas SET categoria_toponimica = '${r.categoria}' WHERE id = '${r.id}'; -- ${Number(r.confianca).toFixed(2)} | ${comentario(r.justificativa)}`
   );
 
   const sql = `-- ai-classify.mjs — ${new Date().toISOString()}
