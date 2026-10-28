@@ -1,0 +1,121 @@
+/* ============================================
+   TEMA DOS JOGOS — referência: public/docs/Cruzadinha (A4).pdf
+   Paleta, tipografia e a faixa de título com borda ondulada.
+   Importado por: portal, quiz, associação, cruzadinha e ranking.
+   Fontes (no <head> de cada HTML): Barlow Condensed (no lugar da Agrandir Narrow do PDF) + Open Sans.
+   ============================================ */
+
+:root {
+  --papel: #faf6e7;
+  --papel-fundo: #f3eedb;
+  --casa: #ece9d9;
+  --linha: #e2d7bb;
+  --marrom: #7c5220;
+  --marrom-escuro: #5e3d17;
+  --marrom-medio: #806342; /* PDF usa #8c6f4a; escurecido para 4,5:1 em textos pequenos */
+  --creme: #faf7e8;
+  --tinta: #4f3414;
+  --ativo: #f3dfb4;
+  --ativo-palavra: #f7ead0;
+  --correct: #e4ead0;
+  --correct-borda: #6b7d3a;
+  --correct-texto: #4b5a24;
+  --incorrect: #f6dccf;
+  --incorrect-borda: #a1452a;
+  --incorrect-texto: #8a3a22;
+  --fonte-titulo: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+  --fonte-texto: 'Open Sans', 'Segoe UI', sans-serif;
+}
+
+body {
+  font-family: var(--fonte-texto);
+  background-color: var(--papel-fundo);
+  color: var(--tinta);
+}
+
+/* Faixa marrom com borda ondulada (painel lateral do PDF) */
+.faixa-titulo {
+  position: relative;
+  background: var(--marrom);
+  color: var(--creme);
+  text-align: center;
+  border-radius: 14px 14px 0 0;
+  padding: 1.4rem 1rem 1.1rem;
+  margin-bottom: 2.4rem;
+}
+
+.faixa-titulo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -15px;
+  height: 16px;
+  background: radial-gradient(circle at 50% 0, var(--marrom) 15px, transparent 16px) 0 0 / 32px 16px repeat-x;
+}
+
+.faixa-titulo h1,
+.faixa-titulo h2 {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  font-size: clamp(2rem, 4.5vw, 2.7rem);
+  line-height: 1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--creme);
+  margin: 0;
+}
+
+.faixa-titulo p {
+  margin: 0.5rem 0 0;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--creme);
+  opacity: 0.9;
+}
+
+/* Botões Bootstrap usados nos jogos */
+.btn-primary {
+  background: var(--marrom) !important;
+  border-color: var(--marrom) !important;
+  color: var(--creme) !important;
+  border-radius: 999px;
+  font-weight: 600;
+  padding-left: 1.2rem;
+  padding-right: 1.2rem;
+}
+.btn-primary:hover,
+.btn-primary:focus-visible { background: var(--marrom-escuro) !important; border-color: var(--marrom-escuro) !important; }
+.btn-primary:disabled { opacity: 0.6; }
+
+.btn-outline-primary,
+.btn-outline-secondary {
+  color: var(--marrom) !important;
+  border-color: var(--marrom) !important;
+  background: transparent !important;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover { background: var(--casa) !important; color: var(--marrom-escuro) !important; }
+
+.form-control {
+  background: var(--papel);
+  border-color: var(--linha);
+  color: var(--tinta);
+}
+.form-control::placeholder { color: var(--marrom-medio); opacity: 0.8; }
+.form-control:focus {
+  background: var(--papel);
+  border-color: var(--marrom-medio);
+  color: var(--tinta);
+  box-shadow: 0 0 0 0.2rem rgba(124, 82, 32, 0.2);
+}
+
+/* Avisos do Bootstrap sobre o fundo creme (o amarelo padrão não tem contraste) */
+.text-warning { color: #8a5a00 !important; }
+.text-danger { color: var(--incorrect-texto) !important; }
+
+@media (max-width: 575.98px) {
+  .faixa-titulo { border-radius: 10px 10px 0 0; padding: 1.1rem 0.8rem 0.9rem; }
+}

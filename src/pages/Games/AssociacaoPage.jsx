@@ -15,12 +15,17 @@ async function carregarPares() {
 
   if (error || !data) return []
   const shuffled = data.filter((r) => r.bairros?.nome).sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, 8).map((r) => ({
+  // Sem pares repetidos (mesma rua no mesmo bairro): o id identifica o botão na tela
+  const unicos = [...new Map(shuffled.map((r) => [`${r.nome_oficial}::${r.bairros.nome}`, r])).values()]
+  return unicos.slice(0, 8).map((r) => ({
     id: `${r.nome_oficial}::${r.bairros.nome}`,
     rua: r.nome_oficial,
     bairro: r.bairros.nome,
   }))
 }
+
+/** Cada par aparece duas vezes (uma por coluna): o estado é por botão, não por par. */
+const chave = (tipo, par) => `${tipo}:${par.id}`
 
 export default function AssociacaoPage() {
   const [fase, setFase] = useState('setup')
@@ -38,8 +43,12 @@ export default function AssociacaoPage() {
   const [error, setError] = useState('')
   const [rankingFalhou, setRankingFalhou] = useState(false)
   const timerRef = useRef(null)
+  const flashRef = useRef(null)
 
-  useEffect(() => () => clearInterval(timerRef.current), [])
+  useEffect(() => () => {
+    clearInterval(timerRef.current)
+    clearTimeout(flashRef.current)
+  }, [])
 
   async function iniciar() {
     setLoading(true)
@@ -56,6 +65,7 @@ export default function AssociacaoPage() {
       setMatched(new Set())
       setSelected(null)
       setFlashWrong(new Set())
+      clearTimeout(flashRef.current)
       setAcertos(0)
       setSegundos(0)
       setFase('game')
@@ -79,47 +89,43 @@ export default function AssociacaoPage() {
   }
 
   function escolher(tipo, par) {
-    if (matched.has(par.id) || fase !== 'game') return
+    if (matched.has(chave(tipo, par)) || fase !== 'game') return
 
-    if (!selected) {
-      setSelected({ tipo, par })
-      return
-    }
-
-    if (selected.tipo === tipo) {
-      setSelected({ tipo, par })
+    // Primeiro clique, troca dentro da mesma coluna, ou clique de novo para desmarcar
+    if (!selected || selected.tipo === tipo) {
+      const mesmo = selected && chave(selected.tipo, selected.par) === chave(tipo, par)
+      setSelected(mesmo ? null : { tipo, par })
       return
     }
 
     const ruaPar = tipo === 'rua' ? par : selected.par
     const bairroPar = tipo === 'bairro' ? par : selected.par
+    // Compara pelo nome do bairro: há bairros repetidos na coluna (várias ruas no mesmo bairro)
     const ok = ruaPar.bairro === bairroPar.bairro
 
     if (ok) {
       const nextMatched = new Set(matched)
-      nextMatched.add(ruaPar.id)
-      nextMatched.add(bairroPar.id)
-      // same id for both since id is rua::bairro
-      nextMatched.add(par.id)
-      nextMatched.add(selected.par.id)
+      nextMatched.add(chave('rua', ruaPar))
+      nextMatched.add(chave('bairro', bairroPar))
       setMatched(nextMatched)
       const nextAcertos = acertos + 1
       setAcertos(nextAcertos)
       setSelected(null)
       if (nextAcertos >= pares.length) finalizar(nextAcertos, segundos)
     } else {
-      const wrong = new Set([par.id, selected.par.id])
-      setFlashWrong(wrong)
+      setFlashWrong(new Set([chave('rua', ruaPar), chave('bairro', bairroPar)]))
       setSelected(null)
-      setTimeout(() => setFlashWrong(new Set()), 800)
+      clearTimeout(flashRef.current)
+      flashRef.current = setTimeout(() => setFlashWrong(new Set()), 800)
     }
   }
 
   function itemClass(par, tipo) {
+    const k = chave(tipo, par)
     let cls = 'assoc-item'
-    if (matched.has(par.id)) cls += ' correct matched'
-    else if (flashWrong.has(par.id)) cls += ' wrong'
-    else if (selected?.tipo === tipo && selected.par.id === par.id) cls += ' selected'
+    if (matched.has(k)) cls += ' correct matched'
+    else if (flashWrong.has(k)) cls += ' wrong'
+    else if (selected && chave(selected.tipo, selected.par) === k) cls += ' selected'
     return cls
   }
 
@@ -128,25 +134,31 @@ export default function AssociacaoPage() {
       <GameChrome />
       <div className="assoc-container">
         {fase === 'setup' && (
-          <div className="assoc-header">
-            <h1>
-              <i className="bi bi-link-45deg me-2" aria-hidden="true" />
-              Jogo de Associação
-            </h1>
-            <p>Conecte cada rua ao seu bairro correto</p>
-            <input
-              className="form-control form-control-sm mb-2"
-              style={{ maxWidth: 250, margin: '0 auto' }}
-              placeholder="Seu nome"
-              maxLength={40}
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-            />
-            {error && <p className="text-danger">{error}</p>}
-            <button type="button" className="btn btn-primary" disabled={loading} onClick={iniciar}>
-              {loading ? 'Carregando…' : 'Iniciar Jogo'}
-            </button>
-          </div>
+          <>
+            <div className="assoc-header faixa-titulo">
+              <h1>
+                <i className="bi bi-link-45deg me-2" aria-hidden="true" />
+                Jogo de Associação
+              </h1>
+              <p>Conecte cada rua ao seu bairro correto</p>
+            </div>
+            <div className="assoc-inicio">
+              <input
+                className="form-control mb-3"
+                style={{ maxWidth: 260, margin: '0 auto' }}
+                placeholder="Seu nome"
+                aria-label="Seu nome"
+                maxLength={40}
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+              />
+              {error && <p className="text-danger">{error}</p>}
+              <button type="button" className="btn btn-primary btn-lg" disabled={loading} onClick={iniciar}>
+                <i className="bi bi-play-fill me-1" aria-hidden="true" />
+                {loading ? 'Carregando…' : 'Iniciar Jogo'}
+              </button>
+            </div>
+          </>
         )}
 
         {fase === 'game' && (
@@ -172,7 +184,8 @@ export default function AssociacaoPage() {
                     key={`rua-${p.id}`}
                     type="button"
                     className={itemClass(p, 'rua')}
-                    disabled={matched.has(p.id)}
+                    disabled={matched.has(chave('rua', p))}
+                    aria-pressed={selected ? chave(selected.tipo, selected.par) === chave('rua', p) : false}
                     onClick={() => escolher('rua', p)}
                   >
                     {p.rua}
@@ -189,7 +202,8 @@ export default function AssociacaoPage() {
                     key={`bairro-${p.id}`}
                     type="button"
                     className={itemClass(p, 'bairro')}
-                    disabled={matched.has(p.id)}
+                    disabled={matched.has(chave('bairro', p))}
+                    aria-pressed={selected ? chave(selected.tipo, selected.par) === chave('bairro', p) : false}
                     onClick={() => escolher('bairro', p)}
                   >
                     {p.bairro}

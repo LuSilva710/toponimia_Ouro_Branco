@@ -21,8 +21,17 @@ function medal(i) {
   return String(i + 1)
 }
 
+/** Filtros iniciais pela URL: ranking.html?jogo=quiz&sala=8A (link "ranking da turma" do portal). */
+function paramsIniciais() {
+  const p = new URLSearchParams(window.location.search)
+  const jogo = JOGOS.some((j) => j.id === p.get('jogo')) ? p.get('jogo') : 'quiz'
+  return { jogo, sala: (p.get('sala') || '').trim().slice(0, 40) }
+}
+
 export default function RankingPage() {
-  const [jogo, setJogo] = useState('quiz')
+  const [inicial] = useState(paramsIniciais)
+  const [jogo, setJogo] = useState(inicial.jogo)
+  const [sala, setSala] = useState(inicial.sala)
   const [periodo, setPeriodo] = useState('geral')
   const [rows, setRows] = useState([])
   const [loading, setLoading] = useState(true)
@@ -39,6 +48,8 @@ export default function RankingPage() {
         .eq('jogo', jogo)
         .order('pontos', { ascending: false })
         .limit(20)
+
+      if (sala) query = query.eq('sala_id', sala)
 
       if (periodo === 'hoje') {
         const hoje = new Date().toISOString().split('T')[0]
@@ -58,7 +69,7 @@ export default function RankingPage() {
     } finally {
       setLoading(false)
     }
-  }, [jogo, periodo])
+  }, [jogo, periodo, sala])
 
   useEffect(() => {
     carregar()
@@ -80,13 +91,32 @@ export default function RankingPage() {
     <>
       <GameChrome />
       <div className="ranking-container">
-        <div className="ranking-header">
+        <div className="ranking-header faixa-titulo">
           <h1>
             <i className="bi bi-trophy me-2" aria-hidden="true" />
             Ranking
           </h1>
           <p>Melhores pontuações dos jogos educativos</p>
         </div>
+
+        {sala && (
+          <div className="ranking-turma" role="status">
+            <span>
+              <i className="bi bi-people-fill me-1" aria-hidden="true" />
+              Ranking da turma <strong>{sala}</strong>
+            </span>
+            <button
+              type="button"
+              className="ranking-turma-limpar"
+              onClick={() => {
+                setSala('')
+                window.history.replaceState(null, '', window.location.pathname)
+              }}
+            >
+              Ver ranking geral
+            </button>
+          </div>
+        )}
 
         <div className="ranking-tabs">
           {JOGOS.map((j) => (

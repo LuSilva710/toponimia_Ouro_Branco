@@ -3,9 +3,9 @@
      --dark: #000000;
      --medium: #f0f0f0;
      --accent: #f5f5f5;
-     --correct: #e8ffe8;
-     --incorrect: #ffe8e8;
      --border-color: #000;
+
+     /* Paleta do PDF "Cruzadinha (A4)": tema_jogos.css */
  }
 
  * {
@@ -16,12 +16,12 @@
 
  html,
  body {
-     font-family: 'Poppins', sans-serif;
+     font-family: 'Open Sans', sans-serif;
      line-height: 1.6;
      margin: 0;
      padding: 0;
-     color: #333;
-     background-color: var(--light);
+     color: var(--tinta);
+     background-color: var(--papel-fundo);
      min-height: 100vh;
      overflow-x: hidden;
  }
@@ -31,9 +31,9 @@
  h3,
  h4,
  h5 {
-     font-family: 'Noto Serif', serif;
+     font-family: 'Barlow Condensed', sans-serif;
      font-weight: 700;
-     color: var(--dark);
+     color: var(--marrom);
  }
 
  /* Estilo da Navbar */
@@ -75,36 +75,52 @@
      display: flex;
      flex-direction: column;
      align-items: center;
-     padding: 1.5rem;
+     --pad: 1.5rem;
+     padding: var(--pad);
      margin: 120px 15px 30px;
-     background: white;
+     background: var(--papel);
      border-radius: 15px;
-     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+     box-shadow: 0 6px 20px rgba(92, 61, 23, 0.10);
      max-width: 1400px;
      margin-left: auto;
      margin-right: auto;
-     border: 1px solid #ddd;
+     border: 1px solid var(--linha);
  }
 
  .game-title {
-     font-size: 2rem;
-     margin-bottom: 1.2rem;
-     color: var(--dark);
-     text-align: center;
      position: relative;
-     padding-bottom: 10px;
+     align-self: stretch;
+     margin: calc(-1 * var(--pad)) calc(-1 * var(--pad)) 2.2rem;
+     padding: 1.3rem 1rem 1rem;
+     background: var(--marrom);
+     color: var(--creme);
+     border-radius: 14px 14px 0 0;
+     text-align: center;
+     font-size: 2.6rem;
+     line-height: 1;
+     letter-spacing: 0.02em;
+     text-transform: uppercase;
  }
 
- .game-title:after {
+ .game-title-sub {
+     display: block;
+     margin-top: 0.4rem;
+     font-family: 'Open Sans', sans-serif;
+     font-size: 0.95rem;
+     font-weight: 600;
+     letter-spacing: 0.12em;
+     opacity: 0.85;
+ }
+
+ /* Borda ondulada: semicírculos marrons pendurados na base da faixa */
+ .game-title::after {
      content: '';
      position: absolute;
-     bottom: 0;
-     left: 50%;
-     transform: translateX(-50%);
-     width: 70px;
-     height: 3px;
-     background: var(--dark);
-     border-radius: 2px;
+     left: 0;
+     right: 0;
+     bottom: -15px;
+     height: 16px;
+     background: radial-gradient(circle at 50% 0, var(--marrom) 15px, transparent 16px) 0 0 / 32px 16px repeat-x;
  }
 
  .game-header {
@@ -125,11 +141,11 @@
  }
 
  .game-button {
-     background: var(--dark);
-     color: white;
-     border: none;
-     padding: 8px 16px;
-     border-radius: 5px;
+     background: var(--marrom);
+     color: var(--creme);
+     border: 2px solid var(--marrom);
+     padding: 8px 18px;
+     border-radius: 999px;
      cursor: pointer;
      font-size: 0.95rem;
      font-weight: 500;
@@ -137,13 +153,19 @@
      align-items: center;
      gap: 6px;
      transition: all 0.3s ease;
-     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+     box-shadow: 0 2px 5px rgba(92, 61, 23, 0.15);
  }
 
  .game-button:hover {
-     background: #333;
+     background: var(--marrom-escuro);
+     border-color: var(--marrom-escuro);
      transform: translateY(-2px);
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+     box-shadow: 0 4px 8px rgba(92, 61, 23, 0.2);
+ }
+
+ .game-button:focus-visible {
+     outline: 3px solid var(--ativo);
+     outline-offset: 2px;
  }
 
  .game-button:active {
@@ -151,27 +173,44 @@
  }
 
  .game-button.restart {
-     background: #555;
+     background: transparent;
+     color: var(--marrom);
  }
 
  .game-button.restart:hover {
-     background: #444;
+     background: var(--casa);
+     color: var(--marrom-escuro);
  }
 
+ /* Bege com texto marrom: creme sobre marrom-médio ficaria abaixo de 4,5:1 */
  .game-button.hint {
-     background: #777;
-     color: white;
+     background: var(--casa);
+     border-color: var(--marrom-medio);
+     color: var(--marrom);
  }
 
  .game-button.hint:hover {
-     background: #666;
+     background: var(--ativo);
+     border-color: var(--marrom);
+     color: var(--marrom-escuro);
+ }
+
+ .game-container .form-control {
+     background: var(--papel);
+     border-color: var(--linha);
+     color: var(--tinta);
+ }
+
+ .game-container .form-control:focus {
+     border-color: var(--marrom-medio);
+     box-shadow: 0 0 0 0.2rem rgba(124, 82, 32, 0.2);
  }
 
  #timer {
      font-size: 1.1rem;
      font-weight: 500;
-     color: var(--dark);
-     background: var(--accent);
+     color: var(--marrom);
+     background: var(--casa);
      padding: 7px 14px;
      border-radius: 25px;
      display: flex;
@@ -190,7 +229,7 @@
  .crossword-section {
      flex: 1.6;
      min-width: 450px;
-     background: var(--light);
+     background: transparent;
      padding: 15px;
      border-radius: 8px;
      display: flex;
@@ -202,10 +241,10 @@
  .clues-section {
      flex: 0.9;
      min-width: 250px;
-     background: var(--accent);
-     border-radius: 10px;
+     background: var(--papel-fundo);
+     border: 1px solid var(--linha);
+     border-radius: 14px;
      padding: 20px;
-     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
      max-height: 500px;
      overflow-y: auto;
      scroll-behavior: smooth;
@@ -220,20 +259,21 @@
  }
 
  .clues-section::-webkit-scrollbar-thumb {
-     background: #ccc;
+     background: var(--linha);
      border-radius: 3px;
  }
 
  .clues-section::-webkit-scrollbar-thumb:hover {
-     background: #999;
+     background: var(--marrom-medio);
  }
 
  .clues-section h2 {
-     color: var(--dark);
-     font-size: 1.6rem;
+     color: var(--marrom);
+     font-size: 1.8rem;
+     text-transform: uppercase;
      margin-bottom: 15px;
      padding-bottom: 8px;
-     border-bottom: 2px solid var(--dark);
+     border-bottom: 2px solid var(--marrom);
  }
 
  #crossword-container {
@@ -262,8 +302,8 @@
      display: flex;
      justify-content: center;
      align-items: center;
-     background: white;
-     border: 1px solid var(--border-color);
+     background: var(--casa);
+     border: 1px solid var(--marrom);
      box-sizing: border-box;
      aspect-ratio: 1 / 1;
  }
@@ -275,7 +315,7 @@
      font-size: 1rem;
      font-weight: bold;
      text-transform: uppercase;
-     color: var(--dark);
+     color: var(--tinta);
      outline: none;
      border: none;
      background: transparent;
@@ -284,24 +324,24 @@
  }
 
  .grid-cell input:focus {
-     background-color: rgba(0, 0, 0, 0.12);
-     box-shadow: inset 0 0 0 2px #333;
+     background-color: var(--ativo);
+     box-shadow: inset 0 0 0 2px var(--marrom);
      z-index: 10;
  }
 
  /* Highlight visual para toda a palavra ativa */
  .grid-cell.highlighted {
-     background: rgba(0, 0, 0, 0.06);
+     background: var(--ativo-palavra);
      transition: background 0.2s ease;
  }
 
  /* Feedback sutil de palavra completa */
  .grid-cell.word-complete input {
-     border-bottom: 2px solid #4a7;
+     border-bottom: 2px solid var(--correct-borda);
  }
 
  .grid-cell.word-complete input:disabled {
-     border-bottom: 2px solid #4a7;
+     border-bottom: 2px solid var(--correct-borda);
  }
 
  .grid-cell.empty {
@@ -311,7 +351,7 @@
  }
 
  .grid-cell input:disabled {
-     color: var(--dark);
+     color: var(--correct-texto);
      background: var(--correct);
  }
 
@@ -329,8 +369,8 @@
      left: 0;
      font-size: 0.9rem;
      font-weight: 700;
-     color: var(--dark);
-     opacity: 0.75;
+     color: var(--marrom);
+     opacity: 0.9;
      z-index: 3;
      line-height: 1;
      pointer-events: none;
@@ -345,11 +385,11 @@
  #clues-list li {
      margin-bottom: 15px;
      padding: 12px;
-     background: white;
-     border-radius: 6px;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+     background: var(--papel);
+     border-radius: 8px;
+     box-shadow: 0 1px 3px rgba(92, 61, 23, 0.08);
      transition: all 0.25s ease;
-     border-left: 3px solid var(--dark);
+     border-left: 3px solid var(--marrom);
      font-size: 0.95rem;
      cursor: pointer;
      user-select: none;
@@ -357,14 +397,14 @@
 
  #clues-list li:hover {
      transform: translateX(3px);
-     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+     box-shadow: 0 4px 8px rgba(92, 61, 23, 0.12);
  }
 
  /* Dica ativa — sincronizada com o grid */
  #clues-list li.clue-active {
-     background: #eee;
-     border-left: 4px solid #333;
-     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+     background: var(--ativo-palavra);
+     border-left: 4px solid var(--marrom-escuro);
+     box-shadow: 0 4px 10px rgba(92, 61, 23, 0.15);
      transform: translateX(3px);
  }
 
@@ -372,7 +412,7 @@
  .clue-direction {
      display: inline-block;
      font-size: 0.7rem;
-     color: #888;
+     color: var(--marrom-medio);
      margin-left: 4px;
      font-weight: 400;
      vertical-align: middle;
@@ -381,13 +421,14 @@
 
  #clues-list li strong {
      display: inline-block;
-     width: 22px;
-     height: 22px;
-     background: var(--dark);
-     color: white;
+     width: 24px;
+     height: 24px;
+     background: transparent;
+     border: 1.5px solid var(--marrom);
+     color: var(--marrom);
      border-radius: 50%;
      text-align: center;
-     line-height: 22px;
+     line-height: 21px;
      margin-right: 6px;
      font-size: 0.8rem;
  }
@@ -397,7 +438,7 @@
      text-align: center;
      width: 100%;
      padding: 15px;
-     background: var(--accent);
+     background: var(--casa);
      border-radius: 8px;
  }
 
@@ -410,7 +451,7 @@
  .progress-container {
      width: 100%;
      height: 8px;
-     background: #e9ecef;
+     background: var(--linha);
      border-radius: 4px;
      margin: 15px 0;
      overflow: hidden;
@@ -418,7 +459,7 @@
 
  #progress-bar {
      height: 100%;
-     background: var(--dark);
+     background: var(--marrom);
      width: 0%;
      transition: width 0.5s ease;
  }
@@ -510,8 +551,8 @@
      align-items: center;
      gap: 10px;
      font-size: 0.85rem;
-     color: #666;
-     font-weight: 500;
+     color: var(--marrom-medio);
+     font-weight: 600;
  }
 
  .mobile-word-nav {
@@ -532,11 +573,11 @@
  .mobile-clue-card {
      flex: 1;
      min-width: 0;
-     background: var(--accent);
-     border: 1px solid #ddd;
+     background: var(--casa);
+     border: 1px solid var(--linha);
      border-radius: 10px;
      padding: 12px 14px;
-     border-left: 4px solid var(--dark);
+     border-left: 4px solid var(--marrom);
  }
 
  .mobile-clue-meta {
@@ -553,8 +594,10 @@
      justify-content: center;
      width: 28px;
      height: 28px;
-     background: var(--dark);
-     color: white;
+     background: transparent;
+     border: 1.5px solid var(--marrom);
+     color: var(--marrom);
+     font-weight: 700;
      border-radius: 50%;
      font-size: 0.85rem;
  }
@@ -562,7 +605,7 @@
  .mobile-clue-done {
      margin-left: auto;
      font-size: 0.75rem;
-     color: #2c6e49;
+     color: var(--correct-texto);
      font-weight: 600;
      display: inline-flex;
      align-items: center;
@@ -573,7 +616,7 @@
      margin: 0;
      font-size: 0.9rem;
      line-height: 1.4;
-     color: #333;
+     color: var(--tinta);
      display: -webkit-box;
      -webkit-box-orient: vertical;
      overflow: hidden;
@@ -583,7 +626,7 @@
      margin: 0;
      text-align: center;
      font-size: 0.78rem;
-     color: #888;
+     color: var(--marrom-medio);
      display: flex;
      align-items: center;
      justify-content: center;
@@ -597,9 +640,9 @@
      overflow: auto;
      -webkit-overflow-scrolling: touch;
      overscroll-behavior: contain;
-     border: 1px solid #ddd;
+     border: 1px solid var(--linha);
      border-radius: 10px;
-     background: #fafafa;
+     background: var(--papel);
      touch-action: pan-x pan-y;
      scrollbar-width: thin;
  }
@@ -610,7 +653,7 @@
  }
 
  .mobile-board-viewport::-webkit-scrollbar-thumb {
-     background: #999;
+     background: var(--marrom-medio);
      border-radius: 3px;
  }
 
@@ -665,25 +708,25 @@
      width: 40px;
      height: 40px;
      border-radius: 8px;
-     border: 1.5px solid #ccc;
-     background: white;
-     color: var(--dark);
-     font-weight: 600;
+     border: 1.5px solid var(--linha);
+     background: var(--papel);
+     color: var(--marrom);
+     font-weight: 700;
      font-size: 0.9rem;
      cursor: pointer;
      transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
  }
 
  .mobile-word-chip.is-active {
-     background: var(--dark);
-     border-color: var(--dark);
-     color: white;
+     background: var(--marrom);
+     border-color: var(--marrom);
+     color: var(--creme);
  }
 
  .mobile-word-chip.is-done:not(.is-active) {
      background: var(--correct);
-     border-color: #4a7;
-     color: #2c6e49;
+     border-color: var(--correct-borda);
+     color: var(--correct-texto);
  }
 
  .mobile-word-chip:active {
@@ -697,18 +740,18 @@
      justify-content: center;
      gap: 8px;
      padding: 10px 12px;
-     border: 1px dashed #bbb;
+     border: 1px dashed var(--marrom-medio);
      border-radius: 8px;
      background: transparent;
-     color: #555;
+     color: var(--marrom);
      font-size: 0.9rem;
      font-weight: 500;
      cursor: pointer;
  }
 
  .mobile-clues-toggle:hover {
-     background: var(--accent);
-     color: var(--dark);
+     background: var(--casa);
+     color: var(--marrom-escuro);
  }
 
  .mobile-clues-panel {
@@ -747,12 +790,12 @@
  }
 
  .crossword-scroll-wrapper::-webkit-scrollbar-track {
-     background: #f0f0f0;
+     background: var(--casa);
      border-radius: 3px;
  }
 
  .crossword-scroll-wrapper::-webkit-scrollbar-thumb {
-     background: #999;
+     background: var(--marrom-medio);
      border-radius: 3px;
  }
 
@@ -770,7 +813,7 @@
  /* === Tablet / Mobile (< 992px) === */
  @media (max-width: 992px) {
      .game-title {
-         font-size: 1.8rem;
+         font-size: 2.2rem;
      }
  }
 
@@ -778,7 +821,7 @@
  @media (max-width: 768px) {
      .game-container {
          margin-top: 85px;
-         padding: 1rem;
+         --pad: 1rem;
          border-radius: 10px;
      }
 
@@ -810,7 +853,8 @@
      }
 
      .game-title {
-         font-size: 1.5rem;
+         font-size: 1.9rem;
+         border-radius: 10px 10px 0 0;
      }
 
      .clues-section {
@@ -859,18 +903,17 @@
  @media (max-width: 576px) {
      .game-container {
          margin: 75px 8px 20px;
-         padding: 0.8rem;
+         --pad: 0.8rem;
          border-radius: 8px;
      }
 
      .game-title {
-         font-size: 1.25rem;
-         margin-bottom: 0.8rem;
+         font-size: 1.7rem;
+         border-radius: 8px 8px 0 0;
      }
 
-     .game-title:after {
-         width: 50px;
-         height: 2px;
+     .game-title-sub {
+         font-size: 0.8rem;
      }
 
      .controls {
@@ -966,11 +1009,11 @@
  @media (max-width: 400px) {
      .game-container {
          margin: 70px 5px 15px;
-         padding: 0.6rem;
+         --pad: 0.6rem;
      }
 
      .game-title {
-         font-size: 1.1rem;
+         font-size: 1.5rem;
      }
 
      .game-button {

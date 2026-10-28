@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import QuizPage from './pages/Games/QuizPage.jsx'
+import './styles/tema_jogos.css'
 import './styles/style_games.css'
 
 createRoot(document.getElementById('root')).render(

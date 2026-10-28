@@ -9,9 +9,9 @@
 }
 
 body {
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  background-color: var(--lighter-gray);
-  color: var(--medium-gray);
+  font-family: var(--fonte-texto);
+  background-color: var(--papel-fundo);
+  color: var(--tinta);
   margin: 0;
   line-height: 1.6;
   min-height: 100vh;
@@ -56,119 +56,478 @@ body {
   opacity: 1;
 }
 
-.hub-main { margin-top: 60px; padding: 30px 20px; min-height: calc(100vh - 60px); }
+/* ============================================
+   PORTAL EDUCATIVO
+   ============================================ */
 
-.hub-hero {
-  text-align: center;
-  padding: 40px 20px;
-  background: linear-gradient(135deg, rgba(26,26,26,0.92) 0%, rgba(45,45,45,0.88) 50%, rgba(10,10,10,0.95) 100%);
+.portal-main {
+  margin-top: 60px;
+  min-height: calc(100vh - 60px);
+  padding-bottom: 48px;
+}
+
+/* Topo com foto da Serra do Ouro Branco */
+.portal-hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(78vh, 560px);
+  padding: 48px 20px 40px;
   color: var(--white);
-  border-radius: 8px;
-  margin-bottom: 30px;
+  background:
+    linear-gradient(180deg, rgba(40, 24, 8, 0.15) 0%, rgba(40, 24, 8, 0.55) 45%, rgba(60, 36, 12, 0.94) 100%),
+    var(--hero-img) center 30% / cover no-repeat,
+    #1a1a1a;
+  /* Mesmo efeito do Dicionário (index.html): a foto fica parada e o conteúdo rola por cima dela */
+  background-attachment: scroll, fixed, scroll;
 }
 
-.hub-hero h1 {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 800;
-  margin: 0 0 8px;
-}
-
-.hub-hero p {
-  opacity: 0.9;
-  max-width: 500px;
+.portal-hero-conteudo {
+  width: 100%;
+  max-width: 1040px; /* alinha com o conteúdo das seções (1080px − 2×20px de respiro) */
   margin: 0 auto;
 }
 
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-  max-width: 1000px;
-  margin: 0 auto 40px;
+.portal-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  margin-bottom: 14px;
 }
 
-.game-card {
-  background: var(--white);
-  border: 2px solid var(--border-color);
-  border-radius: 8px;
-  padding: 24px 20px;
-  text-align: center;
-  transition: all 0.3s ease;
+.portal-hero h1 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(2.3rem, 5.4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.02;
+  text-transform: uppercase;
+  max-width: 18ch;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.portal-hero p {
+  font-size: clamp(1rem, 1.6vw, 1.15rem);
+  max-width: 54ch;
+  opacity: 0.92;
+  margin: 0 0 22px;
+}
+
+.portal-hero-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.portal-numeros {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  padding: 16px 0 0;
+  margin: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.22);
+  font-size: 0.95rem;
+}
+
+.portal-numeros li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.92;
+}
+
+.portal-numeros strong {
+  font-size: 1.15rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Botões */
+.btn-portal {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.95rem;
   text-decoration: none;
-  color: var(--medium-gray);
-  display: block;
+  border: 2px solid transparent;
+  transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn-portal:hover { transform: translateY(-1px); }
+.btn-portal:focus-visible { outline: 3px solid #93c5fd; outline-offset: 2px; }
+
+.btn-portal--claro { background: var(--creme); color: var(--marrom); }
+.btn-portal--claro:hover { background: var(--ativo); color: var(--marrom-escuro); }
+.btn-portal--contorno { color: var(--white); border-color: rgba(255, 255, 255, 0.7); }
+.btn-portal--contorno:hover { background: rgba(255, 255, 255, 0.12); color: var(--white); }
+.btn-portal--escuro { background: var(--marrom); color: var(--creme); padding: 9px 16px; font-size: 0.9rem; }
+.btn-portal--escuro:hover { background: var(--marrom-escuro); color: var(--creme); }
+
+/* Seções */
+.portal-secao {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 44px 20px 0;
+}
+
+.portal-secao h2,
+.portal-professores h2 {
+  font-family: var(--fonte-titulo);
+  font-size: clamp(1.8rem, 3.2vw, 2.3rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--marrom);
+  margin: 0 0 4px;
+}
+
+.portal-secao-sub {
+  color: var(--marrom-medio);
+  margin: 0 0 22px;
+}
+
+/* Cards dos jogos */
+.jogos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+}
+
+.jogo-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--tinta);
+  box-shadow: 0 1px 3px rgba(92, 61, 23, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.jogo-card:hover,
+.jogo-card:focus-visible {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(92, 61, 23, 0.16);
+  border-color: var(--cor);
+  color: var(--tinta);
+}
+
+.jogo-card:focus-visible { outline: 3px solid var(--cor); outline-offset: 2px; }
+
+.jogo-card-topo {
   position: relative;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--cor);
   overflow: hidden;
 }
 
-.game-card::before {
+/* Borda ondulada do PDF na base do topo colorido */
+.jogo-card-topo::after {
   content: '';
   position: absolute;
-  top: 0; left: 0; width: 100%; height: 3px;
-  background: linear-gradient(90deg, var(--dark-gray), var(--medium-gray));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.3s ease;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12px;
+  background: radial-gradient(circle at 50% 100%, var(--papel) 11px, transparent 12px) 0 0 / 24px 12px repeat-x;
 }
 
-.game-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  border-color: var(--dark-gray);
-  color: var(--medium-gray);
+/* Padrão de quadras ao fundo, lembrando um mapa de ruas */
+.jogo-card-topo::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.14) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.14) 2px, transparent 2px);
+  background-size: 28px 28px;
+  transform: rotate(-8deg) scale(1.4);
 }
 
-.game-card:hover::before { transform: scaleX(1); }
-
-.game-icon {
-  width: 56px; height: 56px;
-  margin: 0 auto 14px;
-  background: linear-gradient(135deg, var(--dark-gray), var(--medium-gray));
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem;
+.jogo-card-topo i {
+  position: relative;
+  font-size: 3rem;
   color: var(--white);
-  transition: all 0.3s ease;
+  transition: transform 0.25s ease;
 }
 
-.game-card:hover .game-icon {
-  transform: scale(1.06) rotate(5deg);
+.jogo-card:hover .jogo-card-topo i { transform: scale(1.1) rotate(-6deg); }
+
+.jogo-card-corpo {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 18px 20px 20px;
 }
 
-.game-card h3 {
-  font-size: 1.05rem;
+.jogo-card h3 {
+  font-family: var(--fonte-titulo);
+  font-size: 1.6rem;
   font-weight: 700;
-  color: var(--black);
-  margin: 0 0 8px;
+  text-transform: uppercase;
+  line-height: 1.05;
+  color: var(--marrom);
+  margin: 0 0 6px;
 }
 
-.game-card p {
-  font-size: 0.85rem;
-  line-height: 1.5;
+.jogo-card p { font-size: 0.92rem; line-height: 1.5; margin: 0 0 10px; }
+
+.jogo-card .jogo-aprende {
+  color: var(--cor-texto);
+  font-weight: 600;
+  font-size: 0.86rem;
+}
+
+.jogo-meta {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.jogo-meta li {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--casa);
+  color: var(--marrom);
+}
+
+.jogo-cta {
+  margin-top: auto;
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--cor-texto);
+  color: var(--creme);
+  font-weight: 700;
+  font-size: 0.92rem;
+  padding: 8px 18px;
+  border-radius: 999px;
+}
+
+.jogo-cta i { transition: transform 0.2s ease; }
+.jogo-card:hover .jogo-cta i { transform: translateX(3px); }
+
+/* Ranking + rua do dia */
+.portal-duo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  gap: 20px;
+}
+
+.portal-painel {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  padding: 20px 22px;
+  min-width: 0;
+}
+
+.portal-painel-cabecalho {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.portal-painel-cabecalho h2 {
+  font-family: var(--fonte-titulo);
+  font-size: 1.45rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--marrom);
   margin: 0;
 }
 
-.game-badge {
+.portal-painel-cabecalho a {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--marrom);
+  white-space: nowrap;
+}
+
+.portal-vazio { color: var(--marrom-medio); margin: 0; }
+
+.portal-vazio--convite {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--casa);
+  color: var(--tinta);
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.portal-vazio--convite span { font-size: 2rem; }
+.portal-vazio--convite p { margin: 0; }
+
+.top-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.top-lista li {
+  display: grid;
+  grid-template-columns: 2rem minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--linha);
+}
+
+.top-lista li:last-child { border-bottom: 0; }
+.top-posicao { font-size: 1.1rem; text-align: center; font-weight: 700; }
+.top-nome { font-weight: 600; color: var(--tinta); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.top-jogo { font-size: 0.75rem; color: var(--marrom-medio); white-space: nowrap; }
+.top-pontos { font-weight: 800; color: var(--marrom); font-variant-numeric: tabular-nums; }
+
+.rua-dia { border-top: 4px solid var(--marrom); }
+
+.rua-dia-nome {
+  font-family: var(--fonte-titulo);
+  font-size: 1.9rem;
+  font-weight: 700;
+  line-height: 1.05;
+  color: var(--tinta);
+  margin: 0 0 8px;
+}
+
+.rua-dia-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+
+.tag {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background: var(--light-gray);
-  color: var(--dark-gray);
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   font-weight: 600;
-  margin-top: 12px;
-  white-space: nowrap;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--casa);
+  color: var(--marrom);
 }
+
+.tag--categoria {
+  background: color-mix(in srgb, var(--tag-cor) 16%, white);
+  border: 1px solid color-mix(in srgb, var(--tag-cor) 45%, white);
+}
+
+.rua-dia-texto { font-size: 0.95rem; line-height: 1.6; margin: 0 0 12px; }
+
+.rua-dia-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+  color: var(--marrom);
+  text-decoration: none;
+}
+
+.rua-dia-link:hover { text-decoration: underline; color: var(--marrom-escuro); }
+
+/* Professores */
+.portal-professores {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  padding: 26px 24px;
+}
+
+.prof-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 16px;
+}
+
+.prof-card {
+  background: var(--papel-fundo);
+  border: 1px solid var(--linha);
+  border-radius: 12px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.prof-card h3 { font-size: 1rem; font-weight: 700; color: var(--marrom); margin: 0 0 6px; }
+.prof-card p { font-size: 0.9rem; margin: 0 0 14px; }
+.prof-card .btn-portal { margin-top: auto; }
+.prof-card .form-control { max-width: 260px; }
+.prof-card .prof-dica { color: var(--marrom-medio); font-size: 0.85rem; margin: 8px 0 0; }
+
+.prof-links { width: 100%; display: grid; gap: 8px; margin-top: 12px; }
+
+.link-copiavel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 8px;
+  align-items: center;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  padding: 8px 10px;
+  min-width: 0;
+}
+
+.link-copiavel-rotulo { grid-column: 1 / -1; font-size: 0.75rem; font-weight: 700; color: var(--marrom-medio); }
+
+.link-copiavel code {
+  font-size: 0.78rem;
+  color: var(--tinta);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.link-copiavel button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid var(--linha);
+  background: var(--casa);
+  color: var(--marrom);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link-copiavel button:hover { background: var(--ativo); }
 
 .hub-footer {
   text-align: center;
   padding: 20px;
-  border-top: 1px solid var(--border-color);
-  color: var(--medium-gray);
+  border-top: 1px solid var(--linha);
+  color: var(--marrom-medio);
   font-size: 0.85rem;
-  background: var(--white);
+  background: var(--papel);
+}
+
+@media (max-width: 860px) {
+  .prof-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 575.98px) {
@@ -176,16 +535,23 @@ body {
     font-size: 0.8rem !important;
     white-space: nowrap !important;
   }
+  .portal-hero { min-height: 0; padding-top: 72px; }
+  .portal-hero-acoes .btn-portal { flex: 1 1 auto; justify-content: center; }
+  .portal-professores { padding: 20px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .game-card,
-  .game-card::before,
-  .game-icon {
+  .portal-hero { background-attachment: scroll; }
+  .btn-portal,
+  .jogo-card,
+  .jogo-card-topo i,
+  .jogo-cta i {
     transition: none;
   }
-  .game-card:hover,
-  .game-card:hover .game-icon {
+  .btn-portal:hover,
+  .jogo-card:hover,
+  .jogo-card:hover .jogo-card-topo i,
+  .jogo-card:hover .jogo-cta i {
     transform: none;
   }
 }

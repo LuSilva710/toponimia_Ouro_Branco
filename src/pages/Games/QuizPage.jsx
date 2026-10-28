@@ -47,7 +47,8 @@ function gerarPerguntas(ruas, bairros) {
 export default function QuizPage() {
   const [fase, setFase] = useState('setup')
   const [nome, setNome] = useState('')
-  const [sala, setSala] = useState('')
+  // Link do professor pode trazer a turma: quiz.html?sala=8A
+  const [sala, setSala] = useState(() => (new URLSearchParams(window.location.search).get('sala') || '').trim().slice(0, 40))
   const [perguntas, setPerguntas] = useState([])
   const [idx, setIdx] = useState(0)
   const [pontos, setPontos] = useState(0)
@@ -187,27 +188,27 @@ export default function QuizPage() {
       return
     }
     const pdf = new jsPDF('l', 'mm', 'a4')
-    pdf.setFillColor(15, 15, 35)
+    pdf.setFillColor(250, 246, 231)
     pdf.rect(0, 0, 297, 210, 'F')
-    pdf.setDrawColor(108, 99, 255)
+    pdf.setDrawColor(124, 82, 32)
     pdf.setLineWidth(2)
     pdf.rect(10, 10, 277, 190, 'S')
-    pdf.setTextColor(108, 99, 255)
+    pdf.setTextColor(124, 82, 32)
     pdf.setFontSize(28)
     pdf.text('Certificado de Participação', 148.5, 40, { align: 'center' })
-    pdf.setTextColor(224, 224, 224)
+    pdf.setTextColor(79, 52, 20)
     pdf.setFontSize(14)
     pdf.text('Toponímia Urbana de Ouro Branco — IFMG', 148.5, 55, { align: 'center' })
     pdf.setFontSize(16)
     pdf.text('Certificamos que', 148.5, 80, { align: 'center' })
     pdf.setFontSize(24)
-    pdf.setTextColor(108, 99, 255)
+    pdf.setTextColor(124, 82, 32)
     pdf.text(nome.trim() || 'Participante', 148.5, 95, { align: 'center' })
-    pdf.setTextColor(224, 224, 224)
+    pdf.setTextColor(79, 52, 20)
     pdf.setFontSize(14)
     pdf.text(`completou o Quiz Toponímia com ${pontos} pontos`, 148.5, 115, { align: 'center' })
     pdf.setFontSize(12)
-    pdf.setTextColor(136, 136, 170)
+    pdf.setTextColor(128, 99, 66)
     pdf.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, 148.5, 140, { align: 'center' })
     pdf.save(`certificado-quiz-${nome.trim() || 'participante'}.pdf`)
   }
@@ -222,38 +223,40 @@ export default function QuizPage() {
       <div className="quiz-container">
         {fase === 'setup' && (
           <>
-            <div className="quiz-sala">
-              <p>Modo Turma (opcional)</p>
-              <div className="d-flex gap-2 justify-content-center flex-wrap">
-                <input
-                  className="form-control form-control-sm"
-                  style={{ maxWidth: 200 }}
-                  placeholder="Código da sala"
-                  maxLength={40}
-                  value={sala}
-                  onChange={(e) => setSala(e.target.value)}
-                />
-                <input
-                  className="form-control form-control-sm"
-                  style={{ maxWidth: 200 }}
-                  placeholder="Seu nome"
-                  maxLength={40}
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                />
-              </div>
-              <p className="mt-2" style={{ fontSize: '.8rem' }}>
-                Digite seu nome e clique em Iniciar Quiz
-              </p>
-            </div>
-            <div className="quiz-header">
+            <div className="quiz-header faixa-titulo">
               <h1>
                 <i className="bi bi-question-circle me-2" aria-hidden="true" />
                 Quiz Toponímia
               </h1>
               <p>Teste seus conhecimentos sobre as ruas de Ouro Branco</p>
+            </div>
+            <div className="quiz-sala">
+              <div className="d-flex gap-2 justify-content-center flex-wrap">
+                <input
+                  className="form-control"
+                  style={{ maxWidth: 220 }}
+                  placeholder="Seu nome"
+                  aria-label="Seu nome"
+                  maxLength={40}
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                />
+                <input
+                  className="form-control"
+                  style={{ maxWidth: 220 }}
+                  placeholder="Código da sala (opcional)"
+                  aria-label="Código da sala (opcional)"
+                  maxLength={40}
+                  value={sala}
+                  onChange={(e) => setSala(e.target.value)}
+                />
+              </div>
+              <p className="quiz-sala-dica">
+                Com o código da sala, sua pontuação também aparece no ranking da turma.
+              </p>
               {error && <p className="text-danger">{error}</p>}
-              <button type="button" className="btn btn-primary" disabled={loading} onClick={iniciar}>
+              <button type="button" className="btn btn-primary btn-lg" disabled={loading} onClick={iniciar}>
+                <i className="bi bi-play-fill me-1" aria-hidden="true" />
                 {loading ? 'Carregando…' : 'Iniciar Quiz'}
               </button>
             </div>

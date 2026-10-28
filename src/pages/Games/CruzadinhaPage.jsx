@@ -437,7 +437,7 @@ export default function CruzadinhaPage() {
         item.positions.some((pos) => !revealedRef.current[pos.row][pos.col]),
       )
       if (!eligible.length) {
-        setStatus({ text: 'Todas as dicas já foram reveladas!', color: '#666' })
+        setStatus({ text: 'Todas as dicas já foram reveladas!', color: '#6b4a20' })
         return
       }
       entry = eligible[Math.floor(Math.random() * eligible.length)]
@@ -459,7 +459,7 @@ export default function CruzadinhaPage() {
     setHintsUsed(nextHints)
     setStatus({
       text: `Dica revelada! (${nextHints} dica${nextHints > 1 ? 's' : ''} usada${nextHints > 1 ? 's' : ''})`,
-      color: '#666',
+      color: '#6b4a20',
     })
     setTimeout(() => {
       if (!wonRef.current) {
@@ -498,14 +498,14 @@ export default function CruzadinhaPage() {
     if (emptyCells > 0 && errorsFound === 0) {
       setStatus({
         text: `Ainda faltam ${emptyCells} célula${emptyCells > 1 ? 's' : ''} vazias. Continue preenchendo!`,
-        color: '#888',
+        color: '#806342',
       })
     } else if (allCorrect && emptyCells === 0) {
       winGame()
     } else if (errorsFound > 0) {
       setStatus({
         text: `Encontrado${errorsFound > 1 ? 's' : ''} ${errorsFound} erro${errorsFound > 1 ? 's' : ''}. Continue tentando!`,
-        color: '#d1495b',
+        color: '#a1452a',
       })
     } else {
       setStatus({
@@ -820,7 +820,10 @@ export default function CruzadinhaPage() {
       <GameChrome />
 
       <div className={`game-container${isMobile ? ' cruzadinha-mobile' : ''}`}>
-        <h1 className="game-title">Palavras Cruzadas</h1>
+        <h1 className="game-title">
+          Palavras Cruzadas
+          <span className="game-title-sub">Escolas de Ouro Branco</span>
+        </h1>
 
         <div className="game-header">
           <div className="controls">

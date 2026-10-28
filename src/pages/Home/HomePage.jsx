@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { supabase, supabaseConfigError } from '@lib/supabase.js'
+import { RUA_COLUNAS } from '@lib/ruas.js'
 import { Navbar } from '@components/layout/Navbar.jsx'
 import { OnimChatbot } from '@features/onim/OnimChatbot.jsx'
 import { AlphaNav, StreetsByLetter } from './AlphaNav.jsx'
@@ -68,7 +69,7 @@ export default function HomePage() {
             .from('bairros')
             .select('id, slug, nome, titulo, imagem_capa, descricao')
             .order('nome', { ascending: true }),
-          supabase.from('ruas').select('*').order('nome_oficial', { ascending: true }),
+          supabase.from('ruas').select(RUA_COLUNAS).order('nome_oficial', { ascending: true }),
         ])
         if (bairrosRes.error) throw bairrosRes.error
         if (ruasRes.error) throw ruasRes.error
@@ -77,7 +78,17 @@ export default function HomePage() {
         const listaBairros = bairrosRes.data || []
         setBairros(listaBairros)
         setTodasRuas((ruasRes.data || []).map(adaptRua))
-        if (listaBairros.length) setSelectedSlug(listaBairros[0].slug)
+        // Link direto para uma rua (ex.: "Rua do dia" do portal): ?bairro=<slug>&rua=<nome oficial>
+        const params = new URLSearchParams(window.location.search)
+        const bairroLink = listaBairros.find((b) => b.slug === params.get('bairro'))
+        const ruaLink = params.get('rua')
+        if (bairroLink && ruaLink) {
+          setSelectedSlug(bairroLink.slug)
+          setPendingScrollRua(ruaLink)
+          setOpenRuaNome(ruaLink)
+        } else if (listaBairros.length) {
+          setSelectedSlug(listaBairros[0].slug)
+        }
         setLoading(false)
       } catch (err) {
         console.error(err)

@@ -63,6 +63,11 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // Site MPA: sem fallback de SPA. Com o padrão (index.html), qualquer página aberta com
+        // parâmetros (ex.: ranking.html?sala=7A) era trocada pelo Dicionário.
+        navigateFallback: null,
+        // Parâmetros lidos pelo próprio JS da página: o HTML em cache é o mesmo com ou sem eles
+        ignoreURLParametersMatching: [/^utm_/, /^fbclid$/, /^sala$/, /^jogo$/, /^bairro$/, /^rua$/],
         runtimeCaching: [
           {
             urlPattern: /\.(css|js|png|jpg|jpeg|svg|ico|woff2?)$/,
