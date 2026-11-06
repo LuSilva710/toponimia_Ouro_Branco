@@ -30,7 +30,8 @@ export function agruparRuasPorLetra(ruasMap) {
   const ruasPorLetra = {}
   for (const nomeRua of Object.keys(ruasMap)) {
     const nomeSemPrefixo = nomeRua.replace(/^(Rua|Antônio|Ana)\s+/i, '').trim()
-    const primeiraLetra = nomeSemPrefixo.charAt(0).toUpperCase()
+    // Sem acento: "Áurea" entra em A (a lista só exibe as seções de LETTERS)
+    const primeiraLetra = removerAcentos(nomeSemPrefixo.charAt(0)).toUpperCase()
     if (!ruasPorLetra[primeiraLetra]) ruasPorLetra[primeiraLetra] = []
     ruasPorLetra[primeiraLetra].push({ nome: nomeRua, detalhes: ruasMap[nomeRua] })
   }
