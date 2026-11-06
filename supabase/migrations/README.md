@@ -14,5 +14,6 @@ Scripts de **estrutura** do banco Supabase já aplicados (ou a aplicar) no proje
 | `08_onim_rate_limit.sql` | Rate limit da Edge Function `onim-chat` |
 | `09_rls_roles.sql` | `has_role()`, RLS de perfis/auditoria/contribuições/ruas/bairros |
 | `10_configuracao_ia.sql` | Chaves de IA editáveis no painel admin (aba Inteligência Artificial) |
+| `11_storage_imagens.sql` | Bucket `imagens` para upload de fotos no painel (leitura pública, envio por admin/editor) |
 
 Updates one-shot de dados (classificação, coordenadas, significados) **não** ficam versionados aqui — use o painel admin ou scripts em `scripts/` quando necessário.

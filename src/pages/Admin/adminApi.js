@@ -34,8 +34,19 @@ export function encontrarRuaPorNome(ruas, nomeRua) {
   )
 }
 
+/** Espelha os limites do bucket `imagens` (migration 11). */
+const IMAGEM_TIPOS = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp' }
+const IMAGEM_MAX_MB = 5
+
 export async function uploadImage(file, folder) {
-  const fileName = `${folder}/${Date.now()}_${file.name}`
+  const extensao = IMAGEM_TIPOS[file.type]
+  if (!extensao) throw new Error('Formato não aceito. Use PNG, JPG ou WebP.')
+  if (file.size > IMAGEM_MAX_MB * 1024 * 1024) {
+    throw new Error(`A imagem tem mais de ${IMAGEM_MAX_MB} MB. Reduza o tamanho e tente de novo.`)
+  }
+  // O Storage recusa acentos e símbolos no caminho: usa só o nome normalizado
+  const base = gerarSlug(file.name.replace(/\.[^.]+$/, '')) || 'imagem'
+  const fileName = `${folder}/${Date.now()}_${base}.${extensao}`
   const { data, error } = await supabase.storage
     .from('imagens')
     .upload(fileName, file, { cacheControl: '3600', upsert: false })
